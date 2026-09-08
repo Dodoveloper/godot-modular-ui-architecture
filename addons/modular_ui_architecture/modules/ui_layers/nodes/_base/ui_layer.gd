@@ -82,7 +82,7 @@ func unmount_node(node: Node) -> bool:
 
 
 ## Returns the UI nodes mounted in this layer.[br]
-## [b]NOTE[/b]: world-anchored UI nodes (parented to the are excluded.
+## [b]NOTE[/b]: world-anchored UI nodes are excluded.
 ## Do not use [method Node.get_children] as a substitute — it includes infrastructure children
 ## that are not mounted UI.
 func get_mounted_nodes() -> Array:

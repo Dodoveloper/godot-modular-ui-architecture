@@ -13,11 +13,11 @@ func _init(reg_input_bindings: CapInputBindingsRegistry, svc_ui_layers: CapUiLay
 
 
 func enable() -> void:
-	print("UI Input Actions Service enabled")
+	print("UI Input Bindings Service enabled")
 
 
 func disable() -> void:
-	print("UI Input Actions Service disabled")
+	print("UI Input Bindings Service disabled")
 
 
 func trigger_bindings(

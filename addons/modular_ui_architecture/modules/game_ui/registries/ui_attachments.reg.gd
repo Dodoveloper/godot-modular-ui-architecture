@@ -1,5 +1,6 @@
 extends CapUiAttachmentsRegistry
 
+
 var _attachments: Dictionary[GameUiTypes.UiAttachment, bool] = {}
 
 

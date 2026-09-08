@@ -2,6 +2,7 @@
 class_name CapUiAttachmentsRegistry
 extends GdlrCapability
 
+
 const GameUiTypes = preload("../types.gd")
 
 

@@ -4,7 +4,7 @@ extends GdlrCapability
 
 
 const GameUiTypes = preload("../types.gd")
-const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
+const UiLayersTypes = preload("../../ui_layers/types.gd")
 
 @warning_ignore("unused_signal")
 ## Emitted when a View is mounted. [b]NOTE[/b]: fired before mounting a View's attachments.

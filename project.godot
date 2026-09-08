@@ -27,6 +27,17 @@ window/stretch/aspect="expand"
 
 enabled=PackedStringArray("res://addons/godular/plugin.cfg")
 
+[file_customization]
+
+folder_colors={
+"res://addons/modular_ui_architecture/modules/": "red",
+"res://addons/modular_ui_architecture/shared/": "purple"
+}
+
+[godular]
+
+editor_root_module_path=""
+
 [physics]
 
 3d/physics_engine="Jolt Physics"
