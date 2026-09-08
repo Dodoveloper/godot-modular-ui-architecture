@@ -3,7 +3,8 @@ extends CanvasLayer
 
 
 const UiLayersTypes = preload("../../types.gd")
-const InputBindingsTypes = preload("res://addons/modular_ui_architecture/modules/input_bindings/types.gd")
+const InputBindingsTypes = preload("../../../input_bindings/types.gd")
+const SceneCache = preload("../../../../shared/classes/scene_cache.gd")
 
 var ui_layer: UiLayersTypes.UiLayer
 var should_block_inputs: bool
@@ -67,8 +68,9 @@ func _get_mounted_nodes() -> Array:
 
 ## Mounts a node and returns it. It returns [code]null[/code] if it can't be mounted.
 func mount_node(scene_path: String, data: Dictionary[StringName, Variant] = {}) -> Node:
-	# TODO: this may be a performance concern; reevaluate
-	var Scene: PackedScene = load(scene_path)
+	var Scene: PackedScene = SceneCache.load_scene(scene_path)
+	if not Scene:
+		return null
 	if not _can_mount_scene(Scene):
 		return null
 	
