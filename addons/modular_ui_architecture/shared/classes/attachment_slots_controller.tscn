@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bcbdukxf123wi"]
+
+[ext_resource type="Script" uid="uid://bk7dmu5dm6kiv" path="res://addons/modular_ui_architecture/shared/classes/attachment_slots_controller.gd" id="1_mrrg3"]
+
+[node name="AttachmentSlotsController" type="Node" unique_id=1027927929]
+script = ExtResource("1_mrrg3")
