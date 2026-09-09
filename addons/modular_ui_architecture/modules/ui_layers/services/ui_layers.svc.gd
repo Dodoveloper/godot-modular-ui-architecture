@@ -1,6 +1,7 @@
 extends CapUiLayers
 
 
+const Utils = preload("../../../shared/classes/utils.gd")
 const WindowUiLayerNode = preload("../nodes/window_ui_layer.gd")
 const PopupsUiLayerNode = preload("../nodes/popups_ui_layer.gd")
 const TooltipUiLayer = preload("../nodes/tooltip_ui_layer.gd")
@@ -58,7 +59,7 @@ func _instantiate_layer_nodes() -> void:
 		layer_node.ui_layer = layer
 		layer_node.layer = layer_config.canvas_layer_index
 		layer_node.should_block_inputs = layer_config.should_block_inputs
-		layer_node.name = (UiLayersTypes.UiLayer.keys()[layer] as String).to_pascal_case()
+		layer_node.name = Utils.enum_to_str(UiLayersTypes.UiLayer, layer).to_pascal_case()
 		
 		layer_container.add_child(layer_node)
 		_layers_to_nodes[layer] = layer_node

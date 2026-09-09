@@ -31,6 +31,7 @@ enabled=PackedStringArray("res://addons/godular/plugin.cfg")
 
 folder_colors={
 "res://addons/modular_ui_architecture/modules/": "red",
+"res://addons/modular_ui_architecture/modules/tooltips/ui/": "green",
 "res://addons/modular_ui_architecture/shared/": "purple"
 }
 
