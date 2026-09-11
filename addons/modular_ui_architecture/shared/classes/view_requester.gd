@@ -58,6 +58,11 @@ func _enter_tree() -> void:
 		assert(false, "Layer not specified")
 		return
 	
+	# NOTE: Godular currently doesn't expose a way of knowing when the graph is started,
+	# so we resort to this ugliness for now.
+	if not GdlrModuleManager._graph_started:
+		await GdlrModuleManager.graph_started
+	
 	_svc_game_ui = GdlrModuleManager.request(CapGameUi, self)
 	if mount_mode == MountMode.ON_READY:
 		owner.ready.connect(_on_owner_ready)

@@ -51,7 +51,7 @@ func _instantiate_layer_nodes() -> void:
 	var tree := Engine.get_main_loop() as SceneTree
 	var layer_container := Node.new()
 	layer_container.name = LAYER_CONTAINER_NODE_NAME
-	tree.root.add_child(layer_container)
+	tree.root.add_child.call_deferred(layer_container)
 	
 	for layer in _layers_config.keys():
 		var layer_config := _layers_config[layer]
