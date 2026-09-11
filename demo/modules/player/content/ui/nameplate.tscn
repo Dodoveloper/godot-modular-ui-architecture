@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://c6r44i8bmytsg"]
+
+[ext_resource type="PackedScene" uid="uid://dj54voule5cl8" path="res://addons/modular_ui_architecture/shared/classes/world_ui_portal/world_ui_portal.tscn" id="1_b8grs"]
+
+[node name="Nameplate" type="Label" unique_id=1114804537]
+text = "Player Name"
+
+[node name="WorldUiPortal" parent="." unique_id=1030067825 node_paths=PackedStringArray("target_ui") instance=ExtResource("1_b8grs")]
+target_ui = NodePath("..")
+anchor_mode = 1

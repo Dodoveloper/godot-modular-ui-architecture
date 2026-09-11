@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://f2u0uhehqghg"]
+
+[ext_resource type="Script" uid="uid://b3ca7kdohky28" path="res://demo/modules/hud/content/ui/hud.gd" id="1_5rvon"]
+[ext_resource type="PackedScene" uid="uid://bcbdukxf123wi" path="res://addons/modular_ui_architecture/shared/classes/attachment_slots_controller/attachment_slots_controller.tscn" id="2_2jcih"]
+[ext_resource type="Script" uid="uid://cdsmt65clb7ek" path="res://addons/modular_ui_architecture/shared/resources/attachment_slot_config.gd" id="3_2jcih"]
+
+[sub_resource type="Resource" id="Resource_2jcih"]
+script = ExtResource("3_2jcih")
+node_path = NodePath("../BottomSection/HBoxContainer/BottomCenter")
+max_children = 1
+protected_center = true
+metadata/_custom_type_script = "uid://cdsmt65clb7ek"
+
+[sub_resource type="Resource" id="Resource_5rvon"]
+script = ExtResource("3_2jcih")
+node_path = NodePath("../BottomSection/HBoxContainer/BottomLeft")
+max_children = 3
+metadata/_custom_type_script = "uid://cdsmt65clb7ek"
+
+[sub_resource type="Resource" id="Resource_pgdjh"]
+script = ExtResource("3_2jcih")
+node_path = NodePath("../BottomSection/HBoxContainer/BottomRight")
+max_children = 3
+metadata/_custom_type_script = "uid://cdsmt65clb7ek"
+
+[node name="Hud" type="Control" unique_id=1095003756]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5rvon")
+
+[node name="AttachmentSlotsController" parent="." unique_id=1027927929 instance=ExtResource("2_2jcih")]
+slot_configs = Dictionary[StringName, ExtResource("3_2jcih")]({
+&"bottom_center": SubResource("Resource_2jcih"),
+&"bottom_left": SubResource("Resource_5rvon"),
+&"bottom_right": SubResource("Resource_pgdjh")
+})
+
+[node name="BottomSection" type="MarginContainer" parent="." unique_id=709681654]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -32.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="BottomSection" unique_id=2116144462]
+layout_mode = 2
+
+[node name="BottomLeft" type="BoxContainer" parent="BottomSection/HBoxContainer" unique_id=1389945888]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="BottomCenter" type="BoxContainer" parent="BottomSection/HBoxContainer" unique_id=154431605]
+unique_name_in_owner = true
+layout_mode = 2
+alignment = 1
+
+[node name="BottomRight" type="BoxContainer" parent="BottomSection/HBoxContainer" unique_id=1714986450]
+unique_name_in_owner = true
+layout_mode = 2
+alignment = 2
+vertical = true
