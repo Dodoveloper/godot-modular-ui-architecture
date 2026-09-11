@@ -7,8 +7,8 @@ extends Node
 ## view logic directly in the parent node.
 
 
-const UiLayersTypes = preload("../../modules/ui_layers/types.gd")
-const Utils = preload("./utils.gd")
+const UiLayersTypes = preload("../../../modules/ui_layers/types.gd")
+const Utils = preload("../utils.gd")
 
 signal view_mounted(view: Node)
 

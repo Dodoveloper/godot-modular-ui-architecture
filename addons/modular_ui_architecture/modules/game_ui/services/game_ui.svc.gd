@@ -1,7 +1,7 @@
 extends CapGameUi
 
 
-const AttachmentSlotsController = preload("../../../shared/classes/attachment_slots_controller.gd")
+const AttachmentSlotsController = preload("../../../shared/classes/attachment_slots_controller/attachment_slots_controller.gd")
 const WindowUiLayerNode = preload("../../ui_layers/nodes/window_ui_layer.gd")
 
 const VIEW_CONTEXT_PROP_NAME := &"context"

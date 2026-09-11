@@ -1,6 +1,0 @@
-[gd_scene format=3 uid="uid://dj54voule5cl8"]
-
-[ext_resource type="Script" uid="uid://bfgk4woe45bwf" path="res://addons/modular_ui_architecture/shared/classes/world_ui_portal.gd" id="1_0vhxt"]
-
-[node name="WorldUiPortal" type="Node" unique_id=1030067825]
-script = ExtResource("1_0vhxt")

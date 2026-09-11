@@ -9,7 +9,7 @@ extends Node
 ## of the Pivot in a nameplate) and set it up. The portal will handle the rest at runtime.
 
 
-const UiLayersTypes = preload("../../modules/ui_layers/types.gd")
+const UiLayersTypes = preload("../../../modules/ui_layers/types.gd")
 
 enum AnchorMode {
 	## The UI is reparented into the target layer as-is, with no position tracking.

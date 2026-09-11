@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://crpb17ar8i612"]
+
+[ext_resource type="Script" uid="uid://bp5hjyixlx4vh" path="res://addons/modular_ui_architecture/shared/classes/view_requester/view_requester.gd" id="1_2kmnw"]
+
+[node name="ViewRequester" type="Node" unique_id=1435008715]
+script = ExtResource("1_2kmnw")
