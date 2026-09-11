@@ -68,7 +68,7 @@ func _get_mounted_nodes() -> Array:
 
 ## Mounts a node and returns it. It returns [code]null[/code] if it can't be mounted.
 func mount_node(scene_path: String, data: Dictionary[StringName, Variant] = {}) -> Node:
-	var Scene: PackedScene = SceneCache.load_scene(scene_path)
+	var Scene := SceneCache.load_scene(scene_path)
 	if not Scene:
 		return null
 	if not _can_mount_scene(Scene):

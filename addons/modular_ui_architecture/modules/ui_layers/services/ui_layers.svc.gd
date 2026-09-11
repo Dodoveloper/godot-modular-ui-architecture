@@ -4,7 +4,7 @@ extends CapUiLayers
 const Utils = preload("../../../shared/classes/utils.gd")
 const WindowUiLayerNode = preload("../nodes/window_ui_layer.gd")
 const PopupsUiLayerNode = preload("../nodes/popups_ui_layer.gd")
-const TooltipUiLayer = preload("../nodes/tooltip_ui_layer.gd")
+const TooltipUiLayerNode = preload("../nodes/tooltip_ui_layer.gd")
 
 static var _layers_config: Dictionary[UiLayersTypes.UiLayer, UiLayersTypes.UiLayerConfig] = {
 	UiLayersTypes.UiLayer.DEFAULT: UiLayersTypes.UiLayerConfig.new(UiLayerNode, 1, false),
@@ -13,7 +13,7 @@ static var _layers_config: Dictionary[UiLayersTypes.UiLayer, UiLayersTypes.UiLay
 	UiLayersTypes.UiLayer.WINDOW: UiLayersTypes.UiLayerConfig.new(WindowUiLayerNode, 4, true),
 	UiLayersTypes.UiLayer.OVERLAY: UiLayersTypes.UiLayerConfig.new(UiLayerNode, 5, true),
 	UiLayersTypes.UiLayer.POPUP: UiLayersTypes.UiLayerConfig.new(PopupsUiLayerNode, 6, true),
-	UiLayersTypes.UiLayer.TOOLTIP: UiLayersTypes.UiLayerConfig.new(TooltipUiLayer, 7, false),
+	UiLayersTypes.UiLayer.TOOLTIP: UiLayersTypes.UiLayerConfig.new(TooltipUiLayerNode, 7, false),
 }
 
 var _layers_to_nodes: Dictionary[UiLayersTypes.UiLayer, UiLayerNode] = {}
