@@ -252,7 +252,6 @@ func _update_world_anchor(ui: Control, info: WorldAnchorInfo) -> void:
 	
 	# Reconstruct Godot's 2D physics interpolation: lerp between the previous and current
 	# physics-tick positions using the render-frame interpolation fraction.
-	# This ensures the nameplate rides the character sprite pixel-perfectly at any refresh rate.
 	var f := Engine.get_physics_interpolation_fraction()
 	var world_pos := info.prev_world_pos.lerp(info.curr_world_pos, f)
 	ui.global_position = info.anchor.get_canvas_transform() * world_pos + info.offset

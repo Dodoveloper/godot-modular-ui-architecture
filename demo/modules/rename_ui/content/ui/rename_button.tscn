@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://d0sy1ft4js3sm"]
+
+[ext_resource type="Theme" uid="uid://8xlwghhgu08q" path="res://demo/assets/resources/themes/default_theme.tres" id="1_yhr1q"]
+
+[node name="RenameButton" type="Button" unique_id=563255849]
+theme = ExtResource("1_yhr1q")
+text = "Rename"

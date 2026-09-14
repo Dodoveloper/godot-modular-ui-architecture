@@ -1,6 +1,14 @@
 extends CharacterBody2D
 
 
+signal name_changed(new_name: String)
+
+@export_category("Identity")
+@export var character_name := "Player Name":
+	set(value):
+		character_name = value
+		name_changed.emit(character_name)
+
 @export_category("Movement")
 @export var speed: float = 250.0
 @export var acceleration: float = 1200.0
