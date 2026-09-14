@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bl3o8x333w8fp"]
 
 [ext_resource type="Script" uid="uid://p7hg4p1d8s" path="res://demo/modules/player/content/entities/player.gd" id="1_l3oy6"]
-[ext_resource type="Texture2D" uid="uid://65fx4q2xs1ve" path="res://demo/assets/art/tilemaps/tilemap-characters_packed.png" id="1_obvrj"]
+[ext_resource type="Texture2D" uid="uid://65fx4q2xs1ve" path="res://demo/assets/art/tilemaps/characters.png" id="1_obvrj"]
 [ext_resource type="PackedScene" uid="uid://c6r44i8bmytsg" path="res://demo/modules/player/content/ui/nameplate.tscn" id="3_qyocx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4dcrc"]

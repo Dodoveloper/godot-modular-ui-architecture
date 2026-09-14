@@ -1,8 +1,8 @@
 [gd_scene format=4 uid="uid://bjlrobvsqx3gj"]
 
 [ext_resource type="Script" uid="uid://c06re8umb14jv" path="res://demo/content/levels/main.gd" id="1_ddi8r"]
-[ext_resource type="TileSet" uid="uid://cokp78p0a17oi" path="res://demo/assets/resources/backgrounds.tres" id="1_rqwih"]
-[ext_resource type="TileSet" uid="uid://dnce0xghlew42" path="res://demo/assets/resources/game_world.tres" id="2_8vxkw"]
+[ext_resource type="TileSet" uid="uid://cokp78p0a17oi" path="res://demo/assets/resources/tilesets/backgrounds.tres" id="1_rqwih"]
+[ext_resource type="TileSet" uid="uid://dnce0xghlew42" path="res://demo/assets/resources/tilesets/game_world.tres" id="2_8vxkw"]
 [ext_resource type="PackedScene" uid="uid://crpb17ar8i612" path="res://addons/modular_ui_architecture/shared/classes/view_requester/view_requester.tscn" id="3_qfc3f"]
 
 [node name="Main" type="Node2D" unique_id=539338448]

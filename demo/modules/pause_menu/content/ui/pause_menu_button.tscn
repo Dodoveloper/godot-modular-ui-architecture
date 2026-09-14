@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://ci8gadmod2hni"]
+
+[ext_resource type="Theme" uid="uid://8xlwghhgu08q" path="res://demo/assets/resources/themes/default_theme.tres" id="1_s7luy"]
+
+[node name="PauseMenuButton" type="Button" unique_id=1346185875]
+offset_right = 33.0
+offset_bottom = 31.0
+theme = ExtResource("1_s7luy")
+text = "Esc"

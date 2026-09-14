@@ -17,12 +17,12 @@ func _ready() -> void:
 	_quit_button.pressed.connect(_on_quit_button_pressed)
 
 
-func _open() -> void:
-	show()
+func _on_block_inputs() -> void:
+	pass
 
 
-func _close() -> void:
-	hide()
+func _on_unblock_inputs() -> void:
+	pass
 
 
 func _on_resume_button_pressed() -> void:
