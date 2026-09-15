@@ -43,5 +43,5 @@ func _confirm_rename() -> void:
 	var new_name := _line_edit.text.strip_edges()
 	if _player and not new_name.is_empty():
 		_player.character_name = new_name
-
+	
 	_request_close()

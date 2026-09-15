@@ -28,5 +28,5 @@ func _execute() -> void:
 func _should_execute() -> bool:
 	return (
 		not _svc_popups.has_popups()
-		#and not _svc_policy_store.is_allowed(PolicyStoreTypes.Category.OPEN_WINDOW_UI)
+		and _svc_policy_store.is_allowed(PolicyStoreTypes.Category.OPEN_POPUP_UI)
 	)
