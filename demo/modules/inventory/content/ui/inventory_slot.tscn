@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://cg0ho57al2xd4"]
+
+[ext_resource type="Script" uid="uid://l23tuep4yybf" path="res://demo/modules/inventory/content/ui/inventory_slot.gd" id="1_vimjq"]
+
+[node name="InventorySlot" type="Panel" unique_id=2064024257]
+custom_minimum_size = Vector2(32, 32)
+script = ExtResource("1_vimjq")

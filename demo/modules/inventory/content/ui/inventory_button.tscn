@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://b1ovswiiiypck"]
+
+[ext_resource type="Theme" uid="uid://8xlwghhgu08q" path="res://demo/assets/resources/themes/default_theme.tres" id="1_gl3t8"]
+
+[node name="InventoryButton" type="Button" unique_id=1950218683]
+theme = ExtResource("1_gl3t8")
+text = "Tab"
