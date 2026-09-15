@@ -109,7 +109,7 @@ func initialize(tooltip_data: Dictionary[String, Variant] = {}) -> void:
 ## Should return one of the following:[br]
 ## [code]&"corner"[/code] — placed at one of the four corners of the anchor (default).[br]
 ## [code]&"horizontal"[/code] — placed left or right of the anchor, vertically centered.[br]
-## [code]&"vertical"[/code] — placed above or below the anchor, horizontally centered.[br]
+## [code]&"vertical"[/code] — placed above or below the anchor, horizontally centered.
 func get_placement_axis() -> PlacementAxis:
 	return _get_placement_axis()
 
