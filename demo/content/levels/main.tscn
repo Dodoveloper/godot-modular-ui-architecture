@@ -14,7 +14,7 @@ size = Vector2(738, 36)
 [node name="Main" type="Node2D" unique_id=539338448]
 script = ExtResource("1_ddi8r")
 
-[node name="Walls" type="RigidBody2D" parent="." unique_id=481303273]
+[node name="Walls" type="StaticBody2D" parent="." unique_id=680302554]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Walls" unique_id=1954575485]
 position = Vector2(-18, 171)

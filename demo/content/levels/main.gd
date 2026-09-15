@@ -20,4 +20,5 @@ func _ready() -> void:
 
 func _spawn_player() -> void:
 	var player := PlayerScene.instantiate()
+	player.global_position.x = 64
 	add_child(player)
