@@ -10,6 +10,7 @@ extends Node
 
 
 const UiLayersTypes = preload("../../../modules/ui_layers/types.gd")
+const Utils = preload("../utils.gd")
 
 enum AnchorMode {
 	## The UI is reparented into the target layer as-is, with no position tracking.
@@ -54,6 +55,8 @@ var _managed_ui: Control
 func _enter_tree() -> void:
 	if Engine.is_editor_hint():
 		return
+	
+	await Utils.await_module_graph_started()
 	
 	_svc_game_ui = GdlrModuleManager.request(CapGameUi, self)
 

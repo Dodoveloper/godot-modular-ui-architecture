@@ -7,6 +7,8 @@ extends Node
 ## and provides a simple API for attaching UI to them.
 
 
+const Utils = preload("../utils.gd")
+
 ## Slots configuration.
 @export var slot_configs: Dictionary[StringName, AttachmentSlotConfig]
 
@@ -28,7 +30,9 @@ var _protected_center_slots: Dictionary[StringName, Node] = {}
 func _enter_tree() -> void:
 	if Engine.is_editor_hint():
 		return
-
+	
+	await Utils.await_module_graph_started()
+	
 	_svc_game_ui = GdlrModuleManager.request(CapGameUi, self)
 
 

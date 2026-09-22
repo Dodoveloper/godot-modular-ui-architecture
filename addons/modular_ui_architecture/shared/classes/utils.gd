@@ -70,3 +70,14 @@ static func static_is_type(script: GDScript, type: GDScript) -> bool:
 		script = script.get_base_script()
 	
 	return false
+
+
+# [b]NOTE[/b]: Godular currently doesn't expose a public way of knowing whether the graph has
+# started, so this relies on the manager's private state as a workaround.
+# Replace this with a public API call if/when Godular exposes one.
+## Awaits until Godular's module graph has started, if it hasn't already.
+static func await_module_graph_started() -> void:
+	if GdlrModuleManager._graph_started:
+		return
+	
+	await GdlrModuleManager.graph_started
