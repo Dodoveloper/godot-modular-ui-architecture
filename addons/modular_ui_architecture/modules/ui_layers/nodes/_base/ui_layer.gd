@@ -23,10 +23,11 @@ func _ready() -> void:
 	_input_actions = InputMap.get_actions()
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if should_block_inputs and get_mounted_nodes().size() > 0:
-		get_viewport().set_input_as_handled()
-	
+# NOTE: intentionally _input, not _unhandled_input. Godot's pipeline runs
+# Node._input -> Viewport GUI phase -> _unhandled_input.
+# Broadcasting here lets a registered, executable binding claim keys like Tab/arrows before
+# built-in focus-cycling can swallow them whenever a Control holds keyboard focus.
+func _input(event: InputEvent) -> void:
 	for action in _input_actions:
 		if event.is_action_pressed(action):
 			_svc_ui_layers.notify_input_triggered(
@@ -36,6 +37,11 @@ func _unhandled_input(event: InputEvent) -> void:
 			_svc_ui_layers.notify_input_triggered(
 				action, ui_layer, InputBindingsTypes.InputActionType.RELEASED
 			)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if should_block_inputs and get_mounted_nodes().size() > 0:
+		get_viewport().set_input_as_handled()
 
 
 @warning_ignore("unused_parameter")

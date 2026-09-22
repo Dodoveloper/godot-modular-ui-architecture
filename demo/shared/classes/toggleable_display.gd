@@ -65,7 +65,7 @@ func _ready() -> void:
 	_on_visibility_changed()
 
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
 	if Engine.is_editor_hint():
 		return
 	
