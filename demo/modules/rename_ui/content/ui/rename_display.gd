@@ -3,6 +3,7 @@ extends ToggleableDisplay
 
 
 const Player = preload("res://demo/modules/player/content/entities/player.gd")
+const InputManager = preload("res://demo/shared/classes/input_manager.gd")
 
 @onready var _line_edit: LineEdit = %LineEdit
 @onready var _confirm_button: Button = %ConfirmButton
@@ -25,6 +26,14 @@ func _ready() -> void:
 	_confirm_button.pressed.connect(_on_confirm_button_pressed)
 	_cancel_button.pressed.connect(_on_cancel_button_pressed)
 	_line_edit.text_submitted.connect(_on_line_edit_text_submitted)
+
+
+func _on_block_inputs() -> void:
+	InputManager.block()
+
+
+func _on_unblock_inputs() -> void:
+	InputManager.unblock()
 
 
 func _on_confirm_button_pressed() -> void:

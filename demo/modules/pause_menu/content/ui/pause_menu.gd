@@ -2,6 +2,8 @@
 extends ToggleableDisplay
 
 
+const InputManager = preload("res://demo/shared/classes/input_manager.gd")
+
 signal quit_requested
 
 @onready var _resume_button: Button = %ResumeButton
@@ -18,11 +20,11 @@ func _ready() -> void:
 
 
 func _on_block_inputs() -> void:
-	pass
+	InputManager.block()
 
 
 func _on_unblock_inputs() -> void:
-	pass
+	InputManager.unblock()
 
 
 func _on_resume_button_pressed() -> void:

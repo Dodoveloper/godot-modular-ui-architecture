@@ -1,6 +1,8 @@
 extends CharacterBody2D
 
 
+const InputManager = preload("res://demo/shared/classes/input_manager.gd")
+
 signal name_changed(new_name: String)
 
 @export_category("Identity")
@@ -23,13 +25,18 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += gravity * delta
 	
-	if Input.is_action_just_pressed(&"jump") and is_on_floor():
+	_update_movement(delta)
+	move_and_slide()
+
+
+func _update_movement(delta: float) -> void:
+	var input_allowed := not InputManager.is_blocked()
+	var direction := Input.get_axis(&"move_left", &"move_right") if input_allowed else 0.0
+	
+	if input_allowed and Input.is_action_just_pressed(&"jump") and is_on_floor():
 		velocity.y = -jump_velocity
 	
-	var direction := Input.get_axis(&"move_left", &"move_right")
 	if direction:
 		velocity.x = move_toward(velocity.x, direction * speed, acceleration * delta)
 	else:
 		velocity.x = move_toward(velocity.x, 0.0, friction * delta)
-	
-	move_and_slide()

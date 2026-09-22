@@ -46,7 +46,8 @@ folder_colors={
 "res://demo/modules/pause_menu/content/": "green",
 "res://demo/modules/player/content/": "green",
 "res://demo/modules/player/content/ui/": "green",
-"res://demo/modules/rename_ui/content/": "green"
+"res://demo/modules/rename_ui/content/": "green",
+"res://demo/shared/": "yellow"
 }
 
 [global_group]

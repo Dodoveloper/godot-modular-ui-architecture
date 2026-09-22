@@ -11,9 +11,10 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.7019608)
 script = ExtResource("1_22snv")
-toggle_action = &"ui_cancel"
+mount_mode = 1
+close_action = &"ui_cancel"
 
-[node name="Inventory" type="PanelContainer" parent="." unique_id=909795104]
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=909795104]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -27,24 +28,24 @@ offset_bottom = 34.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SlotsGrid" type="GridContainer" parent="Inventory" unique_id=689792803]
+[node name="SlotsGrid" type="GridContainer" parent="PanelContainer" unique_id=689792803]
 layout_mode = 2
 columns = 3
 
-[node name="InventorySlot" parent="Inventory/SlotsGrid" unique_id=2064024257 instance=ExtResource("2_843nm")]
+[node name="InventorySlot" parent="PanelContainer/SlotsGrid" unique_id=2064024257 instance=ExtResource("2_843nm")]
 layout_mode = 2
 
-[node name="InventorySlot2" parent="Inventory/SlotsGrid" unique_id=886344039 instance=ExtResource("2_843nm")]
+[node name="InventorySlot2" parent="PanelContainer/SlotsGrid" unique_id=886344039 instance=ExtResource("2_843nm")]
 layout_mode = 2
 
-[node name="InventorySlot3" parent="Inventory/SlotsGrid" unique_id=198393429 instance=ExtResource("2_843nm")]
+[node name="InventorySlot3" parent="PanelContainer/SlotsGrid" unique_id=198393429 instance=ExtResource("2_843nm")]
 layout_mode = 2
 
-[node name="InventorySlot4" parent="Inventory/SlotsGrid" unique_id=846507284 instance=ExtResource("2_843nm")]
+[node name="InventorySlot4" parent="PanelContainer/SlotsGrid" unique_id=846507284 instance=ExtResource("2_843nm")]
 layout_mode = 2
 
-[node name="InventorySlot5" parent="Inventory/SlotsGrid" unique_id=681366339 instance=ExtResource("2_843nm")]
+[node name="InventorySlot5" parent="PanelContainer/SlotsGrid" unique_id=681366339 instance=ExtResource("2_843nm")]
 layout_mode = 2
 
-[node name="InventorySlot6" parent="Inventory/SlotsGrid" unique_id=54290353 instance=ExtResource("2_843nm")]
+[node name="InventorySlot6" parent="PanelContainer/SlotsGrid" unique_id=54290353 instance=ExtResource("2_843nm")]
 layout_mode = 2
