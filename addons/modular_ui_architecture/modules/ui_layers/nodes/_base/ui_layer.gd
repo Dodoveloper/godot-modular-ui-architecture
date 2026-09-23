@@ -6,6 +6,20 @@ const UiLayersTypes = preload("../../types.gd")
 const InputBindingsTypes = preload("../../../input_bindings/types.gd")
 const SceneCache = preload("../../../../shared/classes/scene_cache.gd")
 
+## Actions Godot's Viewport GUI phase special-cases for keyboard/joypad focus navigation.[br]
+## Whenever a [Control] holds keyboard focus, the GUI phase intercepts events matching these
+## — by physical key/button, not by action name — and marks them handled [b]before[/b]
+## [method Node._unhandled_input] ever runs.[br]
+## Any binding sharing a key with one of these (e.g. [i]Tab[/i]) would never reach a normal
+## [method Node._unhandled_input] broadcast while something holds focus, so those specific events
+## are broadcast a phase earlier, via [method Node._input].[br]
+## Every other action keeps using [method Node._unhandled_input], so e.g. typing into a
+## focused [LineEdit] is not pre-empted by unrelated bindings.
+const _FOCUS_NAV_ACTIONS: Array[StringName] = [
+	&"ui_focus_next", &"ui_focus_prev",
+	&"ui_up", &"ui_down", &"ui_left", &"ui_right",
+]
+
 var ui_layer: UiLayersTypes.UiLayer
 var should_block_inputs: bool
 
@@ -23,11 +37,21 @@ func _ready() -> void:
 	_input_actions = InputMap.get_actions()
 
 
-# NOTE: intentionally _input, not _unhandled_input. Godot's pipeline runs
-# Node._input -> Viewport GUI phase -> _unhandled_input.
-# Broadcasting here lets a registered, executable binding claim keys like Tab/arrows before
-# built-in focus-cycling can swallow them whenever a Control holds keyboard focus.
 func _input(event: InputEvent) -> void:
+	if not _collides_with_focus_nav(event):
+		return
+	
+	_broadcast_input(event)
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if should_block_inputs and get_mounted_nodes().size() > 0:
+		get_viewport().set_input_as_handled()
+	
+	_broadcast_input(event)
+
+
+func _broadcast_input(event: InputEvent) -> void:
 	for action in _input_actions:
 		if event.is_action_pressed(action):
 			_svc_ui_layers.notify_input_triggered(
@@ -39,9 +63,12 @@ func _input(event: InputEvent) -> void:
 			)
 
 
-func _unhandled_input(event: InputEvent) -> void:
-	if should_block_inputs and get_mounted_nodes().size() > 0:
-		get_viewport().set_input_as_handled()
+func _collides_with_focus_nav(event: InputEvent) -> bool:
+	for nav_action in _FOCUS_NAV_ACTIONS:
+		if event.is_action(nav_action, true):
+			return true
+	
+	return false
 
 
 @warning_ignore("unused_parameter")
