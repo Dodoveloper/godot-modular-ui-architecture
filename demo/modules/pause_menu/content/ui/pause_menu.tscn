@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://oyugtuaq6fev"]
 
 [ext_resource type="Script" uid="uid://b0rhh5x3e13ma" path="res://demo/modules/pause_menu/content/ui/pause_menu.gd" id="1_qg7re"]
-[ext_resource type="Theme" uid="uid://8xlwghhgu08q" path="res://demo/assets/resources/themes/default_theme.tres" id="2_vp3in"]
+[ext_resource type="Theme" uid="uid://dex65sj4cjk33" path="res://demo/assets/resources/themes/default_theme.tres" id="2_vp3in"]
 
 [node name="PauseMenu" type="ColorRect" unique_id=1728707345]
 process_mode = 3

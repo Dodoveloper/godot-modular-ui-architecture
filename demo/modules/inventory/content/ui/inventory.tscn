@@ -34,18 +34,30 @@ columns = 3
 
 [node name="InventorySlot" parent="PanelContainer/SlotsGrid" unique_id=2064024257 instance=ExtResource("2_843nm")]
 layout_mode = 2
+item_name = "Item1"
+item_description = "Hello!"
 
 [node name="InventorySlot2" parent="PanelContainer/SlotsGrid" unique_id=886344039 instance=ExtResource("2_843nm")]
 layout_mode = 2
+item_name = null
+item_description = null
 
 [node name="InventorySlot3" parent="PanelContainer/SlotsGrid" unique_id=198393429 instance=ExtResource("2_843nm")]
 layout_mode = 2
+item_name = null
+item_description = null
 
 [node name="InventorySlot4" parent="PanelContainer/SlotsGrid" unique_id=846507284 instance=ExtResource("2_843nm")]
 layout_mode = 2
+item_name = null
+item_description = null
 
 [node name="InventorySlot5" parent="PanelContainer/SlotsGrid" unique_id=681366339 instance=ExtResource("2_843nm")]
 layout_mode = 2
+item_name = null
+item_description = null
 
 [node name="InventorySlot6" parent="PanelContainer/SlotsGrid" unique_id=54290353 instance=ExtResource("2_843nm")]
 layout_mode = 2
+item_name = null
+item_description = null
