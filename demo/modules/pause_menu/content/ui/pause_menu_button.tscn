@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ci8gadmod2hni"]
 
-[ext_resource type="Theme" uid="uid://8xlwghhgu08q" path="res://demo/assets/resources/themes/default_theme.tres" id="1_s7luy"]
+[ext_resource type="Theme" uid="uid://dex65sj4cjk33" path="res://demo/assets/resources/themes/default_theme.tres" id="1_s7luy"]
 
 [node name="PauseMenuButton" type="Button" unique_id=1346185875]
 offset_right = 33.0
