@@ -16,7 +16,8 @@ const UiLayersTypes = preload("../../ui_layers/types.gd")
 ## [br]
 ## Returns the mounted tooltip.
 @abstract func show_tooltip(
-	tooltip_path: String, anchor: Control, contents: Dictionary[String, Variant], available_rect: Rect2,
+	tooltip_path: String, anchor: Control, contents: Dictionary[StringName, Variant],
+	available_rect: Rect2,
 ) -> Tooltip
 ## Removes the currently mounted tooltip.[br]
 ## [br]

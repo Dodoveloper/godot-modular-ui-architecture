@@ -21,7 +21,8 @@ func disable() -> void:
 
 
 func show_tooltip(
-	tooltip_path: String, anchor: Control, contents: Dictionary[String, Variant], available_rect: Rect2,
+	tooltip_path: String, anchor: Control, contents: Dictionary[StringName, Variant],
+	available_rect: Rect2,
 ) -> Tooltip:
 	var tooltip_data: Dictionary[StringName, Variant] = {}
 	tooltip_data.anchor = anchor
