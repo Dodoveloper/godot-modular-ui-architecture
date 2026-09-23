@@ -1,8 +1,21 @@
 [gd_scene format=3 uid="uid://p4mspy40f781"]
 
 [ext_resource type="Script" uid="uid://yfe4hy4ealtj" path="res://demo/modules/rename_ui/content/ui/rename_display.gd" id="1_1xx74"]
+[ext_resource type="Theme" uid="uid://dex65sj4cjk33" path="res://demo/assets/resources/themes/default_theme.tres" id="1_qrk3c"]
 
-[node name="RenameDisplay" type="PanelContainer" unique_id=1600554818]
+[node name="RenameDisplay" type="ColorRect" unique_id=184732640]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.7019608)
+script = ExtResource("1_1xx74")
+mount_mode = 1
+close_action = &"ui_cancel"
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=1600554818]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -14,32 +27,31 @@ offset_right = 80.0
 offset_bottom = 29.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_1xx74")
-mount_mode = 1
+theme = ExtResource("1_qrk3c")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=441994754]
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=441994754]
 layout_mode = 2
 
-[node name="Label" type="Label" parent="VBoxContainer" unique_id=1612879363]
+[node name="Label" type="Label" parent="PanelContainer/VBoxContainer" unique_id=1612879363]
 layout_mode = 2
 text = "Choose a new name:"
 horizontal_alignment = 1
 
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer" unique_id=986680615]
+[node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer" unique_id=986680615]
 unique_name_in_owner = true
 layout_mode = 2
 placeholder_text = "New Name"
 
-[node name="ButtonsContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=165850179]
+[node name="ButtonsContainer" type="HBoxContainer" parent="PanelContainer/VBoxContainer" unique_id=165850179]
 layout_mode = 2
 alignment = 1
 
-[node name="ConfirmButton" type="Button" parent="VBoxContainer/ButtonsContainer" unique_id=1336904188]
+[node name="ConfirmButton" type="Button" parent="PanelContainer/VBoxContainer/ButtonsContainer" unique_id=1336904188]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Confirm"
 
-[node name="CancelButton" type="Button" parent="VBoxContainer/ButtonsContainer" unique_id=1922442110]
+[node name="CancelButton" type="Button" parent="PanelContainer/VBoxContainer/ButtonsContainer" unique_id=1922442110]
 unique_name_in_owner = true
 layout_mode = 2
 text = "Cancel"

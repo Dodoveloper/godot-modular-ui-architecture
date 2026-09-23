@@ -7,4 +7,5 @@ class Scenes:
 		&"PAUSE_MENU_TOKEN": &"pause_menu",
 		&"HUD_TOKEN": &"hud",
 		&"INVENTORY_TOKEN": &"inventory",
+		&"RENAME_UI_TOKEN": &"rename_ui",
 	}

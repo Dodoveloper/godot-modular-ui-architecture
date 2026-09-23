@@ -7,26 +7,22 @@ const PolicyStoreTypes = preload("res://addons/modular_ui_architecture/modules/p
 
 const RENAME_DISPLAY_PATH := "res://demo/modules/rename_ui/content/ui/rename_display.tscn"
 
-var _svc_popups: CapPopups
-var _svc_policy_store: CapPolicyStore
+var _svc_game_ui: CapGameUi
 
 
 func _init(
-	svc_popups: CapPopups, svc_policy_store: CapPolicyStore, layer_: UiLayersTypes.UiLayer
+	svc_game_ui: CapGameUi, layer_: UiLayersTypes.UiLayer
 ) -> void:
-	_svc_popups = svc_popups
-	_svc_policy_store = svc_policy_store
+	_svc_game_ui = svc_game_ui
 	super(layer_)
 
 
 func _execute() -> void:
-	_svc_popups.open_popup(
-		RENAME_DISPLAY_PATH, null, Vector2.ZERO, false, Color(0.0, 0.0, 0.0, 0.5), true
-	)
+	if not _svc_game_ui.get_view(Tokens.Scenes.Views.RENAME_UI_TOKEN):
+		_svc_game_ui.mount_view(Tokens.Scenes.Views.RENAME_UI_TOKEN, layer)
+	else:
+		_svc_game_ui.unmount_view(Tokens.Scenes.Views.RENAME_UI_TOKEN)
 
 
 func _should_execute() -> bool:
-	return (
-		not _svc_popups.has_popups()
-		and _svc_policy_store.is_allowed(PolicyStoreTypes.Category.OPEN_POPUP_UI)
-	)
+	return true
