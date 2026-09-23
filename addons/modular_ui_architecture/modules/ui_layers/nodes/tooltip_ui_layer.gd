@@ -23,8 +23,8 @@ func _mount_node(node: Node, data: Dictionary[StringName, Variant] = {}) -> Node
 	
 	_available_rect = data.get(&"available_rect", get_viewport().get_visible_rect())
 	_tooltip = node
-	var contents: Dictionary[String, Variant] = (
-		data.get(&"contents", {} as Dictionary[String, Variant])
+	var contents: Dictionary[StringName, Variant] = (
+		data.get(&"contents", {} as Dictionary[StringName, Variant])
 	)
 	
 	add_child(_tooltip)

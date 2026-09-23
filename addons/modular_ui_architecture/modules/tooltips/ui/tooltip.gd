@@ -59,7 +59,7 @@ func _ready() -> void:
 
 @warning_ignore("unused_parameter")
 ## Virtual method. Override to customize behavior.
-func _initialize(tooltip_data: Dictionary[String, Variant]) -> void:
+func _initialize(tooltip_data: Dictionary[StringName, Variant]) -> void:
 	pass
 
 
@@ -100,7 +100,7 @@ func _update_bubble_position() -> void:
 ## how [param tooltip_data] is consumed.[br]
 ## [br]
 ## [param tooltip_data] — arbitrary key/value pairs, shape is defined per tooltip subclass.
-func initialize(tooltip_data: Dictionary[String, Variant] = {}) -> void:
+func initialize(tooltip_data: Dictionary[StringName, Variant] = {}) -> void:
 	_initialize(tooltip_data)
 
 
