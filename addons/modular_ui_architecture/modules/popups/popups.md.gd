@@ -4,7 +4,7 @@ const GameUiModule := preload("../game_ui/game_ui.md.gd")
 
 const UiLayersTypes := preload("../ui_layers/types.gd")
 const GameUiTypes := preload("../game_ui/types.gd")
-const ClosePopupBinding = preload("./input_bindings/close_popup.bind.gd")
+const ClosePopupBinding = preload("./bindings/close_popup.bind.gd")
 const SvcPopups = preload("./services/popups.svc.gd")
 
 static var IMPORTS := [

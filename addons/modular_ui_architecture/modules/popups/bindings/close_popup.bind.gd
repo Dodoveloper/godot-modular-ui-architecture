@@ -10,7 +10,6 @@ var _svc_popups: CapPopups
 
 func _init(svc_popups: CapPopups, layer_ := UiLayersTypes.UiLayer.DEFAULT) -> void:
 	super(layer_)
-	
 	_svc_popups = svc_popups
 
 
