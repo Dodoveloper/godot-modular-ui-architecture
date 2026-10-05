@@ -4,6 +4,7 @@
 [ext_resource type="TileSet" uid="uid://cokp78p0a17oi" path="res://demo/assets/resources/tilesets/backgrounds.tres" id="1_rqwih"]
 [ext_resource type="TileSet" uid="uid://dnce0xghlew42" path="res://demo/assets/resources/tilesets/game_world.tres" id="2_8vxkw"]
 [ext_resource type="PackedScene" uid="uid://crpb17ar8i612" path="res://addons/modular_ui_architecture/shared/classes/view_requester/view_requester.tscn" id="3_qfc3f"]
+[ext_resource type="PackedScene" uid="uid://dxosbsubkxvte" path="res://demo/modules/chest/content/entities/chest.tscn" id="4_chest"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4dcrc"]
 size = Vector2(36, 414)
@@ -45,3 +46,6 @@ unique_name_in_owner = true
 token = &"hud"
 layer = 1
 unmount_mode = 1
+
+[node name="Chest" parent="." unique_id=1933379847 instance=ExtResource("4_chest")]
+position = Vector2(360, 243)

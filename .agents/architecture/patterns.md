@@ -1,7 +1,7 @@
 # Patterns
 
 Step-by-step recipes for common additions, distilled from how the existing demo modules
-(`hud`, `pause_menu`, `rename_ui`, `inventory`, `player`) are actually built. Read
+(`hud`, `pause_menu`, `rename_ui`, `inventory`, `player`, `chest`) are actually built. Read
 [`glossary.md`](glossary.md) and [`core.md`](core.md) first if a term below is unfamiliar.
 
 ## Add a new demo module
@@ -64,21 +64,39 @@ button-press and key-press behave identically.
 
 Use a Popup instead of a View when the UI should support click-outside dismissal, doesn't need
 to be globally exclusive by token, or should stack/queue with other popups (e.g. a
-confirmation dialog, a rename prompt).
+confirmation dialog, a reward notification).
 
-1. Content scene extends `ToggleableDisplay` too, but there's no `close_action`/`toggle_action`
-   needed — `CapPopups` already handles Escape (`ui_cancel`) and click-outside dismissal at the
-   layer level via its own registered `close_popup.bind.gd`. Only set `mount_mode = LAZY_LOADED`.
-2. Trigger it from a binding via `CapPopups`, not `CapGameUi`:
+1. Content scene extends `ToggleableDisplay` too, but there's no `toggle_action` needed —
+   `CapPopups` already handles click-outside dismissal at the layer level. Set
+   `mount_mode = LAZY_LOADED`. If the popup is shown over another `ToggleableDisplay` (e.g. a
+   confirm dialog opened from a View), also set `close_action = &"ui_cancel"` so the two layers'
+   `_input` broadcasts (popup layer first, since it's added later) resolve Escape to the topmost
+   one — don't leave it to `close_popup.bind.gd` alone, and don't swallow all `InputEventKey`
+   events to "be safe"; that also blocks focus-cycling and typing (see ADR-001). If the popup's
+   content scene already draws its own dimmed backdrop, pass a transparent `color` to
+   `open_popup`/`open_popup_queued` to avoid a double-dimmed look.
+2. Trigger it from a binding, a module's `register()`/view-mounted handler, or a plain entity
+   that resolves `CapPopups` directly (see "Add a demo module" above for the latter) — whichever
+   owns the moment that should show the popup. Always go through `CapPopups`, not `CapGameUi`:
    - `open_popup(popup_path, parent, position, is_blocking, color, dismiss_on_click_outside)`
-     for an immediately-mounted, possibly-nested popup.
+     for an immediately-mounted, possibly-nested popup. It returns the instance before that
+     instance's `_ready()` has run (the popup is parented to its background deferred), so set
+     any exported/configuration properties and connect signals on the returned node right away —
+     don't assume `@onready` state is populated yet.
    - `open_popup_queued(popup_path, color, setup, dismiss_on_click_outside)` for one that should
-     queue (FIFO) behind another already-open queued popup rather than overlapping it.
+     queue (FIFO) behind another already-open queued popup rather than overlapping it. Pass
+     per-popup data through the `setup := func(popup): ...` callable (it runs after
+     instantiation, same timing caveat as above), not by trying to read a return value.
 3. `IMPORTS` `PopupsModule` (which already imports `InputBindingsModule`/`UiLayersModule`/
    `GameUiModule` for you) in the owning `<name>.md.gd`.
 4. If the popup needs to look something up rather than receive it via DI (e.g. "who is the
    current player"), prefer a well-known Godot group (`get_tree().get_first_node_in_group(...)`)
    over inventing a new capability for a single lookup — see `rename_display.gd`.
+5. If showing the popup should depend on "is this class of interaction currently allowed" (e.g.
+   gating gameplay-triggered popups while a View owns exclusivity), check
+   `CapPolicyStore.is_allowed(category)` at the call site that would open the popup — see the
+   `chest` module (an `Area2D` entity, not a module-owned binding) for a non-binding consumer of
+   Policy Store, and the Policy Store recipe below for how to add a new category.
 
 ## Add a Tooltip
 

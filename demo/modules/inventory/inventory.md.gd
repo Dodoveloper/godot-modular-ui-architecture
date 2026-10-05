@@ -63,7 +63,7 @@ class InventoryModule extends GdlrModule:
 			return
 		
 		var inventory: Inventory = svc_game_ui.get_view(token)
-		svc_policy_store.block(PolicyStoreTypes.Category.OPEN_POPUP_UI, inventory)
+		svc_policy_store.block(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI, inventory)
 		inventory.close_requested.connect(_on_inventory_close_requested.bind(token))
 		inventory.tree_exiting.connect(_on_inventory_tree_exiting.bind(inventory))
 	
@@ -73,4 +73,4 @@ class InventoryModule extends GdlrModule:
 	
 	
 	func _on_inventory_tree_exiting(inventory: Inventory) -> void:
-		svc_policy_store.unblock(PolicyStoreTypes.Category.OPEN_POPUP_UI, inventory)
+		svc_policy_store.unblock(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI, inventory)

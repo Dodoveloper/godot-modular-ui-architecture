@@ -66,10 +66,14 @@ modules should not reach into directly — consume the capability, not the servi
 demo/
 ├── content/levels/         # main.tscn / main.gd — plain, non-module bootstrap scene
 ├── assets/                  # art, fonts, themes, tilesets
-├── shared/classes/
-│   ├── tokens.gd             # StringName tokens for Views etc., shared across demo modules
-│   ├── toggleable_display.gd # base class for dismissable UI (Views/Popups), CACHED or LAZY_LOADED
-│   └── input_manager.gd      # simple global input-block reference counter
+├── shared/
+│   ├── classes/
+│   │   ├── tokens.gd             # StringName tokens for Views etc., shared across demo modules
+│   │   ├── toggleable_display.gd # base class for dismissable UI (Views/Popups), CACHED or LAZY_LOADED
+│   │   └── input_manager.gd      # simple global input-block reference counter
+│   └── ui/                        # generic Popup content scenes reused by multiple demo modules
+│       ├── confirmation_dialog/   # yes/no confirmation Popup (e.g. confirm-quit)
+│       └── attention_dialog/      # "you obtained X" queued-Popup content, animated
 └── modules/
     └── <module_name>/
         ├── <module_name>.md.gd
@@ -82,9 +86,12 @@ demo/
             └── entities/           # gameplay nodes (e.g. player.tscn)
 ```
 
-Existing demo modules: `player`, `hud`, `pause_menu`, `rename_ui`, `inventory`. Each is
+Existing demo modules: `player`, `hud`, `pause_menu`, `rename_ui`, `inventory`, `chest`. Each is
 self-contained under `demo/modules/<name>/` — see
 [`patterns.md`](architecture/patterns.md) for how to add a new one following the same shape.
+`chest` has no `bindings/`/`attachments/`: it's a world entity (`content/entities/chest.gd`)
+that resolves `CapPopups`/`CapPolicyStore` directly, the same way `player`'s `Nameplate` resolves
+`CapGameUi` via `WorldUiPortal` — not every demo module needs a binding or an attachment.
 
 `demo/demo.md.gd` is the root module: it only composes (`IMPORTS` every demo module), no
 `PROVIDERS` of its own. `demo/content/levels/main.gd` is a **plain, non-module** bootstrap

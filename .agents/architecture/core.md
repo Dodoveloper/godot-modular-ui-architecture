@@ -132,8 +132,11 @@ every blocker is removed or its `source` becomes invalid (pruned automatically v
 This is intentionally decoupled from `CapInputBindings` — a binding's `_should_execute()` is
 just one *consumer* of Policy Store, not the only one; any system needing to know "is this class
 of interaction currently allowed" can ask, without knowing which other module(s) might be
-blocking it or why. (See §0 — this is the "pragmatism" example: it was extracted because
-multiple bindings across multiple demo modules needed the same check, not preemptively.)
+blocking it or why. The demo's `chest` entity is a non-binding example: it checks
+`is_allowed(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI)` directly before opening its
+reward popups, with `pause_menu`/`inventory` blocking that category for their own lifetime.
+(See §0 — this is the "pragmatism" example: it was extracted because multiple bindings across
+multiple demo modules needed the same check, not preemptively.)
 
 ## 5. Naming discipline: "Context" is reserved
 

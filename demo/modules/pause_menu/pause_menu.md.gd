@@ -1,6 +1,7 @@
 const GameUiModule = preload("res://addons/modular_ui_architecture/modules/game_ui/game_ui.md.gd")
 const InputBindingsModule = preload("res://addons/modular_ui_architecture/modules/input_bindings/input_bindings.md.gd")
 const PolicyStoreModule = preload("res://addons/modular_ui_architecture/modules/policy_store/policy_store.md.gd")
+const PopupsModule = preload("res://addons/modular_ui_architecture/modules/popups/popups.md.gd")
 
 const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
 const GameUiTypes = preload("res://addons/modular_ui_architecture/modules/game_ui/types.gd")
@@ -9,14 +10,17 @@ const TogglePauseMenuBinding = preload("./bindings/toggle_pause_menu.bind.gd")
 const PauseMenuButtonAttachment = preload("./attachments/pause_menu_button.attach.gd")
 const Hud = preload("res://demo/modules/hud/content/ui/hud.gd")
 const PauseMenu = preload("res://demo/modules/pause_menu/content/ui/pause_menu.gd")
+const ConfirmationDialogControl = preload("res://demo/shared/ui/confirmation_dialog/confirmation_dialog.gd")
 
 const PAUSE_MENU_PATH := "res://demo/modules/pause_menu/content/ui/pause_menu.tscn"
+const CONFIRM_QUIT_DIALOG_PATH := "res://demo/shared/ui/confirmation_dialog/confirmation_dialog.tscn"
 const TOGGLE_PAUSE_ACTION := &"toggle_pause"
 
 static var IMPORTS := [
 	GameUiModule,
 	InputBindingsModule,
 	PolicyStoreModule,
+	PopupsModule,
 ]
 
 
@@ -27,6 +31,7 @@ class PauseMenuModule extends GdlrModule:
 	var svc_game_ui: CapGameUi
 	var svc_input_bindings: CapInputBindings
 	var svc_policy_store: CapPolicyStore
+	var svc_popups: CapPopups
 	
 	
 	func register() -> void:
@@ -62,7 +67,7 @@ class PauseMenuModule extends GdlrModule:
 			return
 		
 		var pause_menu: PauseMenu = svc_game_ui.get_view(token)
-		svc_policy_store.block(PolicyStoreTypes.Category.OPEN_POPUP_UI, pause_menu)
+		svc_policy_store.block(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI, pause_menu)
 		pause_menu.close_requested.connect(_on_pause_menu_close_requested.bind(token))
 		pause_menu.quit_requested.connect(_on_pause_menu_quit_requested)
 		pause_menu.tree_exiting.connect(_on_pause_menu_tree_exiting.bind(pause_menu))
@@ -73,9 +78,19 @@ class PauseMenuModule extends GdlrModule:
 	
 	
 	func _on_pause_menu_quit_requested() -> void:
+		var dialog: ConfirmationDialogControl = svc_popups.open_popup(
+			CONFIRM_QUIT_DIALOG_PATH, null, Vector2.ZERO, false, Color(0.0, 0.0, 0.0, 0.5), true
+		)
+		if not dialog:
+			return
+		
+		dialog.confirmed.connect(_on_confirm_quit_dialog_confirmed)
+	
+	
+	func _on_confirm_quit_dialog_confirmed() -> void:
 		var tree := Engine.get_main_loop() as SceneTree
 		tree.quit()
 	
 	
 	func _on_pause_menu_tree_exiting(pause_menu: PauseMenu) -> void:
-		svc_policy_store.unblock(PolicyStoreTypes.Category.OPEN_POPUP_UI, pause_menu)
+		svc_policy_store.unblock(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI, pause_menu)

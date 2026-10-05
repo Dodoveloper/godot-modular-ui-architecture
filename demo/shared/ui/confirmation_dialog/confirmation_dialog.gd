@@ -19,13 +19,6 @@ func _ready() -> void:
 	_ok_button.pressed.connect(_on_ok_button_pressed)
 
 
-func _handle_input(event: InputEvent) -> bool:
-	if super(event):
-		return true
-	
-	return event is InputEventKey
-
-
 func _on_close_button_pressed() -> void:
 	_request_close()
 
@@ -35,4 +28,5 @@ func _on_cancel_button_pressed() -> void:
 
 
 func _on_ok_button_pressed() -> void:
+	_request_close()
 	confirmed.emit()

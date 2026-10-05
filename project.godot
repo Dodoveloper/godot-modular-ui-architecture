@@ -41,6 +41,7 @@ folder_colors={
 "res://demo/assets/": "pink",
 "res://demo/content/": "green",
 "res://demo/modules/": "red",
+"res://demo/modules/chest/content/": "green",
 "res://demo/modules/hud/content/": "green",
 "res://demo/modules/inventory/content/": "green",
 "res://demo/modules/pause_menu/content/": "green",

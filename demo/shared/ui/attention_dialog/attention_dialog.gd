@@ -3,6 +3,7 @@ extends ToggleableDisplay
 
 
 const PopupTypes = preload("res://addons/modular_ui_architecture/modules/popups/types.gd")
+const InputManager = preload("res://demo/shared/classes/input_manager.gd")
 
 signal close_transition_finished
 
@@ -92,6 +93,14 @@ func _should_grab_focus() -> bool:
 	return false
 
 
+func _on_block_inputs() -> void:
+	InputManager.block()
+
+
+func _on_unblock_inputs() -> void:
+	InputManager.unblock()
+
+
 ## Applies display data to the dialog.[br]
 ## This method only updates presentation state and does [b]not[/b] control popup lifecycle,
 ## queueing, or visibility.
@@ -117,16 +126,7 @@ func _apply_config() -> void:
 	headline_label.text = _config.headline
 	main_text_label.text = _config.main_text
 	
-	display_texture.clear_target_node()
-	if _config.display_scene:
-		var icon_node: Node2D = _config.display_scene.instantiate()
-		if _config.display_setup.is_valid():
-			_config.display_setup.call(icon_node)
-		display_texture.set_target_node(icon_node)
-	elif _config.texture:
-		var sprite := Sprite2D.new()
-		sprite.texture = _config.texture
-		display_texture.set_target_node(sprite)
+	display_texture.texture = _config.texture
 	
 	var should_show_amount := _config.amount > 1 and not _config.suppress_amount_label
 	amount_label.text = ""
@@ -155,14 +155,5 @@ class Config extends RefCounted:
 	var amount := 1
 	## When [code]true[/code], the amount label is hidden regardless of [member amount].
 	var suppress_amount_label := false
-	## A packed scene to instantiate as the display, it [b]must[/b] be a [Node2D] type.[br]
-	## When set, takes precedence over [member texture].
-	var display_scene: PackedScene = null
-	## Optional image representing the dialog content.
+	## Image representing the dialog content, displayed via a [TextureRect].
 	var texture: Texture2D = null
-	## Optional callable invoked with the instantiated node from [member display_scene]
-	## after it enters the scene tree.
-	## [codeblock]
-	## @shape: func display_setup(display: Node2D) -> void
-	## [/codeblock]
-	var display_setup: Callable
