@@ -5,12 +5,39 @@
 [ext_resource type="Theme" uid="uid://dex65sj4cjk33" path="res://demo/assets/resources/themes/default_theme.tres" id="2_x6veq"]
 [ext_resource type="PackedScene" uid="uid://bcbdukxf123wi" path="res://addons/modular_ui_architecture/shared/classes/attachment_slots_controller/attachment_slots_controller.tscn" id="3_843nm"]
 [ext_resource type="Script" uid="uid://cdsmt65clb7ek" path="res://addons/modular_ui_architecture/shared/resources/attachment_slot_config.gd" id="3_sukfj"]
+[ext_resource type="Texture2D" uid="uid://byg4128ahn2u7" path="res://icon.svg" id="6_vmdct"]
+[ext_resource type="Texture2D" uid="uid://conmpqj67aqno" path="res://demo/assets/art/tilemaps/game_world.png" id="7_qmlwa"]
 
 [sub_resource type="Resource" id="Resource_843nm"]
 script = ExtResource("3_sukfj")
 node_path = NodePath("../VBoxContainer/Footer")
 max_children = 1
 metadata/_custom_type_script = "uid://cdsmt65clb7ek"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d750k"]
+atlas = ExtResource("7_qmlwa")
+region = Rect2(126, 18, 18, 18)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qmlwa"]
+atlas = ExtResource("7_qmlwa")
+region = Rect2(146, 112, 14, 14)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6cxr6"]
+atlas = ExtResource("7_qmlwa")
+region = Rect2(108, 108, 18, 18)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fy6am"]
+atlas = ExtResource("7_qmlwa")
+region = Rect2(90, 127, 18, 18)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vmdct"]
+atlas = ExtResource("7_qmlwa")
+region = Rect2(72, 36, 18, 18)
+filter_clip = true
 
 [node name="Inventory" type="ColorRect" unique_id=1455531064]
 anchors_preset = 15
@@ -53,23 +80,39 @@ columns = 3
 
 [node name="InventorySlot" parent="PanelContainer/VBoxContainer/SlotsGrid" unique_id=2064024257 instance=ExtResource("2_843nm")]
 layout_mode = 2
-item_name = "Item1"
-item_description = "Hello!"
+item_name = "Godot Engine"
+item_description = "Increases your gamedev skills by 20%."
+texture = ExtResource("6_vmdct")
 
 [node name="InventorySlot2" parent="PanelContainer/VBoxContainer/SlotsGrid" unique_id=886344039 instance=ExtResource("2_843nm")]
 layout_mode = 2
+item_name = "Key"
+item_description = "It looks like the [i]key[/i] to something interesting."
+texture = SubResource("AtlasTexture_d750k")
 
 [node name="InventorySlot3" parent="PanelContainer/VBoxContainer/SlotsGrid" unique_id=198393429 instance=ExtResource("2_843nm")]
 layout_mode = 2
+item_name = "Mushroom"
+item_description = "It's totally a mushroom."
+texture = SubResource("AtlasTexture_qmlwa")
 
 [node name="InventorySlot4" parent="PanelContainer/VBoxContainer/SlotsGrid" unique_id=846507284 instance=ExtResource("2_843nm")]
 layout_mode = 2
+item_name = "Tree"
+item_description = "How did this even fit in here?"
+texture = SubResource("AtlasTexture_6cxr6")
 
 [node name="InventorySlot5" parent="PanelContainer/VBoxContainer/SlotsGrid" unique_id=681366339 instance=ExtResource("2_843nm")]
 layout_mode = 2
+item_name = "Snowman"
+item_description = "It appears to be melting..."
+texture = SubResource("AtlasTexture_fy6am")
 
 [node name="InventorySlot6" parent="PanelContainer/VBoxContainer/SlotsGrid" unique_id=54290353 instance=ExtResource("2_843nm")]
 layout_mode = 2
+item_name = "Heart"
+item_description = "It fills you with determination."
+texture = SubResource("AtlasTexture_vmdct")
 
 [node name="Footer" type="MarginContainer" parent="PanelContainer/VBoxContainer" unique_id=1982206520]
 unique_name_in_owner = true

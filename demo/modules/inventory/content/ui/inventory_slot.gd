@@ -1,4 +1,5 @@
-extends Panel
+@tool
+extends PanelContainer
 
 
 const InventoryItemTooltip = preload("res://demo/modules/inventory/content/ui/inventory_item_tooltip.tscn")
@@ -8,14 +9,20 @@ const InventoryItemTooltip = preload("res://demo/modules/inventory/content/ui/in
 ## [param item_name] - Same value as [member item_name] at the time of selection.
 signal item_selected(item_name: String)
 
+## Visual highlight applied while this slot has focus.
+const SELECTED_MODULATE := Color(1.3, 1.3, 1.1, 1.0)
+
 ## Display name shown as the tooltip's title.
 @export var item_name := ""
 ## Flavor text shown in the tooltip's body.
 @export_multiline() var item_description := ""
-## Visual highlight applied while this slot has focus .
-@export var selected_modulate := Color(1.3, 1.3, 1.1, 1.0)
+## Texture to be displayed on the slot.
+@export var texture: Texture2D:
+	set = _set_texture
 
 var _svc_tooltips: CapTooltips
+
+@onready var _texture_rect: TextureRect = %TextureRect
 
 
 func _enter_tree() -> void:
@@ -26,6 +33,8 @@ func _enter_tree() -> void:
 
 
 func _ready() -> void:
+	_set_texture(texture)
+	
 	if Engine.is_editor_hint():
 		return
 	
@@ -62,10 +71,18 @@ func _on_mouse_exited() -> void:
 
 
 func _on_focus_entered() -> void:
-	self_modulate = selected_modulate
+	self_modulate = SELECTED_MODULATE
 	if not item_name.is_empty():
 		item_selected.emit(item_name)
 
 
 func _on_focus_exited() -> void:
 	self_modulate = Color.WHITE
+
+
+func _set_texture(value: Texture2D) -> void:
+	texture = value
+	if not is_node_ready():
+		return
+	
+	_texture_rect.texture = texture
