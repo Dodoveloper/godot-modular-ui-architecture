@@ -5,6 +5,7 @@
 [ext_resource type="TileSet" uid="uid://dnce0xghlew42" path="res://demo/assets/resources/tilesets/game_world.tres" id="2_8vxkw"]
 [ext_resource type="PackedScene" uid="uid://crpb17ar8i612" path="res://addons/modular_ui_architecture/shared/classes/view_requester/view_requester.tscn" id="3_qfc3f"]
 [ext_resource type="PackedScene" uid="uid://dxosbsubkxvte" path="res://demo/modules/chest/content/entities/chest.tscn" id="4_chest"]
+[ext_resource type="Texture2D" uid="uid://byg4128ahn2u7" path="res://icon.svg" id="6_h7bfm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4dcrc"]
 size = Vector2(36, 414)
@@ -49,3 +50,6 @@ unmount_mode = 1
 
 [node name="Chest" parent="." unique_id=1933379847 instance=ExtResource("4_chest")]
 position = Vector2(360, 243)
+reward_names = ["Sword", "Shield"]
+reward_amounts = [1, 2]
+reward_icons = Array[Texture2D]([ExtResource("6_h7bfm"), ExtResource("6_h7bfm")])

@@ -85,8 +85,12 @@ confirmation dialog, a reward notification).
      don't assume `@onready` state is populated yet.
    - `open_popup_queued(popup_path, color, setup, dismiss_on_click_outside)` for one that should
      queue (FIFO) behind another already-open queued popup rather than overlapping it. Pass
-     per-popup data through the `setup := func(popup): ...` callable (it runs after
-     instantiation, same timing caveat as above), not by trying to read a return value.
+     per-popup data through the `setup` callable (it runs after instantiation, same timing
+     caveat as above), not by trying to read a return value. If the caller may be freed before
+     a later-queued popup's `setup` actually runs (e.g. a world entity queueing several popups
+     and then freeing itself), bind a `static` method to the data instead of using a closure
+     over `self` — see `chest.gd`'s `_configure_popup.bind(config)` — so a freed/invalid
+     instance is never implicitly captured.
 3. `IMPORTS` `PopupsModule` (which already imports `InputBindingsModule`/`UiLayersModule`/
    `GameUiModule` for you) in the owning `<name>.md.gd`.
 4. If the popup needs to look something up rather than receive it via DI (e.g. "who is the

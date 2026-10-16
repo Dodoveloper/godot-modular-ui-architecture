@@ -54,5 +54,9 @@ func _grant_rewards() -> void:
 		
 		_svc_popups.open_popup_queued(
 			ATTENTION_DIALOG_PATH, Color(0.0, 0.0, 0.0, 0.0),
-			func(popup: AttentionDialog): popup.configure(config)
+			_configure_popup.bind(config)
 		)
+
+
+static func _configure_popup(popup: AttentionDialog, config: AttentionDialog.Config) -> void:
+	popup.configure(config)
