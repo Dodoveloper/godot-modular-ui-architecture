@@ -48,7 +48,7 @@ func _ready() -> void:
 func add_to_slot(slot_tag: StringName, ui: Control, priority := 0) -> void:
 	var slot := get_slot(slot_tag)
 	if not slot:
-		assert(false, "Slot '%s' not found" % slot_tag)
+		push_warning("Slot '%s' not found. Ignoring" % slot_tag)
 		return
 	if not slot.has_space():
 		push_error("Slot '%s' does not have space left" % slot_tag)
