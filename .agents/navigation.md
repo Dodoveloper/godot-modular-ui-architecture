@@ -86,12 +86,16 @@ demo/
             └── entities/           # gameplay nodes (e.g. player.tscn)
 ```
 
-Existing demo modules: `player`, `hud`, `pause_menu`, `rename_ui`, `inventory`, `chest`. Each is
-self-contained under `demo/modules/<name>/` — see
+Existing demo modules: `player`, `hud`, `pause_menu`, `rename_ui`, `inventory`, `chest`,
+`equipment`. Each is self-contained under `demo/modules/<name>/` — see
 [`patterns.md`](architecture/patterns.md) for how to add a new one following the same shape.
 `chest` has no `bindings/`/`attachments/`: it's a world entity (`content/entities/chest.gd`)
 that resolves `CapPopups`/`CapPolicyStore` directly, the same way `player`'s `Nameplate` resolves
 `CapGameUi` via `WorldUiPortal` — not every demo module needs a binding or an attachment.
+`equipment` has only `attachments/` (and a shared `content/classes/equipment_state.gd`, not a
+`content/ui/` View): both its Attachments target Views owned by other modules (`inventory`,
+`hud`) — neither of which it `IMPORTS` — via `preload()`ed View scripts, not module imports; see
+`patterns.md`'s "Attach a Widget to another module's View" recipe.
 
 `demo/demo.md.gd` is the root module: it only composes (`IMPORTS` every demo module), no
 `PROVIDERS` of its own. `demo/content/levels/main.gd` is a **plain, non-module** bootstrap

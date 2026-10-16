@@ -4,4 +4,5 @@
 
 [node name="InventorySlot" type="Panel" unique_id=2064024257]
 custom_minimum_size = Vector2(32, 32)
+focus_mode = 2
 script = ExtResource("1_vimjq")

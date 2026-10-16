@@ -83,7 +83,11 @@ apply the definitions below when naming/organizing new UI, even without dedicate
   code**, this is implemented as a single `context: RefCounted` property that `CapGameUi` polls
   every physics frame (`view.get(&"context")`), diffing its exposed properties and calling
   `UiAttachment._on_context_changed` on that View's own Attachments when something changes — not
-  the `get_context() -> Dictionary` method shape described in the older design doc. **This is
+  the `get_context() -> Dictionary` method shape described in the older design doc. See
+  `inventory.gd`'s `context`/inner `Context` class for the demo's concrete example: the
+  Inventory tracks which slot is selected, and the `equipment` module's Attachment (which the
+  Inventory neither imports nor knows about) reads `context.selected_item_name` to enable/label
+  its "Equip" button. **This is
   the only sanctioned meaning of "Context" in this codebase** — do not reuse the name for
   unrelated state containers (e.g. player data). See ADR-002 for the related decision to keep
   Popups/Tooltips outside this View/Context/Attachment system entirely.

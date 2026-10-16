@@ -1,8 +1,9 @@
 # Patterns
 
 Step-by-step recipes for common additions, distilled from how the existing demo modules
-(`hud`, `pause_menu`, `rename_ui`, `inventory`, `player`, `chest`) are actually built. Read
-[`glossary.md`](glossary.md) and [`core.md`](core.md) first if a term below is unfamiliar.
+(`hud`, `pause_menu`, `rename_ui`, `inventory`, `player`, `chest`, `equipment`) are actually
+built. Read [`glossary.md`](glossary.md) and [`core.md`](core.md) first if a term below is
+unfamiliar.
 
 ## Add a new demo module
 
@@ -59,6 +60,60 @@ button-press and key-press behave identically.
    `svc_game_ui.unmount_view(token)` — see `pause_menu.md.gd`'s `_on_game_ui_view_mounted`.
 6. **Register the View token**: add it to `demo/shared/classes/tokens.gd`'s `Views` dictionary,
    and register a `GameUiTypes.ViewRegistration(token, scene_path)` in `register()`.
+
+## Expose Context from a View
+
+Do this when Attachments mounted on a View need to react to state that's internal to that View
+(e.g. a selection) without the View needing to know which Attachments exist or what they do with
+it — see `inventory.gd`'s `context`/`Context` for the concrete example (the Inventory tracks
+which slot is selected; it has no idea the `equipment` module's Attachments read that value).
+
+1. Add `var context := Context.new()` directly on the View's script (not a different name — see
+   [`glossary.md`](glossary.md#this-addons-subsystems-addonsmodular_ui_architecturemodules),
+   "Context" has exactly one meaning in this codebase), and define `Context` as an inner
+   `RefCounted` class on the same script with one exported-equivalent field per value Attachments
+   should see. `CapGameUi` polls this property every physics frame
+   (`game_ui.svc.gd`'s `_poll_view_context`/`_extract_property_values`) and diffs its script
+   variables to detect changes — no signal needs to be emitted by the View itself.
+2. Update the `Context` instance's fields directly from the View's own event handlers (e.g. a
+   child's signal) — the View still owns and mutates its own Context, it just also happens to be
+   read externally.
+3. Attachments read `context` in `_build(host_ui, context)` for the value at mount time, and
+   override `_on_context_changed(new_context)` to react to later changes — see the next recipe
+   for a concrete Attachment built this way.
+
+## Attach a Widget to another module's View
+
+Use this when a module should contribute UI into a View it doesn't own, without that module
+importing the View's module or the View knowing the Attachment exists — see the `equipment`
+demo module's two Attachments (one mounted on the Inventory, one on the HUD) for a working
+example of a single module targeting two other modules' Views this way.
+
+1. The attaching module `preload()`s the target View's script directly (e.g.
+   `const Inventory = preload(".../inventory.gd")`) to use in `_should_mount` — **don't**
+   `IMPORTS` the owning module just for this type check, and don't try `svc_game_ui.get_view()`
+   in `_should_mount` either: Attachments mount while the View is still being added to the tree,
+   before `CapGameUi` has recorded it as mounted, so that call would always return `null` there.
+2. The target View must already expose the Attachment Slot being targeted (see the HUD's
+   `bottom_left`/`bottom_center`/`bottom_right` or the Inventory's `footer` for examples) — a
+   View defines its own slots, it's the attaching module's job to know which tag to target, not
+   the View's job to know who's using it.
+3. `_should_mount(host_ui, context)` is only evaluated once, when the View mounts — an Attachment
+   can't start/stop targeting a View later based on Context; it can only make its own built
+   Widget react to Context changes via `_on_context_changed`. If the Attachment targets a slot
+   the host doesn't actually expose, `AttachmentSlotsController.add_to_slot` only
+   `push_warning`s and skips it — it won't crash the host View.
+4. If the Attachment needs state shared with a sibling Attachment registered by the same module
+   (e.g. one Attachment writes a value, another displays it), create one small `RefCounted`
+   state object in the owning module's `register()` and inject it into both `UiAttachment`
+   constructors — see `equipment.md.gd`. Don't promote this to a capability unless a second,
+   unrelated module also needs the same state (see [`core.md`](core.md#0-design-principles)).
+5. If an Attachment connects to a signal on something that outlives a single mount (e.g. the
+   shared state object above, a module-level service), make/break that connection in `_build`/
+   `_on_instance_tree_exiting` — **not** `_on_before_delete`. A registered `UiAttachment`
+   instance is reused across every mount/unmount cycle of its target View, so `_build` can run
+   many times over the Attachment's life, while `_on_before_delete` only fires once (if ever),
+   when the Attachment object itself is garbage-collected.
 
 ## Add a Popup
 

@@ -2,6 +2,15 @@
 
 [ext_resource type="Script" uid="uid://c66ugkto75k8a" path="res://demo/modules/inventory/content/ui/inventory.gd" id="1_22snv"]
 [ext_resource type="PackedScene" uid="uid://cg0ho57al2xd4" path="res://demo/modules/inventory/content/ui/inventory_slot.tscn" id="2_843nm"]
+[ext_resource type="Theme" uid="uid://dex65sj4cjk33" path="res://demo/assets/resources/themes/default_theme.tres" id="2_x6veq"]
+[ext_resource type="PackedScene" uid="uid://bcbdukxf123wi" path="res://addons/modular_ui_architecture/shared/classes/attachment_slots_controller/attachment_slots_controller.tscn" id="3_843nm"]
+[ext_resource type="Script" uid="uid://cdsmt65clb7ek" path="res://addons/modular_ui_architecture/shared/resources/attachment_slot_config.gd" id="3_sukfj"]
+
+[sub_resource type="Resource" id="Resource_843nm"]
+script = ExtResource("3_sukfj")
+node_path = NodePath("../VBoxContainer/Footer")
+max_children = 1
+metadata/_custom_type_script = "uid://cdsmt65clb7ek"
 
 [node name="Inventory" type="ColorRect" unique_id=1455531064]
 anchors_preset = 15
@@ -27,37 +36,41 @@ offset_right = 52.0
 offset_bottom = 34.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("2_x6veq")
 
-[node name="SlotsGrid" type="GridContainer" parent="PanelContainer" unique_id=689792803]
+[node name="AttachmentSlotsController" parent="PanelContainer" unique_id=1027927929 instance=ExtResource("3_843nm")]
+slot_configs = Dictionary[StringName, ExtResource("3_sukfj")]({
+&"footer": SubResource("Resource_843nm")
+})
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer" unique_id=1689250278]
+layout_mode = 2
+
+[node name="SlotsGrid" type="GridContainer" parent="PanelContainer/VBoxContainer" unique_id=689792803]
+unique_name_in_owner = true
 layout_mode = 2
 columns = 3
 
-[node name="InventorySlot" parent="PanelContainer/SlotsGrid" unique_id=2064024257 instance=ExtResource("2_843nm")]
+[node name="InventorySlot" parent="PanelContainer/VBoxContainer/SlotsGrid" unique_id=2064024257 instance=ExtResource("2_843nm")]
 layout_mode = 2
 item_name = "Item1"
 item_description = "Hello!"
 
-[node name="InventorySlot2" parent="PanelContainer/SlotsGrid" unique_id=886344039 instance=ExtResource("2_843nm")]
+[node name="InventorySlot2" parent="PanelContainer/VBoxContainer/SlotsGrid" unique_id=886344039 instance=ExtResource("2_843nm")]
 layout_mode = 2
-item_name = null
-item_description = null
 
-[node name="InventorySlot3" parent="PanelContainer/SlotsGrid" unique_id=198393429 instance=ExtResource("2_843nm")]
+[node name="InventorySlot3" parent="PanelContainer/VBoxContainer/SlotsGrid" unique_id=198393429 instance=ExtResource("2_843nm")]
 layout_mode = 2
-item_name = null
-item_description = null
 
-[node name="InventorySlot4" parent="PanelContainer/SlotsGrid" unique_id=846507284 instance=ExtResource("2_843nm")]
+[node name="InventorySlot4" parent="PanelContainer/VBoxContainer/SlotsGrid" unique_id=846507284 instance=ExtResource("2_843nm")]
 layout_mode = 2
-item_name = null
-item_description = null
 
-[node name="InventorySlot5" parent="PanelContainer/SlotsGrid" unique_id=681366339 instance=ExtResource("2_843nm")]
+[node name="InventorySlot5" parent="PanelContainer/VBoxContainer/SlotsGrid" unique_id=681366339 instance=ExtResource("2_843nm")]
 layout_mode = 2
-item_name = null
-item_description = null
 
-[node name="InventorySlot6" parent="PanelContainer/SlotsGrid" unique_id=54290353 instance=ExtResource("2_843nm")]
+[node name="InventorySlot6" parent="PanelContainer/VBoxContainer/SlotsGrid" unique_id=54290353 instance=ExtResource("2_843nm")]
 layout_mode = 2
-item_name = null
-item_description = null
+
+[node name="Footer" type="MarginContainer" parent="PanelContainer/VBoxContainer" unique_id=1982206520]
+unique_name_in_owner = true
+layout_mode = 2
