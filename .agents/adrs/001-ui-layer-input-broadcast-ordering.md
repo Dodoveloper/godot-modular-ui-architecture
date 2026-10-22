@@ -55,7 +55,24 @@ detection in `_input` unconditionally (not conditionally like `UiLayerNode`) —
 specifically because `close_action`/`toggle_action` are UI-dismissal actions, never ones a user
 would type as literal text into a focused field within the same display.
 
+### Amendment: the `_input` broadcast must respect layer blocking
+
+Layers with `should_block_inputs` (WINDOW, OVERLAY, POPUP) block lower layers by calling
+`set_input_as_handled()` in `_unhandled_input`, relying on higher canvas layers running first.
+The `_input` broadcast has no equivalent: it can't mark the event handled without starving the
+GUI phase of focus navigation inside the blocking layer itself. As a result, a binding on a
+focus-nav key (e.g. `toggle_inventory` on Tab) still fired while a higher blocking layer had
+UI mounted (e.g. the chest's queued Popups).
+
+Fix: `CapUiLayers.is_layer_input_blocked(layer)` returns `true` if any layer drawn above
+`layer` blocks inputs and has mounted nodes. `UiLayerNode._input` returns early when its own
+layer is blocked, without marking anything handled. Don't "fix" this by calling
+`set_input_as_handled()` from `_input`, and don't gate individual bindings on layer state.
+
 ## Consequences
+
+- Any new input path that broadcasts outside `_unhandled_input` must also check
+  `is_layer_input_blocked`.
 
 - Don't move `UiLayerNode`'s broadcast wholesale into `_input` — that reintroduces the typing
   regression (item 2 above). The conditional split is the fix, not `_input` itself.

@@ -25,6 +25,9 @@ const WORLD_UI_CONTAINER_NODE_NAME := &"GameWorldUi"
 @abstract func get_layers() -> Array[UiLayersTypes.UiLayer]
 ## Returns the world-UI container node for [param layer].
 @abstract func get_world_ui_container(layer: UiLayersTypes.UiLayer) -> Control
+## Returns [code]true[/code] if [param layer] is currently obstructed by a layer drawn above it
+## that blocks inputs and has mounted UI.
+@abstract func is_layer_input_blocked(layer: UiLayersTypes.UiLayer) -> bool
 @abstract func notify_input_triggered(
 	action: StringName, layer := UiLayersTypes.UiLayer.DEFAULT,
 	input_type := InputBindingsTypes.InputActionType.PRESSED

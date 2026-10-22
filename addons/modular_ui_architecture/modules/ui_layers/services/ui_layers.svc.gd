@@ -40,6 +40,23 @@ func get_world_ui_container(layer: UiLayersTypes.UiLayer) -> Control:
 	return _world_ui_containers.get(layer, null)
 
 
+func is_layer_input_blocked(layer: UiLayersTypes.UiLayer) -> bool:
+	var layer_config: UiLayersTypes.UiLayerConfig = _layers_config.get(layer, null)
+	if not layer_config:
+		return false
+
+	for other_layer in _layers_to_nodes.keys():
+		var other_config := _layers_config[other_layer]
+		if other_config.canvas_layer_index <= layer_config.canvas_layer_index:
+			continue
+		if not other_config.should_block_inputs:
+			continue
+		if _layers_to_nodes[other_layer].get_mounted_nodes().size() > 0:
+			return true
+	
+	return false
+
+
 func notify_input_triggered(
 	action: StringName, layer := UiLayersTypes.UiLayer.DEFAULT,
 	input_type := InputBindingsTypes.InputActionType.PRESSED

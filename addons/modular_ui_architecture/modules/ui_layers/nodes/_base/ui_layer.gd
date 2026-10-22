@@ -40,6 +40,10 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	if not _collides_with_focus_nav(event):
 		return
+	# Unlike _unhandled_input, nothing here marks the event as handled (that would starve the
+	# GUI phase of focus navigation), so layers obstructed by a blocking layer must opt out.
+	if _svc_ui_layers.is_layer_input_blocked(ui_layer):
+		return
 	
 	_broadcast_input(event)
 
