@@ -28,6 +28,10 @@ func _on_unblock_inputs() -> void:
 	InputManager.unblock()
 
 
+func request_close() -> void:
+	_request_close()
+
+
 func _on_slot_item_selected(item_name: String) -> void:
 	context.selected_item_name = item_name
 

@@ -52,3 +52,4 @@ func _on_context_changed(new_context: RefCounted) -> void:
 
 func _on_button_pressed() -> void:
 	_state.equipped_item_name = _inventory.context.selected_item_name
+	_inventory.request_close()
