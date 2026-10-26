@@ -57,9 +57,11 @@ func _ready() -> void:
 	if Engine.is_editor_hint():
 		return
 	
-	if _should_grab_focus():
-		focus_mode = Control.FOCUS_ALL
-		grab_focus.call_deferred()
+	var focus_target := _get_initial_focus_target()
+	if focus_target:
+		if focus_target == self:
+			focus_mode = Control.FOCUS_ALL
+		focus_target.grab_focus.call_deferred()
 	
 	visibility_changed.connect(_on_visibility_changed)
 	_on_visibility_changed()
@@ -85,10 +87,11 @@ func _validate_property(property: Dictionary) -> void:
 
 
 #region Custom Virtual Methods
-## Virtual method. Override to determine whether this display should grab focus
-## when it becomes active. Defaults to [code]true[/code].
-func _should_grab_focus() -> bool:
-	return true
+## Virtual method. Override to choose the [Control] that receives focus when this display is
+## ready. It must be this display or one of its descendants. It is focused once, deferred, from
+## [method _ready]. Defaults to this display itself; return [code]null[/code] to skip focusing.
+func _get_initial_focus_target() -> Control:
+	return self
 
 
 @warning_ignore("unused_parameter")

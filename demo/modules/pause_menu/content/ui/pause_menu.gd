@@ -27,6 +27,10 @@ func _on_unblock_inputs() -> void:
 	InputManager.unblock()
 
 
+func _get_initial_focus_target() -> Control:
+	return _resume_button
+
+
 func _on_resume_button_pressed() -> void:
 	_request_close()
 

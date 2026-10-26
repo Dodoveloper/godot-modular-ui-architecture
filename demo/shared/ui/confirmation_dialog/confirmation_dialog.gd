@@ -19,6 +19,10 @@ func _ready() -> void:
 	_ok_button.pressed.connect(_on_ok_button_pressed)
 
 
+func _get_initial_focus_target() -> Control:
+	return _cancel_button
+
+
 func _on_close_button_pressed() -> void:
 	_request_close()
 

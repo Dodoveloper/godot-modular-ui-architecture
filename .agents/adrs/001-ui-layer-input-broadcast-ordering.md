@@ -73,6 +73,11 @@ layer is blocked, without marking anything handled. Don't "fix" this by calling
 
 - Any new input path that broadcasts outside `_unhandled_input` must also check
   `is_layer_input_blocked`.
+- Known latent risk: `ToggleableDisplay._input` does not check layer blocking. A popup without
+  its own `close_action` shown over a display that has one (e.g. Escape over the Pause Menu)
+  would let the underlying display close too. The demo avoids this today because the chest's
+  popups are gated by `OPEN_GAMEPLAY_POPUP_UI` while the Inventory and Pause Menu are open. Not
+  fixed yet. Revisit if a popup can open over a `close_action` display without that gate.
 
 - Don't move `UiLayerNode`'s broadcast wholesale into `_input` — that reintroduces the typing
   regression (item 2 above). The conditional split is the fix, not `_input` itself.

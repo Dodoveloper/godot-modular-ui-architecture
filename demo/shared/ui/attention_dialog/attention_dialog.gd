@@ -67,8 +67,6 @@ func _ready() -> void:
 	if animation_player.has_animation(OPEN_ANIMATION):
 		animation_player.play(OPEN_ANIMATION)
 		animation_player.seek(0.0, true)
-	
-	close_button.grab_focus.call_deferred()
 
 
 func _get_configuration_warnings() -> PackedStringArray:
@@ -89,8 +87,8 @@ func _get_configuration_warnings() -> PackedStringArray:
 	return warnings
 
 
-func _should_grab_focus() -> bool:
-	return false
+func _get_initial_focus_target() -> Control:
+	return close_button
 
 
 func _on_block_inputs() -> void:

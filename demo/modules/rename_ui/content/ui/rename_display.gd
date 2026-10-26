@@ -20,12 +20,15 @@ func _ready() -> void:
 	_player = get_tree().get_first_node_in_group(&"player")
 	if _player:
 		_line_edit.text = _player.character_name
-		_line_edit.grab_focus.call_deferred()
 		_line_edit.select_all.call_deferred()
 	
 	_confirm_button.pressed.connect(_on_confirm_button_pressed)
 	_cancel_button.pressed.connect(_on_cancel_button_pressed)
 	_line_edit.text_submitted.connect(_on_line_edit_text_submitted)
+
+
+func _get_initial_focus_target() -> Control:
+	return _line_edit
 
 
 func _on_block_inputs() -> void:

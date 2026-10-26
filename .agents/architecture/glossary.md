@@ -135,7 +135,8 @@ apply the definitions below when naming/organizing new UI, even without dedicate
   dismissable UI used as either a View or a Popup content scene. Two `mount_mode`s: `CACHED`
   (pre-instantiated, `toggle_action` shows/hides it) or `LAZY_LOADED` (mounted/unmounted fresh
   each time, `close_action` requests unmount). Handles its own input in `_input`, not
-  `_unhandled_input` — see ADR-001.
+  `_unhandled_input` — see ADR-001. Focuses the Control returned by the virtual
+  `_get_initial_focus_target()` on `_ready` (defaults to itself; return `null` to skip).
 - **`Tokens`** (`demo/shared/classes/tokens.gd`) — a `class_name` holding `StringName` constants
   (currently View tokens) shared across demo modules, to avoid stringly-typed duplication.
 - **`InputManager`** (`demo/shared/classes/input_manager.gd`) — a static reference-counted

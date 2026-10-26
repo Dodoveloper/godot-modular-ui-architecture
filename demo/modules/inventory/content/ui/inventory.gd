@@ -20,6 +20,13 @@ func _ready() -> void:
 			(slot as InventorySlot).item_selected.connect(_on_slot_item_selected)
 
 
+func _get_initial_focus_target() -> Control:
+	for slot in _slots_grid.get_children():
+		if slot is InventorySlot:
+			return slot
+	return null
+
+
 func _on_block_inputs() -> void:
 	InputManager.block()
 
