@@ -1,7 +1,9 @@
-extends Label
+extends Control
 
 
 const Player = preload("res://demo/modules/player/content/entities/player.gd")
+
+@onready var _label: Label = %Label
 
 
 func _ready() -> void:
@@ -10,9 +12,9 @@ func _ready() -> void:
 		push_error("Nameplate could not find a node in the 'player' group")
 		return
 
-	text = player.character_name
+	_label.text = player.character_name
 	player.name_changed.connect(_on_player_name_changed)
 
 
 func _on_player_name_changed(new_name: String) -> void:
-	text = new_name
+	_label.text = new_name

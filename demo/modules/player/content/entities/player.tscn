@@ -3,16 +3,9 @@
 [ext_resource type="Script" uid="uid://p7hg4p1d8s" path="res://demo/modules/player/content/entities/player.gd" id="1_l3oy6"]
 [ext_resource type="Texture2D" uid="uid://65fx4q2xs1ve" path="res://demo/assets/art/tilemaps/characters.png" id="1_obvrj"]
 [ext_resource type="PackedScene" uid="uid://c6r44i8bmytsg" path="res://demo/modules/player/content/ui/nameplate.tscn" id="3_qyocx"]
-[ext_resource type="FontFile" uid="uid://dnt1wgfrc061e" path="res://demo/assets/fonts/kenney_pixel.ttf" id="4_224c2"]
-[ext_resource type="PackedScene" uid="uid://dj54voule5cl8" path="res://addons/modular_ui_architecture/shared/classes/world_ui_portal/world_ui_portal.tscn" id="5_fbcia"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4dcrc"]
 size = Vector2(20, 6.5)
-
-[sub_resource type="LabelSettings" id="LabelSettings_1lv3q"]
-font = ExtResource("4_224c2")
-outline_size = 4
-outline_color = Color(0, 0, 0, 1)
 
 [node name="Player" type="CharacterBody2D" unique_id=1718278793 groups=["player"]]
 script = ExtResource("1_l3oy6")
@@ -26,35 +19,6 @@ region_rect = Rect2(2, 1, 20, 23)
 position = Vector2(0, 8.25)
 shape = SubResource("RectangleShape2D_4dcrc")
 
-[node name="Pivot" type="Control" parent="." unique_id=6607235]
-layout_mode = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_top = -20.0
-offset_bottom = -20.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Nameplate" parent="Pivot" unique_id=1114804537 instance=ExtResource("3_qyocx")]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -31.5
-offset_top = -7.0
-offset_right = 31.5
-offset_bottom = 5.0
-grow_horizontal = 2
-grow_vertical = 0
-label_settings = SubResource("LabelSettings_1lv3q")
-horizontal_alignment = 1
-
-[node name="WorldUiPortal" parent="." unique_id=1030067825 node_paths=PackedStringArray("target_ui", "world_anchor") instance=ExtResource("5_fbcia")]
-target_ui = NodePath("../Pivot")
-anchor_mode = 1
-world_anchor = NodePath("..")
+[node name="Nameplate" parent="." unique_id=194046646 instance=ExtResource("3_qyocx")]
+offset_top = -15.0
+offset_bottom = -15.0

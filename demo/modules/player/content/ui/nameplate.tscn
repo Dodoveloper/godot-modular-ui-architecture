@@ -1,7 +1,32 @@
 [gd_scene format=3 uid="uid://c6r44i8bmytsg"]
 
 [ext_resource type="Script" uid="uid://cbuyjvrqiywym" path="res://demo/modules/player/content/ui/nameplate.gd" id="1_xfqwj"]
+[ext_resource type="Theme" uid="uid://dex65sj4cjk33" path="res://demo/assets/resources/themes/default_theme.tres" id="1_yvlkn"]
+[ext_resource type="PackedScene" uid="uid://dj54voule5cl8" path="res://addons/modular_ui_architecture/shared/classes/world_ui_portal/world_ui_portal.tscn" id="2_xfqwj"]
 
-[node name="Nameplate" type="Label" unique_id=1114804537]
-text = "Player Name"
+[node name="Nameplate" type="Control" unique_id=194046646]
+layout_mode = 3
+anchors_preset = 0
+theme = ExtResource("1_yvlkn")
 script = ExtResource("1_xfqwj")
+
+[node name="Label" type="Label" parent="." unique_id=1114804537]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -31.5
+offset_top = -12.0
+offset_right = 31.5
+grow_horizontal = 2
+grow_vertical = 0
+text = "Player Name"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="WorldUiPortal" parent="." unique_id=1030067825 node_paths=PackedStringArray("target_ui") instance=ExtResource("2_xfqwj")]
+target_ui = NodePath("..")
+anchor_mode = 1
