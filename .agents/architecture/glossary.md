@@ -74,8 +74,9 @@ apply the definitions below when naming/organizing new UI, even without dedicate
   View by an `AttachmentSlotsController` node — if that node is absent from a View's scene,
   Attachments for that View are simply never mounted (no error).
 - **World UI / World UI Portal** — UI reparented into a UI Layer but positionally tracked against
-  a game-world node every physics frame (e.g. a nameplate). Mounted via
-  `CapGameUi.mount_world_ui`, usually through the `WorldUiPortal` helper component.
+  a game-world node (e.g. a nameplate), positioned once per rendered frame and sampled once per
+  physics tick. See [ADR-003](../adrs/003-world-ui-positioned-pre-draw-lazy-sampled.md). Mounted
+  via `CapGameUi.mount_world_ui`, usually through the `WorldUiPortal` helper component.
 - **Context (View-scoped)** — per-View state, owned and updated by the View, that Attachments
   read to configure the Widgets they build — the mechanism that lets a Widget stay decoupled
   from a View's internal details/platform differences and be reused across multiple Views (each

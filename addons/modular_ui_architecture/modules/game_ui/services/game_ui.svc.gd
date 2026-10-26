@@ -6,7 +6,7 @@ const WindowUiLayerNode = preload("../../ui_layers/nodes/window_ui_layer.gd")
 
 const VIEW_CONTEXT_PROP_NAME := &"context"
 ## Squared threshold for detecting teleports/corrections in world-anchored UI.
-## If an anchor moves more than sqrt(this) distance in a single physics tick, it's treated as a teleport
+## If an anchor moves more than sqrt(this) distance between two samples, it's treated as a teleport
 ## and interpolation is reset (prev = curr = new) to avoid gliding from old to new position.
 ## Heuristic: must be larger than max legitimate single-tick movement (~10px for typical gameplay)
 ## and smaller than typical teleport distance. Using squared distance to avoid [code]sqrt[/code] cost.
@@ -35,8 +35,9 @@ var _attachments_by_view: Dictionary[Node, Array] = {}
 ## }
 ## [/codeblock]
 var _cached_context_values: Dictionary[Node, Dictionary] = {}
-## Maps world-anchored UI nodes to their [WorldAnchorInfo].
-## Position updates run each physics frame.[br]
+## Maps world-anchored UI nodes to their [WorldAnchorInfo].[br]
+## Anchors are sampled at most once per physics tick, and every world-anchored UI is positioned
+## once per rendered frame, right before drawing (see [method _on_frame_pre_draw]).
 var _world_anchors: Dictionary[Control, WorldAnchorInfo] = {}
 
 
@@ -51,15 +52,17 @@ func _init(
 func enable() -> void:
 	var tree := Engine.get_main_loop() as SceneTree
 	tree.physics_frame.connect(_on_scene_tree_physics_frame)
-	tree.process_frame.connect(_on_scene_tree_process_frame)
+	# Positioning runs after every _process and after Cameras have updated the canvas transform,
+	# and right before drawing, so world-anchored UI always matches what is rendered.
+	RenderingServer.frame_pre_draw.connect(_on_frame_pre_draw)
 
 
 func disable() -> void:
 	var tree := Engine.get_main_loop() as SceneTree
 	if tree.physics_frame.is_connected(_on_scene_tree_physics_frame):
 		tree.physics_frame.disconnect(_on_scene_tree_physics_frame)
-	if tree.process_frame.is_connected(_on_scene_tree_process_frame):
-		tree.process_frame.disconnect(_on_scene_tree_process_frame)
+	if RenderingServer.frame_pre_draw.is_connected(_on_frame_pre_draw):
+		RenderingServer.frame_pre_draw.disconnect(_on_frame_pre_draw)
 
 
 # TODO: eventually, Views may override convention methods (e.g. on_open, on_close)
@@ -126,11 +129,17 @@ func mount_world_ui(
 	else:
 		world_ui_container.add_child(ui)
 	
+	if anchor != null:
+		# The UI is positioned by hand from the anchor's interpolated position every rendered frame.
+		# Engine interpolation on the UI would smooth it a second time, causing lag.
+		ui.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+	
 	# Seed interpolation buffers from anchor's current position to avoid origin-frame flash.
 	var info := WorldAnchorInfo.new(anchor, offset, mirror_anchor_visuals, ui.scale)
 	var pos := _get_canvas_item_global_position(anchor)
 	info.curr_world_pos = pos
 	info.prev_world_pos = pos
+	info.last_sampled_tick = Engine.get_physics_frames()
 	_world_anchors[ui] = info
 	
 	ui.tree_exiting.connect(_on_world_ui_tree_exiting.bind(ui), CONNECT_ONE_SHOT)
@@ -246,15 +255,43 @@ func _get_canvas_item_global_position(node: CanvasItem) -> Vector2:
 	return (node as Control).global_position
 
 
+## Samples [param info]'s anchor at most once per physics tick.[br]
+## Sampling is lazy: it runs at render time, and only does work if a physics tick has run since the
+## last sample. When exactly one tick ran, [member WorldAnchorInfo.curr_world_pos] is that tick's
+## final position and the previous sample is the one before it, so the result is exact. When several
+## ticks ran within one rendered frame (low framerates), the intermediate positions are unknown, so
+## the previous sample is the last rendered frame's position instead.
+func _sample_anchor(info: WorldAnchorInfo, physics_tick: int) -> void:
+	if not info.is_anchor_valid() or info.last_sampled_tick == physics_tick:
+		return
+	
+	var new_pos := _get_canvas_item_global_position(info.anchor)
+	# If delta is too large, it's a teleport, so snap.
+	if info.curr_world_pos.distance_squared_to(new_pos) > TELEPORT_RESET_DISTANCE_SQ:
+		info.prev_world_pos = new_pos
+	else:
+		info.prev_world_pos = info.curr_world_pos
+	info.curr_world_pos = new_pos
+	info.last_sampled_tick = physics_tick
+
+
 func _update_world_anchor(ui: Control, info: WorldAnchorInfo) -> void:
 	if not info.is_anchor_valid():
 		return
 	
-	# Reconstruct Godot's 2D physics interpolation: lerp between the previous and current
-	# physics-tick positions using the render-frame interpolation fraction.
-	var f := Engine.get_physics_interpolation_fraction()
-	var world_pos := info.prev_world_pos.lerp(info.curr_world_pos, f)
-	ui.global_position = info.anchor.get_canvas_transform() * world_pos + info.offset
+	var world_pos: Vector2
+	if info.anchor.is_physics_interpolated_and_enabled():
+		# Reconstruct Godot's 2D physics interpolation for the anchor: lerp between its previous and
+		# current physics-tick positions using the render-frame interpolation fraction.
+		var f := Engine.get_physics_interpolation_fraction()
+		world_pos = info.prev_world_pos.lerp(info.curr_world_pos, f)
+	else:
+		# The anchor is drawn at its live position, so use that.
+		world_pos = _get_canvas_item_global_position(info.anchor)
+	
+	var target_pos := info.anchor.get_canvas_transform() * world_pos + info.offset
+	if not ui.global_position.is_equal_approx(target_pos):
+		ui.global_position = target_pos
 	
 	if info.mirror_anchor_visuals:
 		_mirror_anchor_visuals(ui, info)
@@ -274,21 +311,11 @@ func _mirror_anchor_visuals(ui: Control, info: WorldAnchorInfo) -> void:
 func _on_scene_tree_physics_frame() -> void:
 	for view in _mounted_views_by_token.values():
 		_poll_view_context(view)
-	
-	# Capture anchor positions at physics-tick rate for interpolation.
-	for ui: Control in _world_anchors.keys():
-		var info := _world_anchors[ui]
-		if info.is_anchor_valid():
-			var new_pos := _get_canvas_item_global_position(info.anchor)
-			# If delta is too large, it's a teleport, so snap.
-			if info.curr_world_pos.distance_squared_to(new_pos) > TELEPORT_RESET_DISTANCE_SQ:
-				info.prev_world_pos = new_pos
-			else:
-				info.prev_world_pos = info.curr_world_pos
-			info.curr_world_pos = new_pos
 
 
-func _on_scene_tree_process_frame() -> void:
+## Runs right before each frame is drawn, after all [code]_process[/code] calls and camera updates.
+func _on_frame_pre_draw() -> void:
+	var physics_tick := Engine.get_physics_frames()
 	# Detect and clean up stale anchors (anchors freed externally without unmounting the UI).
 	# NOTE: at pathological scale (thousands of world-anchored UIs), this loop
 	# could become a profiling target.
@@ -298,6 +325,7 @@ func _on_scene_tree_process_frame() -> void:
 		if info.is_anchor_stale():
 			stale.append(ui)
 		else:
+			_sample_anchor(info, physics_tick)
 			_update_world_anchor(ui, info)
 	for ui in stale:
 		push_warning("World anchor for '%s' was freed externally; unmounting." % ui.name)
@@ -326,10 +354,12 @@ func _on_view_tree_exiting(token: StringName) -> void:
 class WorldAnchorInfo:
 	var anchor: CanvasItem
 	var offset: Vector2
-	## Previous physics-tick world position of the anchor (for interpolation).
+	## Previous sampled world position of the anchor (for interpolation).
 	var prev_world_pos: Vector2
-	## Current physics-tick world position of the anchor (for interpolation).
+	## Current sampled world position of the anchor (for interpolation).
 	var curr_world_pos: Vector2
+	## [method Engine.get_physics_frames] value at the last sample. Used to sample once per tick.
+	var last_sampled_tick: int = -1
 	## Whether to mirror [member anchor]'s [code]visible[/code], [code]modulate[/code], and
 	## [code]scale[/code] onto the mounted UI every frame.
 	var mirror_anchor_visuals: bool

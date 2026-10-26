@@ -11,6 +11,8 @@ Context section, because that narrative *is* the evidence for the decision.
 |---|-------|---------|
 | [001](001-ui-layer-input-broadcast-ordering.md) | `UiLayerNode` input broadcast ordering | Why input broadcasting is split between `_input` (focus-nav-colliding actions only) and `_unhandled_input` (everything else), instead of using one phase for everything. |
 | [002](002-separate-popups-views-tooltips-subsystems.md) | Separate Views/Popups/Tooltips subsystems | Why these three UI-mounting systems were kept independent instead of unified into one "modal" capability. |
+| [003](003-world-ui-positioned-pre-draw-lazy-sampled.md) | World UI is positioned in `frame_pre_draw` with lazily-sampled anchors | Why world-anchored UI is positioned right before drawing (not in `physics_frame`/`process_frame`), why anchors are sampled per tick at render time, and why engine interpolation is disabled on that UI. |
+
 
 ## When To Add A New ADR
 

@@ -16,7 +16,7 @@ enum AnchorMode {
 	## The UI is reparented into the target layer as-is, with no position tracking.
 	NONE,
 	## The UI is reparented into the target layer and its position is synced to a game-world node
-	## per physics frame.
+	## every rendered frame, with the node sampled once per physics tick.
 	WORLD_FOLLOW,
 }
 
