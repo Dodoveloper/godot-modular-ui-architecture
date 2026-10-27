@@ -3,12 +3,10 @@ extends CapPopups
 
 const PopupsUiLayer = preload("../../ui_layers/nodes/popups_ui_layer.gd")
 
-var _svc_game_ui: CapGameUi
 var _svc_ui_layers: CapUiLayers
 
 
-func _init(svc_game_ui: CapGameUi, svc_ui_layers: CapUiLayers) -> void:
-	_svc_game_ui = svc_game_ui
+func _init(svc_ui_layers: CapUiLayers) -> void:
 	_svc_ui_layers = svc_ui_layers
 
 
@@ -32,7 +30,7 @@ func open_popup(
 	popup_data.color = color
 	popup_data.dismiss_on_click_outside = dismiss_on_click_outside
 
-	return _svc_game_ui.mount_ui(popup_path, UiLayersTypes.UiLayer.POPUP, popup_data)
+	return _svc_ui_layers.mount_ui(popup_path, UiLayersTypes.UiLayer.POPUP, popup_data)
 
 
 func open_popup_queued(
@@ -44,7 +42,7 @@ func open_popup_queued(
 
 
 func close_popup(popup: Control) -> bool:
-	return _svc_game_ui.unmount_ui(popup)
+	return _svc_ui_layers.unmount_ui(popup)
 
 
 func has_popups() -> bool:

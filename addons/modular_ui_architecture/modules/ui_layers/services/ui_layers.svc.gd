@@ -40,6 +40,28 @@ func get_world_ui_container(layer: UiLayersTypes.UiLayer) -> Control:
 	return _world_ui_containers.get(layer, null)
 
 
+func mount_ui(
+	scene_path: String, layer: UiLayersTypes.UiLayer, data: Dictionary[StringName, Variant] = {}
+) -> Node:
+	var layer_node := get_layer_node(layer)
+	return layer_node.mount_node(scene_path, data)
+
+
+func unmount_ui(ui: Node) -> bool:
+	var layer_node: UiLayerNode
+	for layer in get_layers():
+		var _layer_node := get_layer_node(layer)
+		if _layer_node.get_mounted_nodes().has(ui):
+			layer_node = _layer_node
+			break
+	
+	if not layer_node:
+		push_error("UI node '%s' not found in any layer" % [ui.name])
+		return false
+	
+	return layer_node.unmount_node(ui)
+
+
 func is_layer_input_blocked(layer: UiLayersTypes.UiLayer) -> bool:
 	var layer_config: UiLayersTypes.UiLayerConfig = _layers_config.get(layer, null)
 	if not layer_config:

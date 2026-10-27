@@ -1,6 +1,5 @@
 const InputBindingsModule := preload("../input_bindings/input_bindings.md.gd")
 const UiLayersModule := preload("../ui_layers/ui_layers.md.gd")
-const GameUiModule := preload("../game_ui/game_ui.md.gd")
 
 const UiLayersTypes := preload("../ui_layers/types.gd")
 const GameUiTypes := preload("../game_ui/types.gd")
@@ -10,12 +9,11 @@ const SvcPopups = preload("./services/popups.svc.gd")
 static var IMPORTS := [
 	InputBindingsModule,
 	UiLayersModule,
-	GameUiModule,
 ]
 
 static var PROVIDERS := {
 	CapPopups: {
-		"inject": [CapGameUi, CapUiLayers],
+		"inject": [CapUiLayers],
 		"use": SvcPopups,
 	},
 }

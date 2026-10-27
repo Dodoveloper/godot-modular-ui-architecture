@@ -1,16 +1,14 @@
 const UiLayersModule = preload("../ui_layers/ui_layers.md.gd")
-const GameUiModule = preload("../game_ui/game_ui.md.gd")
 
 const SvcTooltips = preload("./services/tooltips.svc.gd")
 
 static var IMPORTS := [
 	UiLayersModule,
-	GameUiModule,
 ]
 
 static var PROVIDERS := {
 	CapTooltips: {
-		"inject": [CapGameUi, CapUiLayers],
+		"inject": [CapUiLayers],
 		"use": SvcTooltips,
 	},
 }

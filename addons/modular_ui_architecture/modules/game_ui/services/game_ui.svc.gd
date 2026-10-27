@@ -12,7 +12,6 @@ const VIEW_CONTEXT_PROP_NAME := &"context"
 ## and smaller than typical teleport distance. Using squared distance to avoid [code]sqrt[/code] cost.
 const TELEPORT_RESET_DISTANCE_SQ := 10000.0
 
-
 var _reg_views: CapViewsRegistry
 var _reg_attachments: CapUiAttachmentsRegistry
 var _svc_ui_layers: CapUiLayers
@@ -76,7 +75,7 @@ func mount_view(token: StringName, layer := UiLayersTypes.UiLayer.DEFAULT) -> No
 		push_error("There is already a mounted View for token '%s'" % [token])
 		return null
 	
-	var view := mount_ui(view_registration.scene, layer)
+	var view := _svc_ui_layers.mount_ui(view_registration.scene, layer)
 	if not view:
 		return null
 	
@@ -94,7 +93,7 @@ func unmount_view(token: StringName) -> bool:
 		push_error("No mounted View found for token '%s'" % [token])
 		return false
 	
-	var is_success := unmount_ui(view)
+	var is_success := _svc_ui_layers.unmount_ui(view)
 	if is_success:
 		_mounted_views_by_token.erase(token)
 		_cached_context_values.erase(view)
@@ -157,29 +156,9 @@ func unmount_world_ui(ui: Node) -> bool:
 	return true
 
 
-func mount_ui(
-	scene_path: String, layer: UiLayersTypes.UiLayer, data: Dictionary[StringName, Variant] = {}
-) -> Node:
-	var layer_node := _svc_ui_layers.get_layer_node(layer)
-	return layer_node.mount_node(scene_path, data)
-
-
-func unmount_ui(ui: Node) -> bool:
-	var layer_node: UiLayerNode
-	for layer in _svc_ui_layers.get_layers():
-		var _layer_node := _svc_ui_layers.get_layer_node(layer)
-		if _layer_node.get_mounted_nodes().has(ui):
-			layer_node = _layer_node
-			break
+func mount_attachments(view: Node, add_to_slot: Callable) -> void:
+	assert(add_to_slot.is_valid(), "add_to_slot must be a valid Callable")
 	
-	if not layer_node:
-		push_error("UI node '%s' not found in any layer" % [ui.name])
-		return false
-	
-	return layer_node.unmount_node(ui)
-
-
-func mount_attachments(view: Node, slots_controller: AttachmentSlotsController) -> void:
 	var context: RefCounted = view.get(VIEW_CONTEXT_PROP_NAME)
 	for attachment in _reg_attachments.get_attachments():
 		if not attachment.should_mount(view, context):

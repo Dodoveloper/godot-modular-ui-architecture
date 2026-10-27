@@ -28,6 +28,20 @@ const WORLD_UI_CONTAINER_NODE_NAME := &"GameWorldUi"
 ## Returns [code]true[/code] if [param layer] is currently obstructed by a layer drawn above it
 ## that blocks inputs and has mounted UI.
 @abstract func is_layer_input_blocked(layer: UiLayersTypes.UiLayer) -> bool
+## Mounts a scene as a child of [param layer] and returns the mounted node.[br]
+## [br]
+## [param scene_path] - Path of the scene to instantiate.[br]
+## [param layer] - Layer the node will be mounted in.[br]
+## [param data] - Data forwarded when mounting the node.[br]
+## [br]
+## Returns the mounted node, or [code]null[/code] if it could not be mounted.
+@abstract func mount_ui(
+	scene_path: String, layer: UiLayersTypes.UiLayer, data: Dictionary[StringName, Variant] = {}
+) -> Node
+## Unmounts and frees a node mounted in any layer.[br]
+## [br]
+## Returns [code]true[/code] if successful, [code]false[/code] if the node is not mounted in a layer.
+@abstract func unmount_ui(ui: Node) -> bool
 @abstract func notify_input_triggered(
 	action: StringName, layer := UiLayersTypes.UiLayer.DEFAULT,
 	input_type := InputBindingsTypes.InputActionType.PRESSED

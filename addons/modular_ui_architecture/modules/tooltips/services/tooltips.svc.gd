@@ -3,12 +3,10 @@ extends CapTooltips
 
 const TooltipUiLayer = preload("../../ui_layers/nodes/tooltip_ui_layer.gd")
 
-var _svc_game_ui: CapGameUi
 var _svc_ui_layers: CapUiLayers
 
 
-func _init(svc_game_ui: CapGameUi, svc_ui_layers: CapUiLayers) -> void:
-	_svc_game_ui = svc_game_ui
+func _init(svc_ui_layers: CapUiLayers) -> void:
 	_svc_ui_layers = svc_ui_layers
 
 
@@ -29,7 +27,7 @@ func show_tooltip(
 	tooltip_data.contents = contents
 	tooltip_data.available_rect = available_rect
 	
-	return _svc_game_ui.mount_ui(tooltip_path, UiLayersTypes.UiLayer.TOOLTIP, tooltip_data)
+	return _svc_ui_layers.mount_ui(tooltip_path, UiLayersTypes.UiLayer.TOOLTIP, tooltip_data)
 
 
 func hide_tooltip() -> bool:
