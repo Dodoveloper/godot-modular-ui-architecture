@@ -42,17 +42,21 @@ func _ready() -> void:
 	
 	_initialize_slots()
 	_debug_print_slots()
-	_svc_game_ui.mount_attachments(owner, self)
+	_svc_game_ui.mount_attachments(owner, add_to_slot)
 
 
-func add_to_slot(slot_tag: StringName, ui: Control, priority := 0) -> void:
+## Adds [param ui] to the slot tagged [param slot_tag], ordered by [param priority].[br]
+## [br]
+## Returns [code]true[/code] if the UI was placed, [code]false[/code] if the slot does not exist or
+## has no space left. In that case, [param ui] is not added to the tree.
+func add_to_slot(slot_tag: StringName, ui: Control, priority := 0) -> bool:
 	var slot := get_slot(slot_tag)
 	if not slot:
 		push_warning("Slot '%s' not found. Ignoring" % slot_tag)
-		return
+		return false
 	if not slot.has_space():
 		push_error("Slot '%s' does not have space left" % slot_tag)
-		return
+		return false
 	
 	_priorities_by_ui[ui] = priority
 	
@@ -64,6 +68,7 @@ func add_to_slot(slot_tag: StringName, ui: Control, priority := 0) -> void:
 	_refresh_protection_for_container(slot.node.get_parent())
 	
 	ui.tree_exiting.connect(_on_ui_tree_exiting.bind(ui), CONNECT_ONE_SHOT)
+	return true
 
 
 func has_slot(slot_tag: StringName) -> bool:

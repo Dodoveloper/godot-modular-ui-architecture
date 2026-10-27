@@ -6,7 +6,6 @@ const SvcGameUi = preload("./services/game_ui.svc.gd")
 const UiLayersModule = preload("../ui_layers/ui_layers.md.gd")
 #endregion
 
-
 static var PROVIDERS := {
 	CapUiAttachmentsRegistry: {
 		"use": RegUiAttachments,

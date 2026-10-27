@@ -9,8 +9,8 @@ class UiAttachment extends RefCounted:
 	var _Scene: PackedScene
 	## Instance of the scene mounted.
 	var _instance: Control
-
-
+	
+	
 	## [param slot_tag] - The slot tag where the UI should be mounted.[br]
 	## [param Scene] - The scene to be mounted.[br]
 	func _init(slot_tag: StringName, Scene: PackedScene = null) -> void:
@@ -22,8 +22,8 @@ class UiAttachment extends RefCounted:
 		match what:
 			NOTIFICATION_PREDELETE:
 				_on_before_delete()
-
-
+	
+	
 	@warning_ignore("unused_parameter")
 	## Virtual method. Triggered when the host UI's context has changed.
 	func _on_context_changed(new_context: RefCounted) -> void:
@@ -44,8 +44,8 @@ class UiAttachment extends RefCounted:
 	## Virtual method. Triggered when the attachment itself is about to be deleted.
 	func _on_before_delete() -> void:
 		pass
-
-
+	
+	
 	## Triggered when the host UI's context has changed.[br]
 	## [br]
 	## [param new_context] - The new, updated context.
@@ -59,12 +59,20 @@ class UiAttachment extends RefCounted:
 	
 	func get_priority() -> int:
 		return _priority
-
-
+	
+	
 	func get_instance() -> Control:
 		return _instance
-
-
+	
+	
+	## Frees an instance that was built but never placed in the tree, and clears the reference.
+	## Use this instead of freeing the instance directly, so the attachment's state stays consistent.
+	func discard_instance() -> void:
+		if is_instance_valid(_instance):
+			_instance.queue_free()
+		_instance = null
+	
+	
 	## Determines if the UI should be mounted or not.[br]
 	## [br]
 	## [param host_ui] - The UI view that the UI will be mounted on.[br]
@@ -72,8 +80,8 @@ class UiAttachment extends RefCounted:
 	## Returns [code]true[/code] if the node can be mounted.
 	func should_mount(host_ui: Node, context: RefCounted) -> bool:
 		return _should_mount(host_ui, context)
-
-
+	
+	
 	## Builds the UI instance.[br]
 	## [br]
 	## [param host_ui] - The UI view that the UI will be mounted on.[br]
@@ -86,19 +94,19 @@ class UiAttachment extends RefCounted:
 		_instance.tree_exited.connect(_on_instance_tree_exited, CONNECT_ONE_SHOT)
 		
 		return _instance
-
-
+	
+	
 	func _build(_host_ui: Node, _context: RefCounted) -> Control:
 		if not _Scene:
 			assert(false, "No scene provided")
 			return null
 		
 		return _Scene.instantiate()
-
-
+	
+	
 	func _should_mount(_host_ui: Node, _context: RefCounted) -> bool:
 		return true
-
+	
 	
 	func _on_instance_tree_exited() -> void:
 		_instance = null

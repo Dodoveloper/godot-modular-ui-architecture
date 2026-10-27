@@ -41,5 +41,20 @@ signal view_mounted(token: StringName)
 	ui: Control, anchor: CanvasItem = null, layer := UiLayersTypes.UiLayer.DEFAULT,
 	offset := Vector2.ZERO, mirror_anchor_visuals := false
 ) -> Control
-## Unmounts a world-anchored UI node and stops position tracking.
+## Unmounts a world-anchored UI node and stops position tracking.[br]
+## [br]
+## [param ui] - The UI node to be unmounted.
 @abstract func unmount_world_ui(ui: Node) -> bool
+## Mounts the Attachments that apply to [param view], placing each built UI through
+## [param add_to_slot].[br]
+## [br]
+## [param view] - The View to mount Attachments on.[br]
+## [param add_to_slot] - Callable with signature
+## [code]func(slot_tag: StringName, ui: Control, priority: int) -> bool[/code]. Returns
+## [code]true[/code] if the UI was placed. The Callable is only valid for the duration of this
+## call and must not be stored.
+@abstract func mount_attachments(view: Node, add_to_slot: Callable) -> void
+## Unmounts an attachment previously mounted by [method mount_attachments].[br]
+## [br]
+## [param attachment] - The attachment whose UI should be removed.
+@abstract func unmount_attachment(attachment: GameUiTypes.UiAttachment) -> void

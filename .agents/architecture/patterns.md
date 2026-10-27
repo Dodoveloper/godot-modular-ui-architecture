@@ -102,7 +102,7 @@ example of a single module targeting two other modules' Views this way.
    can't start/stop targeting a View later based on Context; it can only make its own built
    Widget react to Context changes via `_on_context_changed`. If the Attachment targets a slot
    the host doesn't actually expose, `AttachmentSlotsController.add_to_slot` only
-   `push_warning`s and skips it — it won't crash the host View.
+   `push_warning`s (or `push_error`s), returns `false`, and the built UI is discarded — it won't crash the host View.
 4. If the Attachment needs state shared with a sibling Attachment registered by the same module
    (e.g. one Attachment writes a value, another displays it), create one small `RefCounted`
    state object in the owning module's `register()` and inject it into both `UiAttachment`

@@ -1,7 +1,6 @@
 extends CapGameUi
 
 
-const AttachmentSlotsController = preload("../../../shared/classes/attachment_slots_controller/attachment_slots_controller.gd")
 const WindowUiLayerNode = preload("../../ui_layers/nodes/window_ui_layer.gd")
 
 const VIEW_CONTEXT_PROP_NAME := &"context"
@@ -165,9 +164,8 @@ func mount_attachments(view: Node, add_to_slot: Callable) -> void:
 			continue
 		
 		var ui := attachment.build(view, context)
-		slots_controller.add_to_slot(attachment.get_slot_tag(), ui, attachment.get_priority())
-		
-		if ui.is_inside_tree():
+		var placed: bool = add_to_slot.call(attachment.get_slot_tag(), ui, attachment.get_priority())
+		if placed:
 			_uis_by_attachment[attachment] = ui
 			(
 				_attachments_by_view
@@ -175,6 +173,11 @@ func mount_attachments(view: Node, add_to_slot: Callable) -> void:
 				.append(attachment)
 			)
 			ui.tree_exiting.connect(_on_attachment_ui_tree_exiting.bind(attachment))
+		else:
+			# The host rejected the UI, so nothing owns it. Discard it through the attachment so
+			# its instance reference is cleared too.
+			push_warning("Attachment UI for slot '%s' was not placed; discarding it." % attachment.get_slot_tag())
+			attachment.discard_instance()
 
 
 func unmount_attachment(attachment: GameUiTypes.UiAttachment) -> void:
