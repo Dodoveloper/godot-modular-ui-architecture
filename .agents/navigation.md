@@ -18,7 +18,7 @@ repo root unless stated otherwise.
 ├── demo/                    # playable demo project exercising the addon
 ├── .agents/                 # this documentation tree
 ├── docs/                    # (future) human-facing wiki, adapted from .agents/
-└── tests/                   # (future) automated tests
+└── tests/                   # GUT unit tests (run instructions: tests/README.md)
 ```
 
 Don't modify `addons/godular` or `addons/gdb_promise` unless the task is explicitly about

@@ -209,6 +209,12 @@ single one-off check).
    checks `svc_policy_store.is_allowed(category)` inside `_should_execute()` — never inside
    `_execute()`, and never by having the View/Widget itself query Policy Store directly.
 
+## Add a unit test for an addon class
+
+Unit tests live under `tests/unit/` and mirror the addon layout. Conventions, how to run them,
+and the known addon defects that block some tests are in [`tests/README.md`](../../tests/README.md).
+Follow that file rather than copying a pattern from an existing test.
+
 ## When To Update This Document
 
 See [`PRINCIPLES.md`](../PRINCIPLES.md) for the general rules that apply to every doc in this

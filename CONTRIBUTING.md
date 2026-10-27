@@ -21,6 +21,12 @@ reasoning behind non-obvious past decisions).
   same PR — see [`.agents/PRINCIPLES.md`](.agents/PRINCIPLES.md) for how that documentation is
   meant to stay accurate over time.
 
+## Testing
+
+Unit tests use [GUT](https://github.com/bitwes/Gut) and live under
+[`tests/unit/`](tests/unit/). See [`tests/README.md`](tests/README.md) for how to run them and how
+to add one.
+
 ## Branching / PR process
 
 _TODO: fill in once the project's contribution workflow (branch naming, review process, CI, if
