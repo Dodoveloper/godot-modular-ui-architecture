@@ -31,8 +31,8 @@ func _mount_node(node: Node, data: Dictionary[StringName, Variant] = {}) -> Node
 	var node_has_signal := node.has_signal(CLOSE_TRANSITION_FINISHED_SIGNAL)
 	if node_has_method != node_has_signal:
 		push_warning(
-			"Popup '%s' partially implements the close transition API: "
-			+ "has_method=%s has_signal=%s. The transition will be skipped."
+			("Popup '%s' partially implements the close transition API: "
+			+ "has_method=%s has_signal=%s. The transition will be skipped.")
 			% [node.name, node_has_method, node_has_signal]
 		)
 	
