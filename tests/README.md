@@ -56,17 +56,24 @@ GUT only consumes an expected error recorded **before** the assertion runs, so p
 Godot reports some failures with more than one engine error. For example, a missing scene
 produces two engine errors. Count them with `assert_engine_error_count(n)`.
 
-## Known defects
+## Engine pitfalls found by the tests
 
-These defects in the addon were found while writing the tests. The affected tests are marked
-`pending()` with the reason, so they do not fail the suite. Remove the `pending()` call when the
-defect is fixed.
+These were addon defects the tests surfaced. They are fixed, but the rules they reveal are easy to
+re-break, so they are recorded here.
 
-| Defect | Where | Affected tests |
-|---|---|---|
-| Every `UiAttachment` fails on `NOTIFICATION_PREDELETE`: `_notification` calls `_on_before_delete()` on a torn-down object (\"base 'null instance'\"). Reproduces with a plain `UiAttachment.new()`. | `modules/game_ui/types.gd` | `unit/modules/game_ui/test_ui_attachment.gd`, `test_ui_attachments_registry.gd` |
-| `WorldAnchorInfo.is_anchor_stale()` returns `false` after the anchor is freed, because the stored reference compares equal to `null`. The stale-anchor cleanup never runs, although its warning says the UI is unmounted. | `modules/game_ui/services/game_ui.svc.gd` | `unit/modules/game_ui/test_game_ui_world_anchors.gd` |
-| `UiLayersService.unmount_ui()` passes nodes into the popup layer's typed `Array[Control]`, so a non-`Control` node is rejected with an engine error. | `modules/ui_layers/services/ui_layers.svc.gd`, `nodes/popups_ui_layer.gd` | `unit/modules/ui_layers/test_ui_layers_service.gd` (uses a `Control` as a workaround) |
+- **Predelete cannot call script methods.** `UiAttachment` is a destructor via
+  `NOTIFICATION_PREDELETE`. By that point Godot has detached the script instance, so calling any
+  script method on `self` fails with "base 'null instance'". Member variables are still readable,
+  and freeing plain objects works. Keep predelete cleanup data-only.
+- **A freed object reference compares equal to `null` in Godot 4.** A check such as
+  `anchor != null and not is_instance_valid(anchor)` is therefore always false once the anchor is
+  freed. `WorldAnchorInfo` records `has_anchor` at construction for this reason.
+- **Typed arrays reject `has()` for the wrong element type.** `Array[Control].has(node)` with a
+  non-`Control` `node` errors and returns `false`. `UiLayersService` compares by iteration instead.
+
+## Open items
+
+None of the defects found so far are open. The tests in `unit/` contain no `pending()` calls.
 
 ## Not covered yet
 

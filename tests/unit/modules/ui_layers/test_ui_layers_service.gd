@@ -62,6 +62,14 @@ func test_mount_ui_returns_null_when_path_is_not_a_scene() -> void:
 	assert_push_error("is not a PackedScene")
 
 
+func test_unmount_ui_finds_plain_node_mounted_in_a_non_popup_layer() -> void:
+	var node := _service.mount_ui(SCENE_PATH, UiLayersTypes.UiLayer.HUD)
+
+	var is_success := _service.unmount_ui(node)
+
+	assert_true(is_success)
+
+
 func test_unmount_ui_removes_mounted_node() -> void:
 	var node := _service.mount_ui(SCENE_PATH, UiLayersTypes.UiLayer.HUD)
 

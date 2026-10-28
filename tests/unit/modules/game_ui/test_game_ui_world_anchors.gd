@@ -75,11 +75,27 @@ func test_teleport_beyond_threshold_snaps_both_samples() -> void:
 	_game_ui.unmount_world_ui(ui)
 
 
-## KNOWN DEFECT: after the anchor is freed, WorldAnchorInfo.is_anchor_stale() returns false, because a
-## freed Object compares equal to null in Godot 4 and the check short-circuits. The UI is therefore never
-## unmounted, contrary to the "was freed externally; unmounting" contract. Marked pending until the addon is fixed.
 func test_stale_anchor_unmounts_its_ui_on_next_frame() -> void:
-	pending("Blocked by stale-anchor detection defect (is_anchor_stale never true after free)")
+	var anchor := Node2D.new()
+	var ui := Control.new()
+	_game_ui.mount_world_ui(ui, anchor)
+	anchor.free()
+
+	_game_ui._on_frame_pre_draw()
+
+	assert_false(_game_ui._world_anchors.has(ui))
+	assert_push_warning("was freed externally")
+
+
+func test_null_anchor_is_not_treated_as_stale() -> void:
+	var ui := Control.new()
+	autofree(ui)
+	_game_ui.mount_world_ui(ui, null)
+
+	_game_ui._on_frame_pre_draw()
+
+	assert_true(_game_ui._world_anchors.has(ui))
+	_game_ui.unmount_world_ui(ui)
 
 
 func test_unmount_world_ui_is_safe_for_untracked_node_on_frame_draw() -> void:
