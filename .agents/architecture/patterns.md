@@ -110,10 +110,10 @@ example of a single module targeting two other modules' Views this way.
    unrelated module also needs the same state (see [`core.md`](core.md#0-design-principles)).
 5. If an Attachment connects to a signal on something that outlives a single mount (e.g. the
    shared state object above, a module-level service), make/break that connection in `_build`/
-   `_on_instance_tree_exiting` — **not** `_on_before_delete`. A registered `UiAttachment`
-   instance is reused across every mount/unmount cycle of its target View, so `_build` can run
-   many times over the Attachment's life, while `_on_before_delete` only fires once (if ever),
-   when the Attachment object itself is garbage-collected.
+   `_on_instance_tree_exiting`. A registered `UiAttachment` instance is reused across every
+   mount/unmount cycle of its target View, so `_build` can run many times over the Attachment's
+   life. `_on_instance_tree_exiting` also runs when a built instance is discarded before it was
+   placed (`discard_instance()`), so one teardown hook covers both paths.
 
 ## Add a Popup
 

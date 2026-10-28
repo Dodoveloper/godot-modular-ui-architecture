@@ -18,10 +18,16 @@ class UiAttachment extends RefCounted:
 		_Scene = Scene
 	
 	
+	## Destructor. Runs when the attachment is about to be freed.[br]
+	## Only data is touched here: at this point Godot has already detached the script instance, so
+	## calling any script method fails with "base 'null instance'". Freeing [member _instance]
+	## directly is safe.
 	func _notification(what: int) -> void:
 		match what:
 			NOTIFICATION_PREDELETE:
-				_on_before_delete()
+				if is_instance_valid(_instance):
+					_instance.free()
+				_instance = null
 	
 	
 	@warning_ignore("unused_parameter")
@@ -39,13 +45,8 @@ class UiAttachment extends RefCounted:
 	## Virtual method. Triggered when the UI instance emits its [signal Node.tree_exiting] signal.
 	func _on_instance_tree_exiting() -> void:
 		pass
-	
-	
-	## Virtual method. Triggered when the attachment itself is about to be deleted.
-	func _on_before_delete() -> void:
-		pass
-	
-	
+
+
 	## Triggered when the host UI's context has changed.[br]
 	## [br]
 	## [param new_context] - The new, updated context.
@@ -65,9 +66,12 @@ class UiAttachment extends RefCounted:
 		return _instance
 	
 	
-	## Frees an instance that was built but never placed in the tree, and clears the reference.
-	## Use this instead of freeing the instance directly, so the attachment's state stays consistent.
+	## Frees an instance that was built but never placed in the tree, and clears the reference.[br]
+	## Runs [method _on_instance_tree_exiting] first, since [signal Node.tree_exiting] never fires for
+	## an instance that was never in the tree. Use this instead of freeing the instance directly.
 	func discard_instance() -> void:
+		if is_instance_valid(_instance) and not _instance.is_inside_tree():
+			_on_instance_tree_exiting()
 		if is_instance_valid(_instance):
 			_instance.queue_free()
 		_instance = null
@@ -89,6 +93,8 @@ class UiAttachment extends RefCounted:
 	## Returns the instance of the built [Control] node.
 	func build(host_ui: Node, context: RefCounted) -> Control:
 		_instance = _build(host_ui, context)
+		if not _instance:
+			return null
 		_on_instance_built()
 		_instance.tree_exiting.connect(_on_instance_tree_exiting, CONNECT_ONE_SHOT)
 		_instance.tree_exited.connect(_on_instance_tree_exited, CONNECT_ONE_SHOT)
