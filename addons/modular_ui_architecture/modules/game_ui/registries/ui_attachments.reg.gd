@@ -9,6 +9,10 @@ func register_attachment(attachment: GameUiTypes.UiAttachment) -> void:
 
 
 func unregister_attachment(attachment: GameUiTypes.UiAttachment) -> void:
+	if not _attachments.has(attachment):
+		push_error("Attachment is not registered")
+		return
+	
 	_attachments.erase(attachment)
 
 

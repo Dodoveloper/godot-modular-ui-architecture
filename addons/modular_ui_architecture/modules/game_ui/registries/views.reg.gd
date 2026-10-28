@@ -9,6 +9,10 @@ func register_view(view_registration: GameUiTypes.ViewRegistration) -> void:
 
 
 func unregister_view(token: StringName) -> void:
+	if not _views.has(token):
+		push_error("No view registered for token '%s'" % token)
+		return
+	
 	_views.erase(token)
 
 
