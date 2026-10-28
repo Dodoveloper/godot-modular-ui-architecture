@@ -18,6 +18,10 @@ func register_binding(action: StringName, binding: InputBindingsTypes.InputBindi
 
 
 func unregister_binding(action: StringName, binding: InputBindingsTypes.InputBinding) -> void:
+	if not _bindings_by_action.has(action):
+		push_error("No bindings registered for action '%s'" % action)
+		return
+	
 	_bindings_by_action[action].erase(binding)
 
 
