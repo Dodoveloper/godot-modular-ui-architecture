@@ -71,10 +71,8 @@ func test_unmount_ui_removes_mounted_node() -> void:
 	assert_null(node.get_parent())
 
 
-## NOTE: a Control is used here because unmount_ui() passes nodes through the popup layer's
-## typed Array[Control] (has()), which rejects plain Nodes. See the defect report.
 func test_unmount_ui_returns_false_for_node_in_no_layer() -> void:
-	var stray := Control.new()
+	var stray := Node.new()
 	autofree(stray)
 
 	var is_success := _service.unmount_ui(stray)

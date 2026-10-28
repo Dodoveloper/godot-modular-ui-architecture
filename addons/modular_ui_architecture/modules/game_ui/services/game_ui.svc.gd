@@ -145,7 +145,7 @@ func mount_world_ui(
 	return ui
 
 
-func unmount_world_ui(ui: Node) -> bool:
+func unmount_world_ui(ui: Control) -> bool:
 	if not _world_anchors.has(ui):
 		push_error("UI node '%s' is not tracked as world-anchored" % ui.name)
 		return false
@@ -335,6 +335,9 @@ func _on_view_tree_exiting(token: StringName) -> void:
 
 class WorldAnchorInfo:
 	var anchor: CanvasItem
+	## Whether an anchor was supplied at mount time. Kept separately from [member anchor] because a
+	## freed anchor reference becomes [code]null[/code], which would be indistinguishable from none.
+	var has_anchor: bool
 	var offset: Vector2
 	## Previous sampled world position of the anchor (for interpolation).
 	var prev_world_pos: Vector2
@@ -355,6 +358,7 @@ class WorldAnchorInfo:
 		base_scale_: Vector2 = Vector2.ONE
 	) -> void:
 		anchor = anchor_
+		has_anchor = anchor_ != null
 		offset = offset_
 		prev_world_pos = Vector2.ZERO
 		curr_world_pos = Vector2.ZERO
@@ -370,4 +374,4 @@ class WorldAnchorInfo:
 	## Returns [code]true[/code] if the anchor was set at mount time but has since been freed.
 	## A deliberately [code]null[/code] anchor is not considered stale.
 	func is_anchor_stale() -> bool:
-		return anchor != null and not is_instance_valid(anchor)
+		return has_anchor and not is_instance_valid(anchor)

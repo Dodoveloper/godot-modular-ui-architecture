@@ -80,8 +80,10 @@ func _can_mount_scene(Scene: PackedScene) -> bool:
 	return Utils.is_scene_of_native_type(Scene, &"Control")
 
 
-func _get_mounted_nodes() -> Array[Control]:
-	return _popups.keys()
+func _get_mounted_nodes() -> Array[Node]:
+	var nodes: Array[Node] = []
+	nodes.assign(_popups.keys())
+	return nodes
 
 
 func has_popups() -> bool:

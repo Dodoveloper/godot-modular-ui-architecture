@@ -97,10 +97,12 @@ func _can_mount_scene(Scene: PackedScene) -> bool:
 	return true
 
 
-func _get_mounted_nodes() -> Array:
-	return get_children().filter(func(c: Node):
-		return c.name != CapUiLayers.WORLD_UI_CONTAINER_NODE_NAME
-	)
+func _get_mounted_nodes() -> Array[Node]:
+	var nodes: Array[Node] = []
+	for child in get_children():
+		if child.name != CapUiLayers.WORLD_UI_CONTAINER_NODE_NAME:
+			nodes.append(child)
+	return nodes
 
 
 ## Mounts a node and returns it. It returns [code]null[/code] if it can't be mounted.
@@ -124,5 +126,5 @@ func unmount_node(node: Node) -> bool:
 ## [b]NOTE[/b]: world-anchored UI nodes are excluded.
 ## Do not use [method Node.get_children] as a substitute — it includes infrastructure children
 ## that are not mounted UI.
-func get_mounted_nodes() -> Array:
+func get_mounted_nodes() -> Array[Node]:
 	return _get_mounted_nodes()

@@ -1,6 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cmk86hk475fe0"]
 
-[ext_resource type="Script" path="res://tests/fixtures/scripts/transition_popup.gd" id="1"]
+[ext_resource type="Script" uid="uid://7bxg1m8pifxv" path="res://tests/fixtures/scripts/transition_popup.gd" id="1"]
 
-[node name="root" type="Control"]
+[node name="TransitionPopup" type="Control" unique_id=1489900959]
+layout_mode = 3
+anchors_preset = 0
 script = ExtResource("1")

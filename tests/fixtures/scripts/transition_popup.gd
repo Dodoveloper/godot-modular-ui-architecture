@@ -3,6 +3,8 @@
 ## themselves to simulate an animation finishing.
 extends Control
 
+
+@warning_ignore("unused_signal")
 signal close_transition_finished
 
 var begin_close_count := 0

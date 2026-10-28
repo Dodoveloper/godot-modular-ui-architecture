@@ -49,7 +49,8 @@ folder_colors={
 "res://demo/modules/player/content/": "green",
 "res://demo/modules/player/content/ui/": "green",
 "res://demo/modules/rename_ui/content/": "green",
-"res://demo/shared/": "yellow"
+"res://demo/shared/": "yellow",
+"res://tests/": "teal"
 }
 
 [global_group]

@@ -44,7 +44,7 @@ signal view_mounted(token: StringName)
 ## Unmounts a world-anchored UI node and stops position tracking.[br]
 ## [br]
 ## [param ui] - The UI node to be unmounted.
-@abstract func unmount_world_ui(ui: Node) -> bool
+@abstract func unmount_world_ui(ui: Control) -> bool
 ## Mounts the Attachments that apply to [param view], placing each built UI through
 ## [param add_to_slot].[br]
 ## [br]

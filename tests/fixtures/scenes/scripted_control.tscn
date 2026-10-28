@@ -1,6 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://clqgkh6cx0jl0"]
 
-[ext_resource type="Script" path="res://tests/fixtures/scripts/base_script.gd" id="1"]
+[ext_resource type="Script" uid="uid://3e5r1hkpcxb" path="res://tests/fixtures/scripts/base_script.gd" id="1"]
 
-[node name="root" type="Control"]
+[node name="ScriptedControl" type="Control" unique_id=1476565831]
+layout_mode = 3
+anchors_preset = 0
 script = ExtResource("1")
