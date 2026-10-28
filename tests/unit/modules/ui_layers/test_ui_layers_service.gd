@@ -138,3 +138,13 @@ func test_notify_input_triggered_emits_layer_signal() -> void:
 		_service, "ui_layer_input_triggered",
 		[&"ui_accept", UiLayersTypes.UiLayer.HUD, InputBindingsTypes.InputActionType.PRESSED]
 	)
+
+
+func test_disable_without_layer_container_warns_and_does_not_fail() -> void:
+	var container := get_tree().root.get_node_or_null(NodePath(UiLayersService.LAYER_CONTAINER_NODE_NAME))
+	assert_not_null(container)
+	container.free()
+
+	_service.disable()
+
+	assert_push_warning("Layer Container node is not present in the tree")

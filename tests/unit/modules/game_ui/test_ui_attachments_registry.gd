@@ -44,9 +44,10 @@ func test_unregister_attachment_removes_it() -> void:
 	assert_eq(_registry.get_attachments(), [keep])
 
 
-func test_unregister_unknown_attachment_is_a_no_op() -> void:
+func test_unregister_unknown_attachment_pushes_error() -> void:
 	var attachment := GameUiTypes.UiAttachment.new(&"bottom_right")
 
 	_registry.unregister_attachment(attachment)
 
+	assert_push_error("Attachment is not registered")
 	assert_true(_registry.get_attachments().is_empty())

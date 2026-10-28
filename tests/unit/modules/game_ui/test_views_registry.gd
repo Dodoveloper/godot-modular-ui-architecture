@@ -44,7 +44,8 @@ func test_unregister_view_removes_registration() -> void:
 	assert_null(_registry.get_view_registration(TOKEN))
 
 
-func test_unregister_unknown_view_is_a_no_op() -> void:
+func test_unregister_unknown_view_pushes_error() -> void:
 	_registry.unregister_view(TOKEN)
 
+	assert_push_error("No view registered for token 'inventory'")
 	assert_null(_registry.get_view_registration(TOKEN))

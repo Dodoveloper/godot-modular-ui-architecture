@@ -81,3 +81,14 @@ func test_queued_popup_waits_until_active_one_leaves_the_tree() -> void:
 
 	assert_false(is_instance_valid(first), "Active queued popup was closed")
 	assert_eq(_popups_layer.get_mounted_nodes().size(), 1, "Next queued popup is now open")
+
+
+func test_open_popup_queued_forwards_arguments_to_popup_layer_queue() -> void:
+	var setup := func(_popup: Control) -> void: pass
+
+	_service.open_popup_queued(SCENE_PATH, Color.GREEN, setup, true)
+
+	var popup: Control = _popups_layer.get_mounted_nodes()[0]
+	assert_eq((popup.get_parent() as ColorRect).color, Color.GREEN)
+	assert_true(_popups_layer._popups[popup].dismiss_on_click_outside)
+	assert_true(_popups_layer._popups[popup].is_blocking)

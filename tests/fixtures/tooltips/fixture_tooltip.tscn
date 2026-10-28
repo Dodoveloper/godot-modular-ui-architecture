@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://cw8fgssnaab5f"]
+
+[ext_resource type="Script" uid="uid://ottxje6t1fp7" path="res://tests/fixtures/tooltips/fixture_tooltip.gd" id="1"]
+
+[node name="FixtureTooltip" type="Control" unique_id=1236305832 node_paths=PackedStringArray("bubble", "content", "description")]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1")
+bubble = NodePath("Bubble")
+content = NodePath("Bubble/Content")
+description = NodePath("Bubble/Content/Description")
+
+[node name="Bubble" type="Control" parent="." unique_id=685211933]
+anchors_preset = 0
+
+[node name="Content" type="Control" parent="Bubble" unique_id=2037791683]
+anchors_preset = 0
+
+[node name="Description" type="RichTextLabel" parent="Bubble/Content" unique_id=267282252]
+layout_mode = 0

@@ -105,6 +105,12 @@ Always declare function return types, including `-> void` for side-effect-only m
 `Array`/`Dictionary` literals can lose their element type through `filter()`/`map()` — assign
 through an already-typed variable when that matters.
 
+The UI layer pipeline uses `Node` as its element type: `UiLayerNode.get_mounted_nodes()` returns
+`Array[Node]`, and public mount/unmount signatures take `Node`. Narrowing to `Control` happens after
+`_can_mount_scene()` checks the scene, and never in a public signature. Typed containers reject
+`has()` for a value of the wrong type, so a `Control`-typed container must not be queried with a
+plain `Node` — compare by iteration, or keep the element type `Node`.
+
 ## Naming
 
 - Files: `snake_case.gd`, with the suffix table above.

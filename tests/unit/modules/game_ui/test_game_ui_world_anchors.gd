@@ -104,3 +104,130 @@ func test_unmount_world_ui_is_safe_for_untracked_node_on_frame_draw() -> void:
 	_game_ui._on_frame_pre_draw()
 
 	assert_true(_game_ui._world_anchors.is_empty())
+
+
+func test_frame_draw_places_ui_at_anchor_position_plus_offset() -> void:
+	var anchor := Node2D.new()
+	add_child_autofree(anchor)
+	anchor.global_position = Vector2(100, 50)
+	var ui := Control.new()
+	autofree(ui)
+	_game_ui.mount_world_ui(ui, anchor, UiLayersTypes.UiLayer.DEFAULT, Vector2(8, -4))
+
+	_game_ui._on_frame_pre_draw()
+
+	var expected := anchor.get_canvas_transform() * anchor.global_position + Vector2(8, -4)
+	assert_true(ui.global_position.is_equal_approx(expected))
+	_game_ui.unmount_world_ui(ui)
+
+
+func test_frame_draw_uses_live_position_when_anchor_interpolation_is_off() -> void:
+	var anchor := Node2D.new()
+	add_child_autofree(anchor)
+	anchor.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+	anchor.global_position = Vector2(0, 0)
+	var ui := Control.new()
+	autofree(ui)
+	_game_ui.mount_world_ui(ui, anchor)
+	# Move the anchor without sampling: the live branch must read its current position.
+	anchor.global_position = Vector2(40, 0)
+
+	_game_ui._on_frame_pre_draw()
+
+	assert_true(ui.global_position.is_equal_approx(Vector2(40, 0)))
+	_game_ui.unmount_world_ui(ui)
+
+
+func test_sampling_once_per_tick_keeps_previous_buffer_for_same_tick() -> void:
+	var anchor := Node2D.new()
+	add_child_autofree(anchor)
+	anchor.global_position = Vector2.ZERO
+	var ui := Control.new()
+	autofree(ui)
+	_game_ui.mount_world_ui(ui, anchor)
+	var info := _info_for(ui)
+	var tick := Engine.get_physics_frames() + 1
+
+	anchor.global_position = Vector2(10, 0)
+	_game_ui._sample_anchor(info, tick)
+	var curr_after_first := info.curr_world_pos
+	anchor.global_position = Vector2(20, 0)
+	_game_ui._sample_anchor(info, tick)
+
+	assert_eq(info.curr_world_pos, curr_after_first, "A second sample on the same tick is ignored")
+	_game_ui.unmount_world_ui(ui)
+
+
+func test_mirroring_copies_anchor_visibility_modulate_and_scaled_scale() -> void:
+	var anchor := Node2D.new()
+	add_child_autofree(anchor)
+	anchor.visible = false
+	anchor.modulate = Color(0.5, 0.5, 0.5, 1.0)
+	anchor.scale = Vector2(2, 2)
+	var ui := Control.new()
+	autofree(ui)
+	ui.scale = Vector2(3, 3)
+	_game_ui.mount_world_ui(ui, anchor, UiLayersTypes.UiLayer.DEFAULT, Vector2.ZERO, true)
+
+	_game_ui._on_frame_pre_draw()
+
+	assert_false(ui.visible)
+	assert_eq(ui.modulate, Color(0.5, 0.5, 0.5, 1.0))
+	assert_eq(ui.scale, Vector2(6, 6), "Anchor scale is multiplied onto the UI's own base scale")
+	_game_ui.unmount_world_ui(ui)
+
+
+func test_without_mirroring_ui_keeps_its_own_visibility_and_modulate() -> void:
+	var anchor := Node2D.new()
+	add_child_autofree(anchor)
+	anchor.visible = false
+	var ui := Control.new()
+	autofree(ui)
+	ui.modulate = Color.WHITE
+	_game_ui.mount_world_ui(ui, anchor, UiLayersTypes.UiLayer.DEFAULT, Vector2.ZERO, false)
+
+	_game_ui._on_frame_pre_draw()
+
+	assert_true(ui.visible)
+	assert_eq(ui.modulate, Color.WHITE)
+	_game_ui.unmount_world_ui(ui)
+
+
+func test_freeing_world_ui_removes_its_anchor_tracking() -> void:
+	var anchor := Node2D.new()
+	add_child_autofree(anchor)
+	var ui := Control.new()
+	_game_ui.mount_world_ui(ui, anchor)
+	assert_true(_game_ui._world_anchors.has(ui))
+
+	ui.queue_free()
+	await wait_process_frames(2)
+
+	# The key is now a freed object, and a typed Dictionary[Control, ...] rejects has() on it,
+	# so check the remaining tracked entries instead.
+	assert_true(_game_ui._world_anchors.is_empty())
+
+
+func test_frame_draw_interpolates_anchor_position_when_interpolation_is_on() -> void:
+	var anchor := Node2D.new()
+	anchor.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_ON
+	add_child_autofree(anchor)
+	anchor.global_position = Vector2(0, 0)
+	var ui := Control.new()
+	autofree(ui)
+	_game_ui.mount_world_ui(ui, anchor)
+	var info := _info_for(ui)
+	# Distinct previous and current samples, so the interpolated and live positions diverge.
+	info.prev_world_pos = Vector2(0, 0)
+	info.curr_world_pos = Vector2(100, 0)
+	info.last_sampled_tick = Engine.get_physics_frames()
+	anchor.global_position = Vector2(500, 0)
+
+	_game_ui._on_frame_pre_draw()
+
+	# The fraction is read in the same frame as the service, so the expected value matches it.
+	var f := Engine.get_physics_interpolation_fraction()
+	var expected := info.prev_world_pos.lerp(info.curr_world_pos, f)
+	assert_true(ui.global_position.is_equal_approx(expected))
+	assert_false(ui.global_position.is_equal_approx(Vector2(500, 0)), "Not the live position")
+	_game_ui.unmount_world_ui(ui)

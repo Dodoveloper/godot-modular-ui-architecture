@@ -77,3 +77,12 @@ func test_get_actions_lists_registered_actions() -> void:
 	assert_eq(actions.size(), 2)
 	assert_has(actions, ACTION)
 	assert_has(actions, &"other_action")
+
+
+func test_unregister_binding_for_unknown_action_pushes_error() -> void:
+	var binding := FakeBinding.new()
+
+	_registry.unregister_binding(&"never_registered", binding)
+
+	assert_push_error("No bindings registered for action 'never_registered'")
+	assert_true(_registry.get_bindings(&"never_registered").is_empty())
