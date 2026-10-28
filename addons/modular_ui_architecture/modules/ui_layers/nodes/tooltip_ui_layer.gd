@@ -9,8 +9,6 @@ var _available_rect: Rect2
 
 
 func _mount_node(node: Node, data: Dictionary[StringName, Variant] = {}) -> Node:
-	unmount_tooltip()
-	
 	_anchor = data.get(&"anchor")
 	if not is_instance_valid(_anchor):
 		node.queue_free()
