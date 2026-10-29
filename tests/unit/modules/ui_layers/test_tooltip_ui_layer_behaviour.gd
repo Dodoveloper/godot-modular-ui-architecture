@@ -2,8 +2,10 @@ extends GutTest
 ## Unit tests for TooltipUiLayer: acceptance rules, a single tooltip at a time, unmounting, and
 ## placement through _reposition(). Also covers TooltipsService forwarding.
 ##
-## The anchor and mouse position are controlled through the anchor's rect, so the mouse-outside
-## check is deterministic. Placement is driven by calling _reposition() with fixed rects.
+## The anchor is always placed under the live mouse position, so the mouse-inside check passes
+## regardless of where the cursor is (editor runs use a real window, headless runs use (0, 0)).
+## The mouse-outside case uses an anchor far away from the cursor. Placement is driven by calling
+## _reposition() with fixed rects.
 
 
 const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
@@ -35,13 +37,13 @@ func after_each() -> void:
 	await wait_process_frames(1)
 
 
-## Returns an anchor Control covering the viewport at (0, 0), so the mouse (also at (0, 0) in
-## headless runs) is inside it. A full-rect preset alone leaves a plain Control at zero size here.
+## Returns an 800x600 anchor centred on the current mouse position, so the mouse is always inside
+## it. Positioning relative to the live cursor avoids depending on where the editor window sits.
 func _make_anchor() -> Control:
 	var anchor := Control.new()
 	add_child_autofree(anchor)
-	anchor.position = Vector2.ZERO
 	anchor.size = Vector2(800, 600)
+	anchor.global_position = anchor.get_global_mouse_position() - anchor.size / 2.0
 	return anchor
 
 
