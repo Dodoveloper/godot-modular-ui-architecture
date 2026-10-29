@@ -1,8 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dapa14x171x8g"]
 
 [ext_resource type="Theme" uid="uid://dex65sj4cjk33" path="res://demo/assets/resources/themes/default_theme.tres" id="1_theme"]
 
-[node name="EquipButton" type="Button"]
+[node name="EquipButton" type="Button" unique_id=1904360755]
 theme = ExtResource("1_theme")
 disabled = true
 text = "Equip"

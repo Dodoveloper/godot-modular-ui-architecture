@@ -1,6 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://dikydxpsc8gjc"]
 
-[ext_resource type="Script" path="res://tests/fixtures/game_ui/context_view.gd" id="1"]
+[ext_resource type="Script" uid="uid://dbyqjoyl4ndd8" path="res://tests/fixtures/game_ui/context_view.gd" id="1"]
 
-[node name="root" type="Control"]
+[node name="root" type="Control" unique_id=1768202911]
+layout_mode = 3
+anchors_preset = 0
 script = ExtResource("1")

@@ -11,7 +11,9 @@ content = NodePath("Bubble/Content")
 description = NodePath("Bubble/Content/Description")
 
 [node name="Bubble" type="Control" parent="." unique_id=685211933]
+custom_minimum_size = Vector2(96, 0)
 anchors_preset = 0
+offset_right = 96.0
 
 [node name="Content" type="Control" parent="Bubble" unique_id=2037791683]
 anchors_preset = 0

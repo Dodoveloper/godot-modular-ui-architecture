@@ -1,7 +1,7 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://b43ysrf2eqf3v"]
 
 [ext_resource type="Theme" uid="uid://dex65sj4cjk33" path="res://demo/assets/resources/themes/default_theme.tres" id="1_theme"]
 
-[node name="EquippedItemLabel" type="Label"]
+[node name="EquippedItemLabel" type="Label" unique_id=574905560]
 theme = ExtResource("1_theme")
 text = "Equipped: none"
