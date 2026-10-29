@@ -9,16 +9,19 @@ var _available_rect: Rect2
 
 
 func _mount_node(node: Node, data: Dictionary[StringName, Variant] = {}) -> Node:
-	_anchor = data.get(&"anchor")
-	if not is_instance_valid(_anchor):
+	var anchor: Control = data.get(&"anchor")
+	if not is_instance_valid(anchor):
 		node.queue_free()
 		push_error("Invalid anchor node")
 		return null
-	# If mouse is outside the anchor's rect, don't mount
-	if not _anchor.get_global_rect().has_point(_anchor.get_global_mouse_position()):
+	
+	# If mouse is outside the anchor's rect, don't mount. The anchor is only stored once accepted,
+	# so a refused mount never leaves a stale reference behind.
+	if not anchor.get_global_rect().has_point(anchor.get_global_mouse_position()):
 		node.queue_free()
 		return null
 	
+	_anchor = anchor
 	_available_rect = data.get(&"available_rect", get_viewport().get_visible_rect())
 	_tooltip = node
 	var contents: Dictionary[StringName, Variant] = (
