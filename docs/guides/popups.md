@@ -61,7 +61,8 @@ For a queued popup, you can't read the return value, because the popup may open 
 Callable instead. It runs after the popup is instantiated:
 
 ```gdscript
-svc_popups.open_popup_queued(REWARD_PATH, Color(0, 0, 0, 0), _configure_reward.bind(reward))
+func _grant_rewards() -> void:
+	svc_popups.open_popup_queued(REWARD_PATH, Color(0, 0, 0, 0), _configure_reward.bind(reward))
 
 
 static func _configure_reward(popup: RewardDialog, reward: Reward) -> void:

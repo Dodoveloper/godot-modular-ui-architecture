@@ -22,8 +22,8 @@ const MyFeatureModule = preload("res://my_feature/my_feature.md.gd")
 
 
 func _ready() -> void:
-await GdlrModuleManager.mount(MyFeatureModule)
-await GdlrModuleManager.start()
+	await GdlrModuleManager.mount(MyFeatureModule)
+	await GdlrModuleManager.start()
 ```
 
 Don't resolve a capability before `start()` has returned. The demo follows the same order in

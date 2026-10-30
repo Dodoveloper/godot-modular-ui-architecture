@@ -143,6 +143,7 @@ way round. This is a warning, and the transition is skipped.
 var dialog: Control = svc_popups.open_popup(CONFIRM_PATH)
 if not dialog:
 	return
+
 dialog.confirmed.connect(_on_confirmed)
 ```
 

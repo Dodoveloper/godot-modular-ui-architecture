@@ -3,10 +3,7 @@
 Short, end-to-end recipes for common features. Each one points to the guide that explains the parts
 in depth. Start with the [Quick start](getting-started/03-quick-start.md) if you haven't built a View yet.
 
-Recipes marked **validated** were run headless against the addon before being written. The others
-follow the same APIs, and each one names the guide that backs it.
-
-## Toggle a View with a key and a HUD button (validated)
+## Toggle a View with a key and a HUD button
 
 A View that opens from a key and from a button, using one binding for both. The Quick start builds this
 in full. The shape is:
@@ -19,7 +16,7 @@ in full. The shape is:
 See the [Quick start](getting-started/03-quick-start.md) for the files, and [Views](guides/views.md) and
 [Attachments and Attachment Slots](guides/attachments-and-slots.md) for the rules behind each part.
 
-## Gate gameplay popups while a window is open (validated)
+## Gate gameplay popups while a window is open
 
 A window blocks a category of interaction while it's open. Gameplay code checks the category before it
 shows a popup. Neither side needs to know about the other.
@@ -32,10 +29,10 @@ var svc_policy_store: CapPolicyStore
 
 func _on_window_mounted(window: Node) -> void:
 	svc_policy_store.block(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI, window)
-	window.tree_exiting.connect(_on_window_leaving.bind(window))
+	window.tree_exiting.connect(_on_window_unmounting.bind(window))
 
 
-func _on_window_leaving(window: Node) -> void:
+func _on_window_unmounting(window: Node) -> void:
 	svc_policy_store.unblock(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI, window)
 ```
 
@@ -44,10 +41,11 @@ Checking, from the gameplay code that would show the popup:
 ```gdscript
 if not _svc_policy_store.is_allowed(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI):
 	return
+
 _svc_popups.open_popup_queued(REWARD_PATH, Color(0, 0, 0, 0), _configure_reward.bind(reward))
 ```
 
-Validated: a category is allowed by default, blocked while a source holds it, and allowed again once the
+A category is allowed by default, blocked while a source holds it, and allowed again once the
 source is freed. The window's blocks are released automatically if the window is destroyed without
 unblocking. See [Policy Store](guides/policy-store.md).
 
@@ -60,6 +58,7 @@ func _on_quit_pressed() -> void:
 	var dialog: Control = svc_popups.open_popup(CONFIRM_PATH, menu_popup, Vector2.ZERO, true)
 	if not dialog:
 		return
+	
 	dialog.confirmed.connect(_on_quit_confirmed)
 
 
