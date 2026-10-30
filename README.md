@@ -12,6 +12,7 @@ framework) and [GdbPromise](addons/gdb_promise/README.md) (a promise library).
 UI tends to accumulate coupling as a game grows. A HUD script ends up with direct references to
 the inventory, the quest log, and the pause menu; a new feature means editing scenes owned by
 other systems; and removing a feature means hunting down every place that still reaches into it.
+
 Escape closes three overlapping windows at once, a hotkey fires while a text field has focus,
 and "don't show a popup while the game is paused" gets hardcoded into every popup instead of
 declared once.
@@ -170,5 +171,6 @@ Everything in this repository has been reviewed and is maintained by the author.
 ## License
 
 [MIT](LICENSE). Built on [Godular](addons/godular/README.md) and
-[GdbPromise](addons/gdb_promise/README.md) (both MIT). Demo art/fonts are from
-[Kenney](https://kenney.nl/).
+[GdbPromise](addons/gdb_promise/README.md) (both MIT).
+
+Demo art/fonts are from [Kenney](https://kenney.nl/).

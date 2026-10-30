@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest in contributing to Modular UI Architecture. This document covers how to
+Thanks for your interest in contributing to Modular UI Architecture! This document covers how to
 propose a change, what a good change looks like, and what to check before opening a pull request.
 
 ## Before you start
@@ -36,7 +36,8 @@ dependencies. Upgrades are a separate change.
 
 ## Commit messages
 
-Use [Conventional Commits](https://www.conventionalcommits.org/) with one of these prefixes:
+It is not mandatory, but recommended to use
+[Conventional Commits](https://www.conventionalcommits.org/) with one of these prefixes:
 
 | Prefix | Use for |
 |--------|---------|
@@ -85,11 +86,6 @@ See [`.agents/PRINCIPLES.md`](.agents/PRINCIPLES.md) for how this documentation 
 
 - Run the demo (`demo/content/levels/main.tscn`) and check the parts your change touches. The demo is
   the integration check for the addon, so a change that breaks it isn't ready.
-
-## Working with scenes
-
-Create and edit `.tscn` files in the Godot editor where possible. Hand-editing scene trees can lose
-UIDs, as described in the [style guide](.agents/architecture/style-guide.md#godot-mcp--scene-editing-gotchas).
 
 ## License
 
