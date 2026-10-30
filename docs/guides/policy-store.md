@@ -24,6 +24,11 @@ Categories are values of `PolicyStoreTypes.Category`, defined in
 To add a category, add an entry to that enum with a doc comment that describes what it gates. Your
 project's categories then sit alongside the addon's.
 
+> **Current limitation:** you add the category by editing `policy_store/types.gd` in the addon, not
+> from your own module. An addon upgrade may overwrite the change, so record it and reapply it after
+> upgrading. Registering categories from your own modules is a planned improvement, noted in the
+> [README](../../README.md#potential-improvements).
+
 ## Blocking and unblocking
 
 `CapPolicyStore` has four methods:

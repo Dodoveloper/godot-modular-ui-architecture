@@ -4,6 +4,9 @@ An opinionated architecture and set of runtime systems for building modular, reu
 extensible UI in Godot 4.7, built on top of [Godular](addons/godular/README.md) (a DI/module
 framework) and [GdbPromise](addons/gdb_promise/README.md) (a promise library).
 
+![Main level, with HUD buttons, a nameplate, and a queued reward popup](docs/images/main-level.png)
+<!-- [main level screenshot] -->
+
 ## The problem
 
 UI tends to accumulate coupling as a game grows. A HUD script ends up with direct references to
@@ -39,10 +42,12 @@ and removing a feature's module removes everything it contributed — no danglin
   popup") is blocked, from wherever that decision is made, without the gated code needing to
   know who's blocking it or why.
 
-See [`.agents/architecture/core.md`](.agents/architecture/core.md) and
-[`.agents/architecture/glossary.md`](.agents/architecture/glossary.md) for how these fit
-together, and [ADR-002](.agents/adrs/002-separate-popups-views-tooltips-subsystems.md) for why
-Views, Popups, and Tooltips are kept as separate systems instead of one unified "modal" concept.
+![Inventory open, with an item tooltip and a footer button contributed by another module](docs/images/inventory-tooltip.png)
+<!-- [inventory + tooltip screenshot] -->
+
+See the [concepts](docs/concepts/01-architecture-overview.md) section of the documentation for how
+these fit together. [ADR-002](.agents/adrs/002-separate-popups-views-tooltips-subsystems.md) explains
+why Views, Popups, and Tooltips are kept as separate systems instead of one unified "modal" concept.
 
 ## Is this for you?
 
@@ -92,9 +97,8 @@ class MyFeatureModule extends GdlrModule:
 		svc_game_ui.mount_view(MY_VIEW_TOKEN)
 ```
 
-For the full set of step-by-step recipes (adding a View with a toggle binding, a Popup, a
-Tooltip, an Attachment into another module's View, Context, Policy Store gating), see
-[`.agents/architecture/patterns.md`](.agents/architecture/patterns.md).
+The [Quick start](docs/getting-started/03-quick-start.md) builds this feature in full, and the
+[cookbook](docs/cookbook.md) has short recipes for Popups, Tooltips, Policy Store gating, and more.
 
 ## The demo
 
@@ -105,30 +109,44 @@ nameplate as World UI. Run `demo/content/levels/main.tscn` to try it.
 
 ### Try it yourself
 
-These are meant to show *why* the architecture helps, not just what it does:
+These are meant to show *why* the architecture helps, not just what it does. The
+[demo tour](docs/getting-started/04-demo-tour.md) has more experiments, and a challenge to build a
+feature of your own:
 
 - **Remove a feature as a unit.** Comment out `InventoryModule` in `demo/demo.md.gd` and run
   again — the Inventory's HUD button, its keybinding, and the View itself are all gone, with no
   errors. Nothing else in the demo references the Inventory directly.
+
+![HUD with and without InventoryModule](docs/images/module-removal.png)
+<!-- [module removal before/after screenshot] -->
+
 - **Remove a cross-module Attachment.** Comment out `EquipmentModule` instead — the Inventory
   still works exactly as before, just without its "Equip" button, and the HUD no longer shows
-  the equipped item. Neither the Inventory nor the HUD import the `equipment` module; look at
-  `demo/modules/equipment/attachments/` to see how it reaches into both.
-- **Move a HUD button without touching the HUD.** Change `_slot_tag`/`_priority` on any of the
-  `attachments/*.attach.gd` files in `pause_menu`, `rename_ui`, or `inventory` — the button
-  reflows without a single edit to `hud.tscn`.
-- **One input path, no duplicate handling.** Open the Rename dialog and type `r` into the text
-  field — the `toggle_rename` hotkey doesn't fire, even though it's also bound to `r`, because
-  typed input and the hotkey both go through the same `UiLayerNode`/`InputBinding` pipeline.
+  the equipped item. Neither the Inventory nor the HUD import the `equipment` module.
 - **Only the topmost UI closes.** Open the Pause Menu, then press "Quit" to bring up the
   confirmation Popup, then press Escape — only the confirmation closes, not the Pause Menu
   underneath it.
-- **Policy Store gates a category, not a specific UI.** Open the Inventory and walk the
-  character into the chest — no reward popups appear, because the Inventory blocks
-  `OPEN_GAMEPLAY_POPUP_UI` for as long as it's open. Turn off the Inventory View's **Should
-  Block Inputs** in the editor first so the character can actually move while it's open, then
-  try removing the `svc_policy_store.block(...)` call in `inventory.md.gd` to see the popups
-  show up regardless.
+
+![Pause Menu with a confirmation Popup stacked on top](docs/images/pause-menu-popup.png)
+<!-- [pause menu + confirm popup screenshot] -->
+
+- **Challenge: modularize the inventory slots.** The Inventory's item slots are static scene
+  children. Move them into a module, so each one is contributed as an Attachment. The steps are in
+  the [demo tour](docs/getting-started/04-demo-tour.md#challenge-modularize-the-inventory-slots).
+
+## Potential improvements
+
+The addon is usable today, but a few things are still closed to projects that use it:
+
+- **Custom Policy categories.** Today, a new `PolicyStoreTypes.Category` value means editing
+  `policy_store/types.gd` in the addon. A project should be able to declare its own categories from
+  its own modules. See [Policy Store](docs/guides/policy-store.md#the-categories).
+- **Custom UI Layers.** Today, a new `UiLayer` value, and its `UiLayerNode` script, means editing
+  files in `ui_layers/`. Layers should be registrable from a project's modules. See
+  [Customizing a layer](docs/guides/ui-layers.md#customizing-a-layer).
+
+Both are candidates for a future version. Work on either is an architectural change, so please open
+a discussion first. See [CONTRIBUTING.md](CONTRIBUTING.md#before-you-start).
 
 ## Documentation
 
@@ -136,9 +154,7 @@ Full user documentation lives in [`docs/`](docs/README.md). Start with the
 [introduction](docs/getting-started/01-introduction.md) and the
 [quick start](docs/getting-started/03-quick-start.md).
 
-Architecture, conventions, and the reasoning behind non-obvious decisions live under
-[`.agents/`](.agents/), written for AI coding agents but equally useful for human contributors.
-Start at [`AGENTS.md`](AGENTS.md). See [`CONTRIBUTING.md`](CONTRIBUTING.md) before opening a PR.
+Contributors can read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
 
 `ToggleableDisplay`, `InputManager`, and `Tokens` under `demo/shared/classes/` are demo code, not
 part of the addon.

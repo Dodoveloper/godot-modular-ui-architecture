@@ -200,6 +200,8 @@ tree. Specific to this file, update it when:
   code — reconcile the doc with what the codebase actually does, don't just add an exception
 - a new Godot/tooling gotcha is discovered that could plausibly cost a future agent real time
   (like the UID-stripping behavior above)
+- a convention changes what a contributor must do: keep the human-facing summary in
+  [`docs/reference/conventions.md`](../../docs/reference/conventions.md) in step with it
 - a `.gdlintrc`/`.gdformatrc` (or equivalent) is added to the repo — at that point, rules here
   that are currently "followed discipline" should be reconciled with what's actually enforced
 

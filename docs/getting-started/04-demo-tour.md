@@ -62,6 +62,46 @@ To see the Popups appear regardless, comment out the `svc_policy_store.block(...
 Inventory's scene first, or the character can't move while it is open. See
 [Policy Store](../guides/policy-store.md).
 
+### Challenge: modularize the inventory slots
+
+The Inventory's six item slots are static children of `SlotsGrid` in `inventory.tscn`. This challenge
+moves them out of the scene, so a module adds each slot instead. It uses an Attachment Slot, an
+Attachment, and Context, which are the main parts of the addon.
+
+Work it out yourself first. The steps below are a guide, not a solution.
+
+1. **Make the grid a slot.** The Inventory already has an `AttachmentSlotsController` under
+   `PanelContainer`, which holds the `footer` slot. Add a second entry to its **Slot Configs**, with the
+   key `slots_grid`, a `node_path` that points at `SlotsGrid` relative to the controller, and
+   `max_children = -1` for no limit. Use the `footer` entry as the pattern.
+2. **Remove the static slots.** Delete the `InventorySlot` nodes from `SlotsGrid`. Keep the
+   `SlotsGrid` node itself. The grid must still be `unique_name_in_owner`, as `inventory.gd` uses
+   `%SlotsGrid`.
+3. **Create an Attachment.** Add a new file under `demo/modules/inventory/attachments/`, for example
+   `item_slot.attach.gd`. Extend `GameUiTypes.UiAttachment`, set `_slot_tag` to `&"slots_grid"` in
+   `_init()`, and set `_Scene` to the `inventory_slot.tscn` scene. Set the slot's `item_name`,
+   `item_description` and `texture` in `_build()`, which runs once per item.
+4. **Register the Attachments.** In `inventory.md.gd`, register one Attachment per item, using the
+   `reg_attachments` registry the module already has. Each Attachment's `_priority` decides its
+   order inside the grid.
+5. **Check the wiring.** `inventory.gd` connects `item_selected` only to the children that exist in
+   `_ready()`. A slot mounted later never gets that connection. Find a way for the Context to receive
+   the selection (`context.selected_item_name`) from a slot that the module adds. Hint: the
+   `InventorySlot` already emits `item_selected` itself, so the Attachment can connect to it in
+   `_build()`, and disconnect it in `_on_instance_tree_exiting()`.
+
+Expected result: the Inventory looks the same, the Equip button still reads the selected item, and
+removing `InventoryModule` still removes every slot with it.
+
+Things to check when it doesn't work:
+
+- A `_slot_tag` that doesn't match a key in `slot_configs` logs `Slot '...' not found. Ignoring`.
+- A slot that is full logs `Slot '...' does not have space left`.
+- An Attachment with no `AttachmentSlotsController` in its View mounts nothing, and no error appears.
+
+See [Attachments and Attachment Slots](../guides/attachments-and-slots.md) for the rules behind each
+step.
+
 ## Next
 
 Continue with the concepts, starting with the [Architecture overview](../concepts/01-architecture-overview.md).

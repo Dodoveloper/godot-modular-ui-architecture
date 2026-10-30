@@ -38,3 +38,6 @@ the same structure and gotchas every session.
 5. **Follow [`.agents/PRINCIPLES.md`](.agents/PRINCIPLES.md) whenever creating or editing
    anything under `.agents/`** (or under `docs/`) — evidence before guidance, one fact one
    owner, no session-specific phrasing outside of ADRs.
+6. **Update the docs in the same change as the behaviour.** A feature or behaviour change updates
+   the matching page in `docs/` (user-facing), and any affected `.agents/` page (architecture,
+   conventions, structure). Follow [`.agents/PRINCIPLES.md`](.agents/PRINCIPLES.md#docs-ship-with-the-change).

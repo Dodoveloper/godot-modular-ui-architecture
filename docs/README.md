@@ -51,5 +51,6 @@ Each guide covers one system: what it does, when to use it, and the gotchas.
 
 ## Contributing
 
-To contribute to the addon itself, read [CONTRIBUTING.md](../CONTRIBUTING.md). Its architecture notes
-live under [`.agents/`](../.agents/).
+To contribute to the addon itself, read [CONTRIBUTING.md](../CONTRIBUTING.md). It covers the process,
+the commit format, and the documentation and test expectations for a change. The architecture
+decisions behind the addon are recorded as [ADRs](../.agents/adrs/).

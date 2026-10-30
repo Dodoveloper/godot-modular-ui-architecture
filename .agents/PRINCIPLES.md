@@ -60,6 +60,23 @@ Only keep a doc, rule, or checklist entry if a future human or agent will make a
 better decision because it exists. If a section wouldn't change what anyone does differently,
 cut it rather than let it accumulate.
 
+## Docs Ship With The Change
+
+A behaviour or structure change is not finished until its documentation is updated in the same
+change. Which page to update:
+
+| Change | Update |
+|--------|--------|
+| User-visible behaviour, API, or a gotcha | The matching guide or reference page in `docs/` |
+| A new or removed `Cap*` method | `docs/reference/capabilities-api.md` and the guide that covers it |
+| A new enum value or value class | `docs/reference/types-and-enums.md` |
+| A new helper component or exported property | `docs/reference/helper-components.md` |
+| A new demo module | `docs/getting-started/04-demo-tour.md`, `.agents/navigation.md` |
+| A new file-suffix convention | `.agents/architecture/style-guide.md` and `.agents/navigation.md` |
+| A non-obvious decision | A new or updated ADR in `.agents/adrs/` |
+
+The table names the owner of each fact. Link to that owner instead of repeating the fact elsewhere.
+
 ## Humans Are Not Responsible For Agent Artifacts
 
 Humans may work in this repo normally without maintaining `.agents/`. Agents should repair

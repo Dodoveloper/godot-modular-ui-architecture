@@ -90,6 +90,11 @@ The layer scripts are `default_ui_layer.gd`, `hud_ui_layer.gd`, `hud_overlay_ui_
 
 > The addon is part of your project, so these edits apply to that project only. An addon upgrade
 > may overwrite them, so record your changes and reapply them after upgrading.
+>
+> **Current limitation:** you can't add a new layer from your own module. A new `UiLayer` value needs
+> a matching entry in `ui_layers/types.gd`, a node script, and an entry in `_layers_config`, all in the
+> addon. Registering layers from your own modules is a planned improvement, noted in the
+> [README](../../README.md#potential-improvements).
 
 ## Reading layer state
 

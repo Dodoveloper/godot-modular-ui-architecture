@@ -10,13 +10,15 @@ repo root unless stated otherwise.
 ├── AGENTS.md              # entrypoint for agents, routes into .agents/
 ├── CONTRIBUTING.md        # entrypoint for human contributors
 ├── README.md               # short, user-facing pitch
+├── CONTRIBUTING.md         # contribution process, for human contributors
 ├── project.godot
+├── .github/                 # issue and pull request templates
 ├── addons/
 │   ├── modular_ui_architecture/   # THE ADDON — this is what the repo ships
 │   ├── godular/                    # vendored third-party DI/module framework (dependency)
 │   └── gdb_promise/                 # vendored third-party promise library (dependency of godular)
 ├── demo/                    # playable demo project exercising the addon
-├── .agents/                 # this documentation tree
+├── .agents/                 # agent-facing architecture docs (humans may read it too)
 ├── docs/                    # human-facing user documentation (entry: docs/README.md)
 └── tests/                   # GUT unit tests (run instructions: tests/README.md)
 ```

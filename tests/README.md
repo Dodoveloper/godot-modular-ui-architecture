@@ -47,6 +47,8 @@ tests/
   of scope. Services get `enable()`/`disable()` in `before_each`/`after_each`.
 - Tests that create a `UiLayersService` must `await wait_process_frames(2)` after `enable()`,
   because the layer container is added to the root with `call_deferred`.
+- Tests that need a `WorldUiPortal` use a real `GameUiModule` graph, mounted and started in
+  `before_each`. Each test requests its own service, so nothing is cached between tests.
 - Prefer real addon objects (registries, `UiLayersService`) over doubles. Use a fake only to
   observe a hook, as `fake_binding.gd` does.
 
@@ -59,13 +61,12 @@ Godot reports some failures with more than one engine error. For example, a miss
 produces two engine errors. Count them with `assert_engine_error_count(n)`.
 
 An error can also be reported again in the full suite after its own expectation, even when it does not
-repeat in isolation. The `WorldUiPortal` missing-anchor case showed this (see Not covered yet). Prefer
-asserting the observable behaviour, and do not chase a count from a single-file run.
+repeat in isolation. Prefer asserting the observable behaviour, and do not chase a count from a
+single-file run.
 
-## Engine pitfalls found by the tests
+## Engine pitfalls
 
-These were addon defects the tests surfaced. They are fixed, but the rules they reveal are easy to
-re-break, so they are recorded here.
+These rules are easy to break again when the code changes, so they are recorded here.
 
 - **Predelete cannot call script methods.** `UiAttachment` is a destructor via
   `NOTIFICATION_PREDELETE`. By that point Godot has detached the script instance, so calling any
@@ -80,25 +81,17 @@ re-break, so they are recorded here.
   shared by every test that uses the root viewport. Once any test sets it, later tests see `true`
   before they make any call. A fresh `SubViewport` starts clean, but a layer added to a subviewport
   still reports the owner viewport, so subviewports do not isolate layer input. Handled-input tests
-  therefore check the state that triggers handling, not the flag (see Open items).
+  therefore check the state that triggers handling, not the flag. `UiLayerNode._unhandled_input` is
+  tested through the state that triggers it (`should_block_inputs` and mounted nodes). The viewport
+  side effect itself is not asserted.
 - **Registry unregister methods report unknown entries.** `unregister_binding`, `unregister_view` and
   `unregister_attachment` call `push_error` and return when the entry is not registered. Tests for them
   use `assert_push_error`.
 
-## Open items
+## Not covered
 
-None of the defects found so far are open. The tests in `unit/` contain no `pending()` calls.
+These are deliberately outside the unit tests:
 
-Handled-input coverage: `UiLayerNode._unhandled_input` is tested through the state that triggers it
-(`should_block_inputs` and mounted nodes). The viewport side effect itself is not asserted, because the
-flag is shared and never reset (see the viewport note under Engine pitfalls).
-
-## Not covered yet
-
-- `WorldUiPortal` missing-world-anchor error. Its error is reported again after the test's own
-  expectation, only in the full suite and not in isolation. The cause is a graph-lifecycle question,
-  so the test was removed rather than guessed at.
-- `WorldUiPortal` tests use a real `GameUiModule` graph, mounted and started in `before_each`. Each
-  test requests its own service; a restart produces a new service instance, so nothing is cached.
-- Popup close-transition timeout (5 seconds, not injectable).
-- `GameUiUserStore`, which writes to `user://`.
+- Visuals, animation timing, and real window focus. The demo covers these.
+- The popup close-transition timeout (5 seconds, `CLOSE_TRANSITION_TIMEOUT_SEC` in
+  `popups_ui_layer.gd`). It is not injectable, so it is not tested.
