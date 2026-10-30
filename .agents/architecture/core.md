@@ -117,7 +117,7 @@ like typing into a focused `LineEdit`) → `Node._unhandled_input()`. `UiLayerNo
 input in **both** phases, but conditionally: only actions that collide with the engine's
 built-in focus-navigation actions are broadcast in `_input` (pre-empting focus-cycling before it
 swallows them); everything else broadcasts only in `_unhandled_input` (after the GUI phase has
-had its normal chance, e.g. so a focused `LineEdit` still receives typed characters). See
+had its normal chance, e.g. so a focused `LineEdit` still receives typed characters).
 The `_input` broadcast also skips layers obstructed by a higher blocking layer
 (`CapUiLayers.is_layer_input_blocked`), since it can't block via `set_input_as_handled()`. See
 ADR-001 for the full incident history and why this split — not a blanket move to `_input` — is

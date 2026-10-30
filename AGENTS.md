@@ -36,5 +36,5 @@ the same structure and gotchas every session.
    phase vs. `_unhandled_input`) and Godular's DI resolution order — both have non-obvious
    behavior that has already caused real regressions in this project.
 5. **Follow [`.agents/PRINCIPLES.md`](.agents/PRINCIPLES.md) whenever creating or editing
-   anything under `.agents/`** (or, later, `docs/`) — evidence before guidance, one fact one
+   anything under `.agents/`** (or under `docs/`) — evidence before guidance, one fact one
    owner, no session-specific phrasing outside of ADRs.

@@ -63,8 +63,8 @@ surfaces without stepping on each other.
   project's `addons/` folder.
 - Enable the **Godular** plugin under Project Settings → Plugins. It adds the
   `GdlrModuleManager` autoload that this addon (and your own modules) run on.
-- This addon has no `plugin.cfg`/toggle of its own — there's nothing else to enable once Godular
-  is on.
+- Enable the **Modular UI Architecture** plugin under the same Plugins page.
+- See the [installation guide](docs/getting-started/02-installation.md) for the full steps.
 
 ## Quick start
 
@@ -130,17 +130,18 @@ These are meant to show *why* the architecture helps, not just what it does:
   try removing the `svc_policy_store.block(...)` call in `inventory.md.gd` to see the popups
   show up regardless.
 
-## Status
-
-Pre-1.0. The API and module shapes can still change. `ToggleableDisplay`, `InputManager`, and
-`Tokens` under `demo/shared/classes/` are demo-only conventions, not part of the addon itself.
-
 ## Documentation
 
+Full user documentation lives in [`docs/`](docs/README.md). Start with the
+[introduction](docs/getting-started/01-introduction.md) and the
+[quick start](docs/getting-started/03-quick-start.md).
+
 Architecture, conventions, and the reasoning behind non-obvious decisions live under
-[`.agents/`](.agents/) — written for AI coding agents, but equally useful for human
-contributors. Start at [`AGENTS.md`](AGENTS.md). See [`CONTRIBUTING.md`](CONTRIBUTING.md) before
-opening a PR.
+[`.agents/`](.agents/), written for AI coding agents but equally useful for human contributors.
+Start at [`AGENTS.md`](AGENTS.md). See [`CONTRIBUTING.md`](CONTRIBUTING.md) before opening a PR.
+
+`ToggleableDisplay`, `InputManager`, and `Tokens` under `demo/shared/classes/` are demo code, not
+part of the addon.
 
 ## AI disclosure
 

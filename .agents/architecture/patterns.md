@@ -162,7 +162,7 @@ confirmation dialog, a reward notification).
 1. Create a scene/script extending `Tooltip`
    (`addons/modular_ui_architecture/modules/tooltips/ui/tooltip.gd`). Wire the exported
    `bubble`/`content`/`description` node paths in the scene per the base class's contract.
-   Override `_initialize(tooltip_data: Dictionary[String, Variant])` to populate your subclass's
+   Override `_initialize(tooltip_data: Dictionary[StringName, Variant])` to populate your subclass's
    own fields from the dictionary `show_tooltip` will pass in.
 2. From the hovering node (e.g. a `Panel`-based item slot), resolve `CapTooltips` lazily —
    `GdlrModuleManager.request(CapTooltips, self)` in `_enter_tree()` — the same pattern
@@ -170,7 +170,9 @@ confirmation dialog, a reward notification).
 3. On `mouse_entered`, call
    `svc_tooltips.show_tooltip(tooltip_scene_path, self, contents_dict, get_viewport().get_visible_rect())`.
    On `mouse_exited`, call `svc_tooltips.hide_tooltip()`. Only one Tooltip can be shown at a
-   time — `CapTooltips` handles displacing any previous one for you.
+   time: `TooltipUiLayerNode._can_mount_scene` refuses a second one while one is mounted, and
+   `show_tooltip` returns `null`. Call `hide_tooltip()` first to replace the current tooltip. The
+   anchor must also contain the mouse position, or the tooltip is refused.
 4. `IMPORTS` `TooltipsModule` in the owning module if it also registers a View/binding for the
    thing that owns the tooltip-triggering nodes (see `demo/modules/inventory/inventory.md.gd`).
 

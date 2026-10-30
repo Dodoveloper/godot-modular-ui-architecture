@@ -17,7 +17,7 @@ repo root unless stated otherwise.
 │   └── gdb_promise/                 # vendored third-party promise library (dependency of godular)
 ├── demo/                    # playable demo project exercising the addon
 ├── .agents/                 # this documentation tree
-├── docs/                    # (future) human-facing wiki, adapted from .agents/
+├── docs/                    # human-facing user documentation (entry: docs/README.md)
 └── tests/                   # GUT unit tests (run instructions: tests/README.md)
 ```
 

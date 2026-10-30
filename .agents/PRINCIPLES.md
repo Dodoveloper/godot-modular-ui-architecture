@@ -1,7 +1,8 @@
 # Core Principles
 
-These principles govern how durable documentation under `.agents/` (and any future `docs/`
-adapted from it) is written and maintained. They apply to every file in this tree — individual
+These principles govern how durable documentation under `.agents/` is written and maintained.
+User-facing documentation under `docs/` is written for humans, and follows the same evidence rules
+where it states behaviour. They apply to every file in this tree — individual
 docs should link here instead of restating them.
 
 ## Evidence Before Guidance
