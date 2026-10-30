@@ -2,16 +2,20 @@ extends CapUiLayers
 
 
 const Utils = preload("../../../shared/classes/utils.gd")
+const DefaultUiLayerNode = preload("../nodes/default_ui_layer.gd")
+const HudUiLayerNode = preload("../nodes/hud_ui_layer.gd")
+const HudOverlayUiLayerNode = preload("../nodes/hud_overlay_ui_layer.gd")
 const WindowUiLayerNode = preload("../nodes/window_ui_layer.gd")
+const OverlayUiLayerNode = preload("../nodes/overlay_ui_layer.gd")
 const PopupsUiLayerNode = preload("../nodes/popups_ui_layer.gd")
 const TooltipUiLayerNode = preload("../nodes/tooltip_ui_layer.gd")
 
 static var _layers_config: Dictionary[UiLayersTypes.UiLayer, UiLayersTypes.UiLayerConfig] = {
-	UiLayersTypes.UiLayer.DEFAULT: UiLayersTypes.UiLayerConfig.new(UiLayerNode, 1, false),
-	UiLayersTypes.UiLayer.HUD: UiLayersTypes.UiLayerConfig.new(UiLayerNode, 2, false),
-	UiLayersTypes.UiLayer.HUD_OVERLAY: UiLayersTypes.UiLayerConfig.new(UiLayerNode, 3, false),
+	UiLayersTypes.UiLayer.DEFAULT: UiLayersTypes.UiLayerConfig.new(DefaultUiLayerNode, 1, false),
+	UiLayersTypes.UiLayer.HUD: UiLayersTypes.UiLayerConfig.new(HudUiLayerNode, 2, false),
+	UiLayersTypes.UiLayer.HUD_OVERLAY: UiLayersTypes.UiLayerConfig.new(HudOverlayUiLayerNode, 3, false),
 	UiLayersTypes.UiLayer.WINDOW: UiLayersTypes.UiLayerConfig.new(WindowUiLayerNode, 4, true),
-	UiLayersTypes.UiLayer.OVERLAY: UiLayersTypes.UiLayerConfig.new(UiLayerNode, 5, true),
+	UiLayersTypes.UiLayer.OVERLAY: UiLayersTypes.UiLayerConfig.new(OverlayUiLayerNode, 5, true),
 	UiLayersTypes.UiLayer.POPUP: UiLayersTypes.UiLayerConfig.new(PopupsUiLayerNode, 6, true),
 	UiLayersTypes.UiLayer.TOOLTIP: UiLayersTypes.UiLayerConfig.new(TooltipUiLayerNode, 7, false),
 }

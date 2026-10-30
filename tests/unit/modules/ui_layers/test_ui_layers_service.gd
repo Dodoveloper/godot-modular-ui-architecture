@@ -5,8 +5,10 @@ extends GutTest
 const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
 const InputBindingsTypes = preload("res://addons/modular_ui_architecture/modules/input_bindings/types.gd")
 const UiLayersService = preload("res://addons/modular_ui_architecture/modules/ui_layers/services/ui_layers.svc.gd")
+const HudUiLayerNode = preload("res://addons/modular_ui_architecture/modules/ui_layers/nodes/hud_ui_layer.gd")
 
 const SCENE_PATH := "res://tests/fixtures/scenes/empty_control.tscn"
+const NODES_FOLDER_PATH := "res://addons/modular_ui_architecture/modules/ui_layers/nodes/"
 const POPUP_LAYER := UiLayersTypes.UiLayer.POPUP
 const DEFAULT_LAYER := UiLayersTypes.UiLayer.DEFAULT
 
@@ -92,6 +94,31 @@ func test_unmount_ui_returns_false_for_node_in_no_layer() -> void:
 func test_window_layer_accepts_only_one_mounted_node() -> void:
 	var first := _service.mount_ui(SCENE_PATH, UiLayersTypes.UiLayer.WINDOW)
 	var second := _service.mount_ui(SCENE_PATH, UiLayersTypes.UiLayer.WINDOW)
+
+	assert_not_null(first)
+	assert_null(second)
+
+
+func test_hud_layer_uses_hud_ui_layer_script() -> void:
+	var layer := _service.get_layer_node(UiLayersTypes.UiLayer.HUD)
+
+	assert_eq(layer.get_script(), HudUiLayerNode)
+
+
+func test_every_layer_has_its_own_script_under_nodes_folder() -> void:
+	for layer in UiLayersTypes.UiLayer.values():
+		var script: Script = _service.get_layer_node(layer).get_script()
+
+		assert_not_null(script, "Layer %s has its own script" % layer)
+		assert_true(
+			script.resource_path.begins_with(NODES_FOLDER_PATH),
+			"Layer %s script is under nodes/" % layer
+		)
+
+
+func test_hud_layer_accepts_only_one_mounted_node() -> void:
+	var first := _service.mount_ui(SCENE_PATH, UiLayersTypes.UiLayer.HUD)
+	var second := _service.mount_ui(SCENE_PATH, UiLayersTypes.UiLayer.HUD)
 
 	assert_not_null(first)
 	assert_null(second)

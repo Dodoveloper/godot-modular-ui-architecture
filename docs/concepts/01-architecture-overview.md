@@ -90,7 +90,9 @@ Each layer is a fixed plane. Layers drawn later are on top and receive input fir
 | `POPUP` | Popups. |
 | `TOOLTIP` | Tooltips, above everything else. |
 
-The order is defined by the addon and can't be changed by your code. See
+The order is defined by the addon and can't be changed by your code. Each layer has its own node
+script, so you can customize one layer's behaviour without touching the others. See
+[UI Layers](../guides/ui-layers.md#customizing-a-layer) and
 [Types and enums](../reference/types-and-enums.md#uilayer).
 
 ## Where the addon ends and your code begins

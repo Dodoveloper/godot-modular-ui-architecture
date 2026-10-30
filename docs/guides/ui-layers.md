@@ -11,7 +11,7 @@ handled for you.
 | Layer | Draw order | Blocks input below it? | Notes |
 |-------|-----------|------------------------|-------|
 | `DEFAULT` | 1 (lowest) | No | Fallback. |
-| `HUD` | 2 | No | HUD Views. |
+| `HUD` | 2 | No | HUD Views. Only one child may be mounted at a time. |
 | `HUD_OVERLAY` | 3 | No | Overlays on top of the HUD. |
 | `WINDOW` | 4 | Yes | Exclusive Views. Only one child may be mounted at a time. |
 | `OVERLAY` | 5 | Yes | Overlays above windows. |
@@ -25,6 +25,12 @@ The order and the input-blocking flags are set by the addon and can't be changed
 Each layer is a `UiLayerNode`, a `CanvasLayer` the addon creates when the UI systems start. You don't
 create or manage these nodes yourself. The addon owns them, and you mount through `CapUiLayers` or
 through the services built on it (`CapGameUi` for Views, `CapPopups` for Popups).
+
+Every layer has its own script in `addons/modular_ui_architecture/modules/ui_layers/nodes/`, and
+each script extends `UiLayerNode`. The scripts are where layer-specific rules live. For example,
+`WindowUiLayerNode` and `HudUiLayerNode` override `_can_mount_scene` to accept only one child. The
+`HUD` script is currently identical to the `WINDOW` script, but it is separate so you can change
+the HUD's behaviour without affecting `WINDOW`. See [Customizing a layer](#customizing-a-layer).
 
 A layer:
 
@@ -64,8 +70,26 @@ svc_game_ui.mount_view(&"inventory", UiLayersTypes.UiLayer.WINDOW)
 svc_game_ui.mount_view(&"hud", UiLayersTypes.UiLayer.HUD)
 ```
 
-The `WINDOW` layer accepts only one child. Mounting a second View there is refused, and the mount
-returns `null`.
+The `WINDOW` and `HUD` layers accept only one child. Mounting a second View there is refused, and the
+mount returns `null`.
+
+## Customizing a layer
+
+Each layer's script is listed in `_layers_config` in `ui_layers.svc.gd`. To change how a layer
+behaves:
+
+1. Edit that layer's script in `modules/ui_layers/nodes/`. Each one extends `UiLayerNode`. The
+   `DEFAULT`, `HUD_OVERLAY` and `OVERLAY` scripts are empty, so they use the base behaviour. The
+   `HUD` and `WINDOW` scripts accept one child. Override the methods you need, such as
+   `_can_mount_scene` (decide what the layer accepts) or `_mount_node` and `_unmount_node` (decide
+   how a node is added and removed).
+2. If you want a layer to use a different script, change its entry in `_layers_config`.
+
+The layer scripts are `default_ui_layer.gd`, `hud_ui_layer.gd`, `hud_overlay_ui_layer.gd`,
+`window_ui_layer.gd`, `overlay_ui_layer.gd`, `popups_ui_layer.gd` and `tooltip_ui_layer.gd`.
+
+> The addon is part of your project, so these edits apply to that project only. An addon upgrade
+> may overwrite them, so record your changes and reapply them after upgrading.
 
 ## Reading layer state
 

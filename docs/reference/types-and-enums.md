@@ -10,7 +10,7 @@ Source: `addons/modular_ui_architecture/modules/ui_layers/types.gd`.
 | Value | Canvas order | Blocks input below | Notes |
 |-------|--------------|--------------------|-------|
 | `DEFAULT` | 1 | No | Fallback. |
-| `HUD` | 2 | No | HUD Views. |
+| `HUD` | 2 | No | HUD Views. Only one child is allowed. |
 | `HUD_OVERLAY` | 3 | No | Overlays over the HUD. |
 | `WINDOW` | 4 | Yes | Exclusive Views. Only one child is allowed. |
 | `OVERLAY` | 5 | Yes | Overlays over windows. |
@@ -23,7 +23,9 @@ reorder them.
 ## UiLayerConfig
 
 A value class that describes a layer's node script, canvas index, and whether it blocks input. The
-addon builds these internally, and you won't need to create one.
+addon builds these internally, and you won't need to create one. Each layer's node script is in
+`addons/modular_ui_architecture/modules/ui_layers/nodes/`. See
+[Customizing a layer](../guides/ui-layers.md#customizing-a-layer).
 
 ## InputActionType
 

@@ -81,11 +81,12 @@ lifecycles. See ADR-002 for why this split was kept instead of unifying them.
 ## 3. UI Layers: mounting + input, end to end
 
 Each `UiLayer` (`DEFAULT`, `HUD`, `HUD_OVERLAY`, `WINDOW`, `OVERLAY`, `POPUP`, `TOOLTIP`) is a
-`CanvasLayer` backed by a `UiLayerNode` (or a subclass overriding `_can_mount_scene`/
-`_mount_node` for layer-specific rules, e.g. `WindowUiLayerNode` allowing only one mounted
-child). `CapUiLayers` creates one `UiLayerNode` per layer at `enable()`, in a fixed, ordered
-list that also determines draw order and input priority (declared in
-`ui_layers.svc.gd::_layers_config`).
+`CanvasLayer` backed by its own `UiLayerNode` subclass in `ui_layers/nodes/` (one script per layer,
+so each can be customized independently). Layer-specific rules are overridden there, e.g.
+`_can_mount_scene`/`_mount_node`: `WindowUiLayerNode` and `HudUiLayerNode` allow only one mounted
+child, and `HudUiLayerNode` is currently identical to `WindowUiLayerNode` on purpose. `CapUiLayers`
+creates one node per layer at `enable()`, in a fixed, ordered list that also determines draw order
+and input priority (declared in `ui_layers.svc.gd::_layers_config`).
 
 Input flow, per event:
 

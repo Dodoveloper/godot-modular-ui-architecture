@@ -1,8 +1,6 @@
 extends CapGameUi
 
 
-const WindowUiLayerNode = preload("../../ui_layers/nodes/window_ui_layer.gd")
-
 const VIEW_CONTEXT_PROP_NAME := &"context"
 ## Squared threshold for detecting teleports/corrections in world-anchored UI.
 ## If an anchor moves more than sqrt(this) distance between two samples, it's treated as a teleport

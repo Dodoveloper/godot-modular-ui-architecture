@@ -102,10 +102,11 @@ apply the definitions below when naming/organizing new UI, even without dedicate
   and implement `_initialize(tooltip_data)`.
 - **UI Layer (`UiLayersTypes.UiLayer`)** — one of a fixed, statically-defined, strictly-ordered
   set of planes UI mounts under (`DEFAULT`, `HUD`, `HUD_OVERLAY`, `WINDOW`, `OVERLAY`, `POPUP`,
-  `TOOLTIP`), each backed by a `CanvasLayer`-based `UiLayerNode` (or subclass). Order between
-  layers is fixed and controls both draw order and input priority; a layer's node can also
-  enforce its own mounting rules (e.g. `WindowUiLayerNode` only allows one mounted child at a
-  time). Every View/Popup/Tooltip mount targets a specific layer.
+  `TOOLTIP`), each backed by a `CanvasLayer`-based `UiLayerNode` subclass with its own script in
+  `ui_layers/nodes/`. Order between layers is fixed and controls both draw order and input
+  priority; a layer's node can also enforce its own mounting rules (e.g. `WindowUiLayerNode` and
+  `HudUiLayerNode` only allow one mounted child at a time). Every View/Popup/Tooltip mount targets
+  a specific layer.
 - **`UiLayerNode`** — the node backing a UI Layer, owned/created by `CapUiLayers`. Mounts/unmounts
   nodes, optionally blocks gameplay input while it has mounted children, and listens for
   registered input actions to notify `CapInputBindings` (via `CapUiLayers.notify_input_triggered`)
