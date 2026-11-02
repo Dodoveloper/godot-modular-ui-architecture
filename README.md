@@ -117,10 +117,6 @@ feature of your own:
 - **Remove a feature as a unit.** Comment out `InventoryModule` in `demo/demo.md.gd` and run
   again — the Inventory's HUD button, its keybinding, and the View itself are all gone, with no
   errors. Nothing else in the demo references the Inventory directly.
-
-![HUD with and without InventoryModule](docs/images/module-removal.png)
-<!-- [module removal before/after screenshot] -->
-
 - **Remove a cross-module Attachment.** Comment out `EquipmentModule` instead — the Inventory
   still works exactly as before, just without its "Equip" button, and the HUD no longer shows
   the equipped item. Neither the Inventory nor the HUD import the `equipment` module.

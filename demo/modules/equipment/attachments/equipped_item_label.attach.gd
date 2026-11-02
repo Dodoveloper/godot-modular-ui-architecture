@@ -36,7 +36,7 @@ func _refresh(label: Label) -> void:
 		return
 	
 	var item_name := _state.equipped_item_name
-	label.text = "Equipped: none" if item_name.is_empty() else "Equipped: %s" % item_name
+	label.text = "Equipped: None" if item_name.is_empty() else "Equipped: %s" % item_name
 
 
 func _on_instance_tree_exiting() -> void:

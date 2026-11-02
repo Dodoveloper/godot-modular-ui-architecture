@@ -6,12 +6,17 @@
 [ext_resource type="PackedScene" uid="uid://crpb17ar8i612" path="res://addons/modular_ui_architecture/shared/classes/view_requester/view_requester.tscn" id="3_qfc3f"]
 [ext_resource type="PackedScene" uid="uid://dxosbsubkxvte" path="res://demo/modules/chest/content/entities/chest.tscn" id="4_chest"]
 [ext_resource type="Texture2D" uid="uid://byg4128ahn2u7" path="res://icon.svg" id="6_h7bfm"]
+[ext_resource type="Texture2D" uid="uid://conmpqj67aqno" path="res://demo/assets/art/tilemaps/game_world.png" id="7_6u118"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4dcrc"]
 size = Vector2(62, 414)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ddi8r"]
 size = Vector2(738, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c4hie"]
+atlas = ExtResource("7_6u118")
+region = Rect2(73, 36, 16, 16)
 
 [node name="Main" type="Node2D" unique_id=539338448]
 script = ExtResource("1_ddi8r")
@@ -50,6 +55,6 @@ unmount_mode = 1
 
 [node name="Chest" parent="." unique_id=1933379847 instance=ExtResource("4_chest")]
 position = Vector2(432, 153)
-reward_names = ["Sword", "Shield"]
+reward_names = ["Godot Engine", "Heart"]
 reward_amounts = [1, 2]
-reward_icons = Array[Texture2D]([ExtResource("6_h7bfm"), ExtResource("6_h7bfm")])
+reward_icons = Array[Texture2D]([ExtResource("6_h7bfm"), SubResource("AtlasTexture_c4hie")])
