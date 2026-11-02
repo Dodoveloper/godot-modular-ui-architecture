@@ -33,6 +33,7 @@ script = ExtResource("1_sxv5s")
 mount_mode = 1
 should_block_inputs = false
 close_action = &"ui_cancel"
+trap_focus = true
 
 [node name="Control" type="Control" parent="." unique_id=1985855339]
 layout_mode = 2

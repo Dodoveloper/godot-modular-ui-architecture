@@ -14,6 +14,7 @@ color = Color(0, 0, 0, 0.7019608)
 script = ExtResource("1_qg7re")
 mount_mode = 1
 close_action = &"ui_cancel"
+restore_focus_on_close = true
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=1104385984]
 layout_mode = 1

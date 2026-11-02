@@ -322,6 +322,7 @@ main_text_label = NodePath("Panel/MarginContainer/VBoxContainer/MainTextLabel")
 amount_label = NodePath("Panel/MarginContainer/VBoxContainer/HBoxContainer/AmountLabel")
 display_texture = NodePath("Panel/MarginContainer/VBoxContainer/HBoxContainer/DisplayWrapper")
 mount_mode = 1
+trap_focus = true
 
 [node name="Panel" type="PanelContainer" parent="." unique_id=884484135]
 unique_name_in_owner = true
