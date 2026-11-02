@@ -4,4 +4,5 @@
 
 [node name="RenameButton" type="Button" unique_id=563255849]
 theme = ExtResource("1_yhr1q")
-text = "Rename"
+theme_type_variation = &"ButtonDark"
+text = " R "

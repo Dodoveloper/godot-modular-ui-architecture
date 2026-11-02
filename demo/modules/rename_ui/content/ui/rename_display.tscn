@@ -34,7 +34,7 @@ layout_mode = 2
 
 [node name="Label" type="Label" parent="PanelContainer/VBoxContainer" unique_id=1612879363]
 layout_mode = 2
-text = "Choose a new name:"
+text = "Choose new Player name:"
 horizontal_alignment = 1
 
 [node name="LineEdit" type="LineEdit" parent="PanelContainer/VBoxContainer" unique_id=986680615]
@@ -49,9 +49,11 @@ alignment = 1
 [node name="ConfirmButton" type="Button" parent="PanelContainer/VBoxContainer/ButtonsContainer" unique_id=1336904188]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"ButtonDark"
 text = "Confirm"
 
 [node name="CancelButton" type="Button" parent="PanelContainer/VBoxContainer/ButtonsContainer" unique_id=1922442110]
 unique_name_in_owner = true
 layout_mode = 2
+theme_type_variation = &"ButtonDark"
 text = "Cancel"

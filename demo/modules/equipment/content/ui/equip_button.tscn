@@ -4,5 +4,6 @@
 
 [node name="EquipButton" type="Button" unique_id=1904360755]
 theme = ExtResource("1_theme")
+theme_type_variation = &"ButtonDark"
 disabled = true
 text = "Equip"

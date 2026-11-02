@@ -4,4 +4,4 @@
 
 [node name="EquippedItemLabel" type="Label" unique_id=574905560]
 theme = ExtResource("1_theme")
-text = "Equipped: none"
+text = "Equipped: None"

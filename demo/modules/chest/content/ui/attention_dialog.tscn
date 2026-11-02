@@ -73,7 +73,7 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(2, 2)]
+"values": [Vector2(1, 1)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -173,7 +173,7 @@ tracks/4/keys = {
 "times": PackedFloat32Array(0.03333342, 0.10000022, 0.16666672, 0.23333333),
 "transitions": PackedFloat32Array(1, 0.57434905, 0.5, 0.5),
 "update": 0,
-"values": [Vector2(2, 2), Vector2(2.4, 2.4), Vector2(0.25, 0.25), Vector2(0.25, 0.25)]
+"values": [Vector2(1, 1), Vector2(1.2, 1.2), Vector2(0.125, 0.125), Vector2(0.125, 0.125)]
 }
 tracks/5/type = "value"
 tracks/5/imported = false
@@ -273,7 +273,7 @@ tracks/5/keys = {
 "times": PackedFloat32Array(0, 0.09999998, 0.2666666, 0.36666667),
 "transitions": PackedFloat32Array(0.5, 0.5, 0.57434905, 1),
 "update": 0,
-"values": [Vector2(0.25, 0.25), Vector2(0.25, 0.25), Vector2(2.4, 2.4), Vector2(2, 2)]
+"values": [Vector2(0.125, 0.125), Vector2(0.125, 0.125), Vector2(1.2, 1.2), Vector2(1, 1)]
 }
 tracks/6/type = "value"
 tracks/6/imported = false
@@ -338,7 +338,6 @@ offset_right = 119.0
 offset_bottom = 71.0
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(2, 2)
 pivot_offset_ratio = Vector2(0.5, 0.5)
 theme = ExtResource("2_83jpi")
 
@@ -374,7 +373,8 @@ alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 2
-theme_override_colors/font_shadow_color = Color(0.61, 0.50752, 0.35380003, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
 text = "Item Aquired"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -404,7 +404,7 @@ vertical_alignment = 1
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 4
-theme_type_variation = &"ButtonList"
+theme_type_variation = &"ButtonDark"
 text = "Okay"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=17057196]

@@ -157,9 +157,6 @@ Full user documentation lives in [`docs/`](docs/README.md). Start with the
 
 Contributors can read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
 
-`ToggleableDisplay`, `InputManager`, and `Tokens` under `demo/shared/classes/` are demo code, not
-part of the addon.
-
 ## AI disclosure
 
 This project was developed with the assistance of AI tools. The majority of the code was

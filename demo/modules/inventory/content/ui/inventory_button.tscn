@@ -4,4 +4,5 @@
 
 [node name="InventoryButton" type="Button" unique_id=1950218683]
 theme = ExtResource("1_gl3t8")
+theme_type_variation = &"ButtonDark"
 text = "Tab"

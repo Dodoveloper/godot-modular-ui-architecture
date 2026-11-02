@@ -6,4 +6,5 @@
 offset_right = 33.0
 offset_bottom = 31.0
 theme = ExtResource("1_s7luy")
+theme_type_variation = &"ButtonDark"
 text = "Esc"
