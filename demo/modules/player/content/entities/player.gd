@@ -20,6 +20,8 @@ signal name_changed(new_name: String)
 @export var jump_velocity: float = 350.0
 @export var gravity: float = 1200.0
 
+@onready var _sprite_2d: Sprite2D = %Sprite2D
+
 
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
@@ -32,6 +34,8 @@ func _physics_process(delta: float) -> void:
 func _update_movement(delta: float) -> void:
 	var input_allowed := not InputManager.is_blocked()
 	var direction := Input.get_axis(&"move_left", &"move_right") if input_allowed else 0.0
+	if direction != 0:
+		_sprite_2d.flip_h = direction > 0
 	
 	if input_allowed and Input.is_action_just_pressed(&"jump") and is_on_floor():
 		velocity.y = -jump_velocity
