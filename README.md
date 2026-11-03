@@ -65,7 +65,8 @@ surfaces without stepping on each other.
 
 - Godot 4.7. [Godular](addons/godular/README.md) itself supports 4.5+; this addon has only been
   verified against 4.7.
-- Copy `addons/modular_ui_architecture`, `addons/godular`, and `addons/gdb_promise` into your
+- Install from the Godot **AssetLib** tab (search "Modular UI Architecture"), or copy
+  `addons/modular_ui_architecture`, `addons/godular`, and `addons/gdb_promise` into your
   project's `addons/` folder.
 - Enable the **Godular** plugin under Project Settings → Plugins. It adds the
   `GdlrModuleManager` autoload that this addon (and your own modules) run on.

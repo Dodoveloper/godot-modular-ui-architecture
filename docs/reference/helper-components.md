@@ -6,6 +6,12 @@ or attach the script to a node you already have.
 
 ## ViewRequester
 
+<!-- [ViewRequester node tree + inspector screenshot] -->
+<div align="center">
+  <img src="../images/view-requester-1.png" width="300" style="vertical-align: middle;">
+  <img src="../images/view-requester-2.png" width="300" style="vertical-align: middle;">
+</div>
+
 Source: `shared/classes/view_requester/view_requester.gd`. Scene: `view_requester.tscn`.
 
 Declares that a scene needs a View, without code. It requests the View from `CapGameUi` and mounts it
@@ -29,6 +35,12 @@ The View is mounted through `CapGameUi`, so the same token rules apply. See [Vie
 
 ## AttachmentSlotsController
 
+<!-- [AttachmentSlotsController node tree + inspector screenshot] -->
+<div align="center">
+  <img src="../images/attachment-slots-controller-1.png" width="300" style="vertical-align: middle;">
+  <img src="../images/attachment-slots-controller-2.png" width="300" style="vertical-align: middle;">
+</div>
+
 Source: `shared/classes/attachment_slots_controller/attachment_slots_controller.gd`. Scene:
 `attachment_slots_controller.tscn`.
 
@@ -48,6 +60,11 @@ Slot configs are read on `ready`. The `slot_configs` dictionary is set in the ed
 
 ## AttachmentSlotConfig
 
+<!-- [AttachmentSlotConfig inspector screenshot] -->
+<div align="center">
+  <img src="../images/attachment-slots-config.png" width="300" style="vertical-align: middle;">
+</div>
+
 Source: `shared/resources/attachment_slot_config.gd`. A `Resource`, so you create it in the inspector.
 
 | Export | Type | Default | Purpose |
@@ -59,6 +76,12 @@ Source: `shared/resources/attachment_slot_config.gd`. A `Resource`, so you creat
 See [Attachments and Attachment Slots](../guides/attachments-and-slots.md#protected-center-slots).
 
 ## WorldUiPortal
+
+<!-- [WorldUiPortal node tree + inspector screenshot] -->
+<div align="center">
+  <img src="../images/world-ui-portal-1.png" width="300" style="vertical-align: middle;">
+  <img src="../images/world-ui-portal-2.png" width="300" style="vertical-align: middle;">
+</div>
 
 Source: `shared/classes/world_ui_portal/world_ui_portal.gd`. Scene: `world_ui_portal.tscn`.
 

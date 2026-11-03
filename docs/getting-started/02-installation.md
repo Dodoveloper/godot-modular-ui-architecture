@@ -11,18 +11,33 @@
 
 ## Install the addon
 
-Copy these three folders into your project's `addons/` folder:
+### Via the Godot Asset Library (recommended)
 
-```
-res://addons/
-├── godular/
-├── gdb_promise/
-└── modular_ui_architecture/
-```
+1. In the Godot editor, open the **AssetLib** tab.
+2. Search for **"Modular UI Architecture"**.
+3. Click **Download**, then **Install**. Only the `addons/` folders are added to your project:
+   `modular_ui_architecture`, plus the `godular` and `gdb_promise` dependencies.
+4. Continue with [Enable the plugins](#enable-the-plugins).
 
-The Godular release packages (zip files and the Asset Library entry) already contain `godular` and
-`gdb_promise`, so copying the `addons` folder from a Godular release is enough. Make sure
-`modular_ui_architecture` sits next to them.
+### Manual installation
+
+1. Download a [release](https://github.com/Dodoveloper/godot-modular-ui-architecture/releases), or
+   clone this repository.
+2. Copy these three folders into your project's `addons/` folder:
+
+   ```
+   res://addons/
+   ├── godular/
+   ├── gdb_promise/
+   └── modular_ui_architecture/
+   ```
+
+   Godular's own release packages (zip files and Asset Library entry) also contain `godular` and
+   `gdb_promise`, so you can take those two from there. Make sure `modular_ui_architecture` sits next
+   to them.
+3. Continue with [Enable the plugins](#enable-the-plugins). Unlike addons made of plain
+   `class_name` scripts, this one needs its plugins enabled: Godular's plugin registers the
+   `GdlrModuleManager` autoload that everything runs on.
 
 ## Enable the plugins
 
