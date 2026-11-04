@@ -8,7 +8,7 @@ framework) and [GdbPromise](addons/gdb_promise/README.md) (a promise library).
 
 ![Main level, with HUD buttons, a nameplate, and a queued reward popup](docs/images/main-level.png)
 
-## 🤯 The problem
+## The problem
 
 UI tends to accumulate coupling as a game grows. A HUD script ends up with direct references to
 the inventory, the quest log, and the pause menu; a new feature means editing scenes owned by
@@ -22,7 +22,7 @@ This addon addresses that by making UI **modular at the architecture level**: fe
 what they need (a View, a HUD button, a keybinding) without editing the scenes they attach to,
 and removing a feature's module removes everything it contributed — no dangling references.
 
-## ✨ What you can do with it
+## What you can do with it
 
 Stop letting your HUD script know about the inventory, the quest log, and the pause menu. Here is
 what you get instead:
@@ -50,7 +50,7 @@ it all fits together.
 
 ![Inventory open, with an item tooltip and a footer button contributed by another module](docs/images/inventory-tooltip.png)
 
-## 🎯 Is this for you?
+## Is this for you?
 
 ✅ **Likely useful for:** mid-to-large projects that will keep growing UI over time (RPGs,
 management/sim games, live-service or moddable games), teams where different people own
@@ -61,7 +61,7 @@ module/capability/registration structure costs more upfront than a handful of sc
 singleton would, and that cost only pays off once several independent features need to share UI
 surfaces without stepping on each other.
 
-## 📦 Requirements & installation
+## Requirements & installation
 
 - Godot 4.7. [Godular](addons/godular/README.md) itself supports 4.5+; this addon has only been
   verified against 4.7.
@@ -73,7 +73,7 @@ surfaces without stepping on each other.
 - Enable the **Modular UI Architecture** plugin under the same Plugins page.
 - See the [installation guide](docs/getting-started/02-installation.md) for the full steps.
 
-## 🚀 Quick start
+## Quick start
 
 A minimal module that registers one View and mounts it, following the demo's own conventions:
 
@@ -102,12 +102,12 @@ class MyFeatureModule extends GdlrModule:
 The [Quick start](docs/getting-started/03-quick-start.md) builds this feature in full, and the
 [cookbook](docs/cookbook.md) has short recipes for Popups, Tooltips, Policy Store gating, and more.
 
-## 🎮 The demo
+## The demo
 
 `demo/` is a small playable project exercising every system. Run `demo/content/levels/main.tscn`
 to try it.
 
-## 📚 Documentation
+## Documentation
 
 Full user documentation lives in [`docs/`](docs/README.md). Start with the
 [introduction](docs/getting-started/01-introduction.md) and the
@@ -115,7 +115,7 @@ Full user documentation lives in [`docs/`](docs/README.md). Start with the
 
 Contributors can read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
 
-## 🛠️ Potential improvements
+## Potential improvements
 
 The addon is usable today, but a few things are still closed to projects that use it:
 
@@ -126,7 +126,7 @@ The addon is usable today, but a few things are still closed to projects that us
   files in `ui_layers/`. Layers should be registrable from a project's modules. See
   [Customizing a layer](docs/guides/ui-layers.md#customizing-a-layer).
 
-## 🤖 AI disclosure
+## AI disclosure
 
 This project was developed with the assistance of AI tools. The majority of the code was
 written by hand; AI was used for code review, help with architecture and design decisions, and
@@ -134,11 +134,12 @@ to assist with writing documentation.
 
 Everything in this repository has been reviewed and is maintained by the author.
 
-## 🙏 Credits
+## Credits
 
 - Built on [Godular](addons/godular/README.md) and [GdbPromise](addons/gdb_promise/README.md) (both MIT)
+- Logo and icon design by [Northide](https://x.com/dev_northide)
 - Demo art/fonts are from [Kenney](https://kenney.nl/)
 
-## 📄 License
+## License
 
 Distributed under the [MIT LICENSE](LICENSE).
