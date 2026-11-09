@@ -40,7 +40,7 @@ Each guide covers one system: what it does, when to use it, and the gotchas.
 ## Reference
 
 - [Capabilities API](reference/capabilities-api.md): every public `Cap*` contract, method by method.
-- [Types and enums](reference/types-and-enums.md): `UiLayer`, `PolicyStoreTypes`, `CloseReason`, and the value classes.
+- [Types and enums](reference/types-and-enums.md): `UiLayer`, `CloseReason`, and the value classes.
 - [Helper components](reference/helper-components.md): `ViewRequester`, `AttachmentSlotsController`, `WorldUiPortal`, and their exported properties.
 - [Project conventions](reference/conventions.md): file suffixes, folder layout, and naming.
 

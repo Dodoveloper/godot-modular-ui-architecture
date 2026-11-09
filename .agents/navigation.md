@@ -89,7 +89,7 @@ demo/
 ```
 
 Existing demo modules: `player`, `hud`, `pause_menu`, `rename_ui`, `inventory`, `chest`,
-`equipment`. Each is self-contained under `demo/modules/<name>/` — see
+`equipment`, `policies`. Each is self-contained under `demo/modules/<name>/` — see
 [`patterns.md`](architecture/patterns.md) for how to add a new one following the same shape.
 `chest` has no `bindings/`/`attachments/`: it's a world entity (`content/entities/chest.gd`)
 that resolves `CapPopups`/`CapPolicyStore` directly, the same way `player`'s `Nameplate` resolves

@@ -15,6 +15,7 @@ their API may change independently.
 |-------------|-------|-----------|
 | `player` | A moving character and a World UI nameplate. | `content/entities/player.gd`, `content/ui/nameplate.tscn` |
 | `hud` | The HUD View with three bottom slots (`bottom_left`, `bottom_center`, `bottom_right`). | `hud.md.gd`, `content/ui/hud.tscn` |
+| `policies` | The project's Policy Store categories. It declares `OPEN_GAMEPLAY_POPUP_UI` for the other modules to use. | `policies.md.gd` |
 | `pause_menu` | A View toggled by a key and a HUD button, a confirmation Popup, and a Policy Store block. | `pause_menu.md.gd`, `bindings/toggle_pause_menu.bind.gd`, `attachments/pause_menu_button.attach.gd` |
 | `rename_ui` | A View toggled by a key, with a text field so you can see keystrokes reach the field. | `rename_ui.md.gd`, `bindings/toggle_rename.bind.gd` |
 | `inventory` | A View with item slots, item Tooltips, a Context, and a footer slot for other modules. | `inventory.md.gd`, `content/ui/inventory.gd` |

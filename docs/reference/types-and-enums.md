@@ -51,17 +51,10 @@ Source: `addons/modular_ui_architecture/modules/input_bindings/types.gd`. An abs
 
 Subclass it, and call `super(layer_)` from your `_init()`. See [Input Bindings](../guides/input-bindings.md).
 
-## PolicyStoreTypes
+## Policy Store categories
 
-Source: `addons/modular_ui_architecture/modules/policy_store/types.gd`. Policy categories are `StringName`
-tokens. The addon's built-in categories are constants on this script.
-
-| Constant | Token | Meaning |
-|----------|-------|---------|
-| `OPEN_WINDOW_UI` | `&"open_window_ui"` | Whether opening Windows is allowed. Not used by the demo. |
-| `OPEN_GAMEPLAY_POPUP_UI` | `&"open_gameplay_popup_ui"` | Whether gameplay-triggered popups may open. |
-
-Declare your own categories with `CapPolicyCategoriesRegistry.register_category()`. See
+Policy categories are `StringName` tokens, not an enum. The addon defines none. Declare each one
+with `CapPolicyCategoriesRegistry.register_category()`, from a module's `register()`. See
 [Policy Store](../guides/policy-store.md#declaring-your-own).
 
 ## CloseReason

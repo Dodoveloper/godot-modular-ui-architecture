@@ -201,7 +201,7 @@ single one-off check).
 
 1. Declare the category in the module that owns it: `IMPORTS PolicyStoreModule`, inject
    `CapPolicyCategoriesRegistry`, and call `register_category(&"name")` in `register()`. Document
-   what it gates next to the token. Never edit `policy_store/types.gd`. Recipe and rules:
+   what it gates next to the token. Never add categories to the addon. Recipe and rules:
    [`docs/guides/policy-store.md`](../../docs/guides/policy-store.md#declaring-your-own).
 2. The blocking module `IMPORTS PolicyStoreModule` and calls
    `svc_policy_store.block(category, source)` when entering the restricted state, and

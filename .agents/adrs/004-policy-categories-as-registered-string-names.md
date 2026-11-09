@@ -33,8 +33,8 @@ Input Bindings through a registry capability (`CapViewsRegistry`, `CapUiAttachme
 
 ## Decision
 
-- A category is a `StringName` token. `PolicyStoreTypes.OPEN_WINDOW_UI` and
-  `PolicyStoreTypes.OPEN_GAMEPLAY_POPUP_UI` are the addon's built-in tokens, as constants.
+- A category is a `StringName` token. The addon ships no categories. A project declares each one from
+  one of its own modules. The demo's `policies` module declares `OPEN_GAMEPLAY_POPUP_UI`.
 - `CapPolicyCategoriesRegistry` stores the registered tokens. A module registers its categories in
   `register()`, the same way it registers Views.
 - `CapPolicyStore` validates each category against the registry. An unregistered category pushes an
@@ -49,8 +49,9 @@ use.
 ## Consequences
 
 - **Typos are caught at runtime, not compile time.** The enum gave autocomplete and a parse-time
-  error for an unknown member. Module-level `const` tokens recover most of that, because a typo in
-  the constant's name fails to parse. A raw string literal at a call site still needs review.
+  error for an unknown member. A project's token holder can be a `const` dictionary, which fails at
+  runtime on a typo, or module-level `const` tokens, which fail to parse. Either way, a raw string
+  literal at a call site still needs review.
 - **Don't revert to an enum to get back compile-time checks.** That would reintroduce the
   "edit the addon" limitation this change removed.
 - **Keep the registry as the only source of truth for categories.** Don't add a second, hardcoded
@@ -64,5 +65,5 @@ use.
   for example from a Resource or a project setting, could be added on top of the registry without
   changing this design. It was deferred, because modules are how the addon already contributes
   things.
-- **New built-in categories follow the same rule.** A new built-in category is a constant plus a
-  `register_category()` call in `PolicyStoreModule.register()`. It doesn't go in a `types.gd` enum.
+- **The addon stays category-free.** Categories belong to the project, so a category never goes into
+  the addon. `PolicyStoreModule` registers nothing.

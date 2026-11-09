@@ -15,14 +15,9 @@ Don't add a category for a single check. A one-off condition belongs in a local 
 
 A category is a `StringName` token, such as `&"open_shop"`. Code refers to it by that name.
 
-The addon ships two built-in categories as constants on `PolicyStoreTypes`, defined in
-`addons/modular_ui_architecture/modules/policy_store/types.gd`. The addon registers both when
-`PolicyStoreModule` registers:
-
-| Constant | Token | Meaning |
-|----------|-------|---------|
-| `OPEN_WINDOW_UI` | `&"open_window_ui"` | Whether opening Windows is allowed. Not used by the demo. |
-| `OPEN_GAMEPLAY_POPUP_UI` | `&"open_gameplay_popup_ui"` | Whether gameplay-triggered popups (for example, reward notifications) may open. |
+The addon ships no categories. A project declares every category it uses, from one of its own modules.
+The demo declares `OPEN_GAMEPLAY_POPUP_UI` in its `policies` module (`demo/modules/policies/`), and
+the modules that block or check it import that module.
 
 ### Declaring your own
 
@@ -46,8 +41,7 @@ class ShopModule extends GdlrModule:
 ```
 
 Godular runs every module's `register()` before any `enable()`. A category is therefore registered
-before any module can block or check it in `enable()`. Your categories work the same way as the
-built-in ones in the rest of this guide.
+before any module can block or check it in `enable()`.
 
 Registration rules:
 
@@ -56,7 +50,7 @@ Registration rules:
 - An empty token pushes an error and is ignored.
 - Unregister a category with `unregister_category()` when your code removes the category. Unregistering
   drops every block on it, and a category registered again later starts unblocked. Godular does not call
-  `disable()` on modules, and each `mount()` builds a new registry, so the built-in categories don't need
+  `disable()` on modules, and each `mount()` builds a new registry, so categories don't need
   unregistering on shutdown.
 
 ## Blocking and unblocking
@@ -76,13 +70,16 @@ The demo's Pause Menu blocks while it's open, and unblocks when it leaves the tr
 
 ```gdscript
 func _on_pause_menu_mounted(pause_menu: Node) -> void:
-	svc_policy_store.block(PolicyStoreTypes.OPEN_GAMEPLAY_POPUP_UI, pause_menu)
+	svc_policy_store.block(Tokens.Policies.Categories.OPEN_GAMEPLAY_POPUP_UI, pause_menu)
 	pause_menu.tree_exiting.connect(_on_pause_menu_leaving.bind(pause_menu))
 
 
 func _on_pause_menu_leaving(pause_menu: Node) -> void:
-	svc_policy_store.unblock(PolicyStoreTypes.OPEN_GAMEPLAY_POPUP_UI, pause_menu)
+	svc_policy_store.unblock(Tokens.Policies.Categories.OPEN_GAMEPLAY_POPUP_UI, pause_menu)
 ```
+
+`Tokens` is the demo's own token holder (`demo/shared/classes/tokens.gd`). Projects keep their
+category tokens wherever suits them. The addon doesn't use `Tokens`.
 
 Use the blocking object itself as `source`. That gives each blocker its own identity, and lets the
 addon clean it up when the object is freed.
@@ -93,7 +90,7 @@ Check the category where the interaction would happen. For a binding, that's `_s
 
 ```gdscript
 func _should_execute() -> bool:
-	return _svc_policy_store.is_allowed(PolicyStoreTypes.OPEN_GAMEPLAY_POPUP_UI)
+	return _svc_policy_store.is_allowed(Tokens.Policies.Categories.OPEN_GAMEPLAY_POPUP_UI)
 ```
 
 Don't check inside `_execute()`. The demo's chest checks in an entity's own handler instead, because it's
@@ -101,7 +98,7 @@ not a binding:
 
 ```gdscript
 func _on_body_entered(body: Node) -> void:
-	if not _svc_policy_store.is_allowed(PolicyStoreTypes.OPEN_GAMEPLAY_POPUP_UI):
+	if not _svc_policy_store.is_allowed(Tokens.Policies.Categories.OPEN_GAMEPLAY_POPUP_UI):
 		return
 	_grant_rewards()
 ```
@@ -125,18 +122,22 @@ Importing the module makes the capability available to both. Neither module need
   `is_allowed()` and `get_blockers()` push an error too, and `is_allowed()` returns `true`. A typo in a
   category token therefore lets the gated interaction through. Check the error output when you add a
   category.
+- **Token holders are not compile-checked.** The demo's `Tokens.Policies.Categories` is a dictionary, so
+  a misspelled key returns `null` at runtime instead of failing to parse. Check the error output for
+  `is not registered`, as above.
 
 ## Migrating from 1.x
 
-Version 2.0.0 replaces the `PolicyStoreTypes.Category` enum with `StringName` tokens:
+Version 2.0.0 replaces the `PolicyStoreTypes.Category` enum with `StringName` tokens, and the addon no
+longer ships any categories:
 
-- `PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI` becomes `PolicyStoreTypes.OPEN_GAMEPLAY_POPUP_UI`.
-  The same applies to `OPEN_WINDOW_UI`.
-- If you added values to the enum in the addon's `types.gd`, move each one into a
-  `register_category()` call in one of your modules, as shown in [Declaring your own](#declaring-your-own).
-  Then replace its references with the new token.
-- Revert your edits to the addon's `types.gd`. The categories are now declared by your module, so
-  an addon upgrade no longer overwrites them.
+- The file `policy_store/types.gd` is deleted. Remove any `preload` of it.
+- `PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI` and `PolicyStoreTypes.Category.OPEN_WINDOW_UI` are
+  gone. Declare each category your project uses, with `register_category()`, in one of your modules. The
+  demo's `policies` module shows the pattern for `OPEN_GAMEPLAY_POPUP_UI`.
+- Any values you added to the enum in the addon's `types.gd` move to a `register_category()` call in your
+  own module. Then replace their references with the token.
+- Revert your edits to the addon's `types.gd` if you made any. The file no longer exists in 2.0.0.
 
 ## Next
 
