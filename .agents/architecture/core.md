@@ -128,15 +128,16 @@ unconditionally, which is safe there because those actions are never meant to be
 
 ## 4. Policy Store: cross-module interaction gating
 
-`CapPolicyStore` blocks semantic categories (`PolicyStoreTypes.Category`, e.g.
-`OPEN_WINDOW_UI`), not specific bindings or UI instances. Any object calls
-`block(category, source)`/`unblock(category, source)`; the category is allowed again only once
-every blocker is removed or its `source` becomes invalid (pruned automatically via `WeakRef`).
+`CapPolicyStore` blocks semantic categories (`StringName` tokens, registered by modules through
+`CapPolicyCategoriesRegistry`, e.g. `PolicyStoreTypes.OPEN_WINDOW_UI`), not specific bindings or
+UI instances. Any object calls `block(category, source)`/`unblock(category, source)`; the category
+is allowed again only once every blocker is removed or its `source` becomes invalid (pruned
+automatically via `WeakRef`).
 This is intentionally decoupled from `CapInputBindings` — a binding's `_should_execute()` is
 just one *consumer* of Policy Store, not the only one; any system needing to know "is this class
 of interaction currently allowed" can ask, without knowing which other module(s) might be
 blocking it or why. The demo's `chest` entity is a non-binding example: it checks
-`is_allowed(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI)` directly before opening its
+`is_allowed(PolicyStoreTypes.OPEN_GAMEPLAY_POPUP_UI)` directly before opening its
 reward popups, with `pause_menu`/`inventory` blocking that category for their own lifetime.
 (See §0 — this is the "pragmatism" example: it was extracted because multiple bindings across
 multiple demo modules needed the same check, not preemptively.)

@@ -199,9 +199,10 @@ Only do this once ≥2 real call sites need the same "is this class of interacti
 allowed" check (see [`core.md`](core.md#0-design-principles) — don't add a category for a
 single one-off check).
 
-1. Add the new category to `PolicyStoreTypes.Category`
-   (`addons/modular_ui_architecture/modules/policy_store/types.gd`) with a doc comment
-   describing what it gates.
+1. Declare the category in the module that owns it: `IMPORTS PolicyStoreModule`, inject
+   `CapPolicyCategoriesRegistry`, and call `register_category(&"name")` in `register()`. Document
+   what it gates next to the token. Never edit `policy_store/types.gd`. Recipe and rules:
+   [`docs/guides/policy-store.md`](../../docs/guides/policy-store.md#declaring-your-own).
 2. The blocking module `IMPORTS PolicyStoreModule` and calls
    `svc_policy_store.block(category, source)` when entering the restricted state, and
    `svc_policy_store.unblock(category, source)` when leaving it — pair these on the same

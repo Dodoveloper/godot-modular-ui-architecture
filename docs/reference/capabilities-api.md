@@ -105,16 +105,34 @@ Module: `tooltips`. Source: `tooltips/capabilities/tooltips.cap.gd`.
 | `show_tooltip` | `show_tooltip(tooltip_path: String, anchor: Control, contents: Dictionary[StringName, Variant], available_rect: Rect2) -> Tooltip` | Mounts a tooltip. Returns it, or `null` if refused. See [Tooltips](../guides/tooltips.md#when-a-tooltip-is-refused). |
 | `hide_tooltip` | `hide_tooltip() -> bool` | Removes the current tooltip. Returns `true` if one was removed. |
 
-## CapPolicyStore
+## CapPolicyCategoriesRegistry
 
-Module: `policy_store`. Source: `policy_store/capabilities/policy_store.cap.gd`.
+Module: `policy_store`. Source: `policy_store/capabilities/policy_categories_registry.cap.gd`. Stores the
+policy categories that [CapPolicyStore](#cappolicystore) accepts. Call it from `register()`.
 
 | Method | Signature | Summary |
 |--------|-----------|---------|
-| `block` | `block(category: PolicyStoreTypes.Category, source: Object) -> void` | Blocks `category` on behalf of `source`. |
-| `unblock` | `unblock(category, source: Object) -> void` | Removes that source's block. |
-| `is_allowed` | `is_allowed(category) -> bool` | `true` if no source is blocking `category`. |
-| `get_blockers` | `get_blockers(category) -> Array[Object]` | The live sources blocking `category`. |
+| `register_category` | `register_category(category: StringName) -> void` | Registers a category. An empty or already-registered token pushes an error and is ignored. |
+| `unregister_category` | `unregister_category(category: StringName) -> void` | Unregisters `category`, drops its blockers, and emits `category_unregistered`. An unknown category pushes an error and is ignored. |
+| `is_category_registered` | `is_category_registered(category: StringName) -> bool` | Whether `category` has been registered. |
+
+### Signals
+
+| Signal | Signature | Summary |
+|--------|-----------|---------|
+| `category_unregistered` | `category_unregistered(category: StringName)` | Emitted after a category is unregistered. `CapPolicyStore` uses it to drop that category's blockers. |
+
+## CapPolicyStore
+
+Module: `policy_store`. Source: `policy_store/capabilities/policy_store.cap.gd`. Categories are
+`StringName` tokens that must be registered first. See [Policy Store](../guides/policy-store.md#declaring-your-own).
+
+| Method | Signature | Summary |
+|--------|-----------|---------|
+| `block` | `block(category: StringName, source: Object) -> void` | Blocks `category` on behalf of `source`. An unregistered category pushes an error and is not blocked. |
+| `unblock` | `unblock(category: StringName, source: Object) -> void` | Removes that source's block. An unregistered category pushes an error. |
+| `is_allowed` | `is_allowed(category: StringName) -> bool` | `true` if no source is blocking `category`. An unregistered category pushes an error and returns `true`. |
+| `get_blockers` | `get_blockers(category: StringName) -> Array[Object]` | The live sources blocking `category`. An unregistered category pushes an error and returns an empty array. |
 
 ## Next
 

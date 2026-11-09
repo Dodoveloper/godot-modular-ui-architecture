@@ -28,18 +28,18 @@ var svc_policy_store: CapPolicyStore
 
 
 func _on_window_mounted(window: Node) -> void:
-	svc_policy_store.block(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI, window)
+	svc_policy_store.block(PolicyStoreTypes.OPEN_GAMEPLAY_POPUP_UI, window)
 	window.tree_exiting.connect(_on_window_unmounting.bind(window))
 
 
 func _on_window_unmounting(window: Node) -> void:
-	svc_policy_store.unblock(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI, window)
+	svc_policy_store.unblock(PolicyStoreTypes.OPEN_GAMEPLAY_POPUP_UI, window)
 ```
 
 Checking, from the gameplay code that would show the popup:
 
 ```gdscript
-if not _svc_policy_store.is_allowed(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI):
+if not _svc_policy_store.is_allowed(PolicyStoreTypes.OPEN_GAMEPLAY_POPUP_UI):
 	return
 
 _svc_popups.open_popup_queued(REWARD_PATH, Color(0, 0, 0, 0), _configure_reward.bind(reward))
