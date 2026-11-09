@@ -37,7 +37,7 @@ func _on_body_entered(body: Node) -> void:
 		return
 	if not body.is_in_group(&"player"):
 		return
-	if not _svc_policy_store.is_allowed(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI):
+	if not _svc_policy_store.is_allowed(PolicyStoreTypes.OPEN_GAMEPLAY_POPUP_UI):
 		return
 	
 	_is_opened = true
