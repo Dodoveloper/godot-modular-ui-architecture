@@ -5,15 +5,20 @@ extends GutTest
 
 const PolicyStoreTypes = preload("res://addons/modular_ui_architecture/modules/policy_store/types.gd")
 const PolicyStoreService = preload("res://addons/modular_ui_architecture/modules/policy_store/services/policy_store.svc.gd")
+const PolicyCategoriesRegistry = preload("res://addons/modular_ui_architecture/modules/policy_store/registries/policy_categories.reg.gd")
 
-const CATEGORY := PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI
-const OTHER_CATEGORY := PolicyStoreTypes.Category.OPEN_WINDOW_UI
+const CATEGORY := PolicyStoreTypes.OPEN_GAMEPLAY_POPUP_UI
+const OTHER_CATEGORY := PolicyStoreTypes.OPEN_WINDOW_UI
+const UNREGISTERED_CATEGORY := &"not_registered"
 
 var _store: PolicyStoreService
 
 
 func before_each() -> void:
-	_store = PolicyStoreService.new()
+	var registry := PolicyCategoriesRegistry.new()
+	registry.register_category(CATEGORY)
+	registry.register_category(OTHER_CATEGORY)
+	_store = PolicyStoreService.new(registry)
 
 
 func after_each() -> void:
@@ -165,3 +170,79 @@ func test_disable_clears_all_blocks() -> void:
 	_store.disable()
 
 	assert_true(_store.is_allowed(CATEGORY))
+
+
+func test_block_with_unregistered_category_pushes_error_and_does_not_block() -> void:
+	var source := Object.new()
+	autofree(source)
+
+	_store.block(UNREGISTERED_CATEGORY, source)
+	var blockers := _store.get_blockers(UNREGISTERED_CATEGORY)
+
+	# block() and get_blockers() each report the unregistered category.
+	assert_push_error("Policy category 'not_registered' is not registered")
+	assert_push_error("Policy category 'not_registered' is not registered")
+	assert_true(blockers.is_empty())
+
+
+func test_is_allowed_with_unregistered_category_pushes_error_and_allows() -> void:
+	assert_true(_store.is_allowed(UNREGISTERED_CATEGORY))
+
+	assert_push_error("Policy category 'not_registered' is not registered")
+
+
+func test_unblock_with_unregistered_category_is_a_no_op() -> void:
+	var source := Object.new()
+	autofree(source)
+
+	_store.unblock(UNREGISTERED_CATEGORY, source)
+
+	assert_push_error("Policy category 'not_registered' is not registered")
+	assert_true(_store.is_allowed(CATEGORY))
+
+
+func test_unregistered_category_drops_its_blockers() -> void:
+	var source := Object.new()
+	autofree(source)
+	var registry := PolicyCategoriesRegistry.new()
+	registry.register_category(CATEGORY)
+	var store := PolicyStoreService.new(registry)
+	store.block(CATEGORY, source)
+
+	registry.unregister_category(CATEGORY)
+	var blockers := store.get_blockers(CATEGORY)
+
+	# is_registered reports the unregistered category once per call.
+	assert_push_error("Policy category 'open_gameplay_popup_ui' is not registered")
+	assert_true(blockers.is_empty())
+	store.disable()
+
+
+func test_unregister_without_a_store_call_still_drops_blockers_on_reregister() -> void:
+	var source := Object.new()
+	autofree(source)
+	var registry := PolicyCategoriesRegistry.new()
+	registry.register_category(CATEGORY)
+	var store := PolicyStoreService.new(registry)
+	store.block(CATEGORY, source)
+
+	registry.unregister_category(CATEGORY)
+	registry.register_category(CATEGORY)
+
+	assert_true(store.is_allowed(CATEGORY))
+	store.disable()
+
+
+func test_unregister_does_not_affect_other_categories() -> void:
+	var source := Object.new()
+	autofree(source)
+	var registry := PolicyCategoriesRegistry.new()
+	registry.register_category(CATEGORY)
+	registry.register_category(OTHER_CATEGORY)
+	var store := PolicyStoreService.new(registry)
+	store.block(OTHER_CATEGORY, source)
+
+	registry.unregister_category(CATEGORY)
+
+	assert_false(store.is_allowed(OTHER_CATEGORY))
+	store.disable()
