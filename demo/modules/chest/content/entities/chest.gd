@@ -4,7 +4,6 @@ extends Area2D
 
 
 const Utils = preload("res://addons/modular_ui_architecture/shared/classes/utils.gd")
-const PolicyStoreTypes = preload("res://addons/modular_ui_architecture/modules/policy_store/types.gd")
 const AttentionDialog = preload("res://demo/shared/ui/attention_dialog/attention_dialog.gd")
 
 const ATTENTION_DIALOG_PATH := "res://demo/modules/chest/content/ui/attention_dialog.tscn"
@@ -37,7 +36,7 @@ func _on_body_entered(body: Node) -> void:
 		return
 	if not body.is_in_group(&"player"):
 		return
-	if not _svc_policy_store.is_allowed(PolicyStoreTypes.OPEN_GAMEPLAY_POPUP_UI):
+	if not _svc_policy_store.is_allowed(Tokens.Policies.Categories.OPEN_GAMEPLAY_POPUP_UI):
 		return
 	
 	_is_opened = true

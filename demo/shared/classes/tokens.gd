@@ -9,3 +9,10 @@ class Scenes:
 		&"INVENTORY_TOKEN": &"inventory",
 		&"RENAME_UI_TOKEN": &"rename_ui",
 	}
+
+
+class Policies:
+	const Categories: Dictionary[StringName, StringName] = {
+		## Whether opening popups triggered by gameplay events is allowed.
+		&"OPEN_GAMEPLAY_POPUP_UI": &"open_gameplay_popup_ui",
+	}

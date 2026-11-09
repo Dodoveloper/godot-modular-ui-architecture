@@ -2,10 +2,10 @@ const GameUiModule = preload("res://addons/modular_ui_architecture/modules/game_
 const InputBindingsModule = preload("res://addons/modular_ui_architecture/modules/input_bindings/input_bindings.md.gd")
 const TooltipsModule = preload("res://addons/modular_ui_architecture/modules/tooltips/tooltips.md.gd")
 const PolicyStoreModule = preload("res://addons/modular_ui_architecture/modules/policy_store/policy_store.md.gd")
+const PoliciesModule = preload("res://demo/modules/policies/policies.md.gd")
 
 const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
 const GameUiTypes = preload("res://addons/modular_ui_architecture/modules/game_ui/types.gd")
-const PolicyStoreTypes = preload("res://addons/modular_ui_architecture/modules/policy_store/types.gd")
 const ToggleInventoryBinding = preload("./bindings/toggle_inventory.bind.gd")
 const InventoryButtonAttachment = preload("./attachments/inventory_button.attach.gd")
 const Inventory = preload("./content/ui/inventory.gd")
@@ -18,6 +18,7 @@ static var IMPORTS := [
 	InputBindingsModule,
 	TooltipsModule,
 	PolicyStoreModule,
+	PoliciesModule,
 ]
 
 
@@ -63,7 +64,7 @@ class InventoryModule extends GdlrModule:
 			return
 		
 		var inventory: Inventory = svc_game_ui.get_view(token)
-		svc_policy_store.block(PolicyStoreTypes.OPEN_GAMEPLAY_POPUP_UI, inventory)
+		svc_policy_store.block(Tokens.Policies.Categories.OPEN_GAMEPLAY_POPUP_UI, inventory)
 		inventory.close_requested.connect(_on_inventory_close_requested.bind(token))
 		inventory.tree_exiting.connect(_on_inventory_tree_exiting.bind(inventory))
 	
@@ -73,4 +74,4 @@ class InventoryModule extends GdlrModule:
 	
 	
 	func _on_inventory_tree_exiting(inventory: Inventory) -> void:
-		svc_policy_store.unblock(PolicyStoreTypes.OPEN_GAMEPLAY_POPUP_UI, inventory)
+		svc_policy_store.unblock(Tokens.Policies.Categories.OPEN_GAMEPLAY_POPUP_UI, inventory)

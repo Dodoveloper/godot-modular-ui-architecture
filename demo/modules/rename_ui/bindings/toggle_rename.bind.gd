@@ -3,7 +3,6 @@ extends InputBindingsTypes.InputBinding
 
 const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
 const InputBindingsTypes = preload("res://addons/modular_ui_architecture/modules/input_bindings/types.gd")
-const PolicyStoreTypes = preload("res://addons/modular_ui_architecture/modules/policy_store/types.gd")
 
 const RENAME_DISPLAY_PATH := "res://demo/modules/rename_ui/content/ui/rename_display.tscn"
 

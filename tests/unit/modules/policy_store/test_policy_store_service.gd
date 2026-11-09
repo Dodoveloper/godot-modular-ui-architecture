@@ -3,12 +3,11 @@ extends GutTest
 ## Run with: godot --headless --path . -s addons/gut/gut_cmdln.gd
 
 
-const PolicyStoreTypes = preload("res://addons/modular_ui_architecture/modules/policy_store/types.gd")
 const PolicyStoreService = preload("res://addons/modular_ui_architecture/modules/policy_store/services/policy_store.svc.gd")
 const PolicyCategoriesRegistry = preload("res://addons/modular_ui_architecture/modules/policy_store/registries/policy_categories.reg.gd")
 
-const CATEGORY := PolicyStoreTypes.OPEN_GAMEPLAY_POPUP_UI
-const OTHER_CATEGORY := PolicyStoreTypes.OPEN_WINDOW_UI
+const CATEGORY := &"test_category"
+const OTHER_CATEGORY := &"test_other_category"
 const UNREGISTERED_CATEGORY := &"not_registered"
 
 var _store: PolicyStoreService
@@ -213,7 +212,7 @@ func test_unregistered_category_drops_its_blockers() -> void:
 	var blockers := store.get_blockers(CATEGORY)
 
 	# is_registered reports the unregistered category once per call.
-	assert_push_error("Policy category 'open_gameplay_popup_ui' is not registered")
+	assert_push_error("Policy category 'test_category' is not registered")
 	assert_true(blockers.is_empty())
 	store.disable()
 

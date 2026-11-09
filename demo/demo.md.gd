@@ -5,6 +5,7 @@ const RenameUiModule = preload("res://demo/modules/rename_ui/rename_ui.md.gd")
 const InventoryModule = preload("res://demo/modules/inventory/inventory.md.gd")
 const ChestModule = preload("res://demo/modules/chest/chest.md.gd")
 const EquipmentModule = preload("res://demo/modules/equipment/equipment.md.gd")
+const PoliciesModule = preload("res://demo/modules/policies/policies.md.gd")
 
 static var IMPORTS := [
 	HudModule,
@@ -14,6 +15,7 @@ static var IMPORTS := [
 	InventoryModule,
 	ChestModule,
 	EquipmentModule,
+	PoliciesModule,
 ]
 
 
