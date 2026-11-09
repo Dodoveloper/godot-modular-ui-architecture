@@ -16,6 +16,7 @@ var _blocked_categories: Dictionary[StringName, Dictionary] = {}
 
 func _init(reg_policy_categories: CapPolicyCategoriesRegistry) -> void:
 	_reg_policy_categories = reg_policy_categories
+	_reg_policy_categories.category_unregistered.connect(_on_category_unregistered)
 
 
 func enable() -> void:
@@ -103,3 +104,8 @@ func _prune_dead_blockers(category: StringName) -> void:
 		blockers.erase(dead_id)
 	if blockers.is_empty():
 		_blocked_categories.erase(category)
+
+
+## Drops every block on [param category] once the registry unregisters it.
+func _on_category_unregistered(category: StringName) -> void:
+	_blocked_categories.erase(category)
