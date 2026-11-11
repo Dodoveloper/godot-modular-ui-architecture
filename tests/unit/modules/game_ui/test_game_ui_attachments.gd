@@ -5,6 +5,7 @@ extends GutTest
 
 
 const GameUiService = preload("res://addons/modular_ui_architecture/modules/game_ui/services/game_ui.svc.gd")
+const UiLayersFixture = preload("res://tests/fixtures/ui_layers/layers.gd")
 const UiAttachmentsRegistry = preload("res://addons/modular_ui_architecture/modules/game_ui/registries/ui_attachments.reg.gd")
 const ViewsRegistry = preload("res://addons/modular_ui_architecture/modules/game_ui/registries/views.reg.gd")
 const UiLayersService = preload("res://addons/modular_ui_architecture/modules/ui_layers/services/ui_layers.svc.gd")
@@ -19,7 +20,7 @@ var _game_ui: GameUiService
 
 
 func before_each() -> void:
-	_ui_layers = UiLayersService.new()
+	_ui_layers = UiLayersFixture.make_service()
 	_ui_layers.enable()
 	await wait_process_frames(2)
 	_attachments = UiAttachmentsRegistry.new()

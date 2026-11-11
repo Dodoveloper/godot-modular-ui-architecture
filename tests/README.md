@@ -33,7 +33,8 @@ tests/
 │   ├── scripts/
 │   ├── input_bindings/
 │   ├── game_ui/
-│   └── tooltips/
+│   ├── tooltips/
+│   └── ui_layers/
 └── README.md
 ```
 
@@ -45,7 +46,9 @@ tests/
 - Share scene and script fixtures from `tests/fixtures/` rather than creating them inline.
 - Create nodes with `add_child_autofree()` / `autofree()`, and let `RefCounted` objects go out
   of scope. Services get `enable()`/`disable()` in `before_each`/`after_each`.
-- Tests that create a `UiLayersService` must `await wait_process_frames(2)` after `enable()`,
+- Tests that create a `UiLayersService` build it with `tests/fixtures/ui_layers/layers.gd`
+  (`UiLayersFixture.make_service()`). It registers the same layers a project registers, using the
+  real registry and layer scripts. Then they must `await wait_process_frames(2)` after `enable()`,
   because the layer container is added to the root with `call_deferred`.
 - Tests that need a `WorldUiPortal` use a real `GameUiModule` graph, mounted and started in
   `before_each`. Each test requests its own service, so nothing is cached between tests.
@@ -94,4 +97,4 @@ These are deliberately outside the unit tests:
 
 - Visuals, animation timing, and real window focus. The demo covers these.
 - The popup close-transition timeout (5 seconds, `CLOSE_TRANSITION_TIMEOUT_SEC` in
-  `popups_ui_layer.gd`). It is not injectable, so it is not tested.
+  `popups/nodes/popups_ui_layer.gd`). It is not injectable, so it is not tested.

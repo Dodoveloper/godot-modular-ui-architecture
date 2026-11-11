@@ -5,6 +5,7 @@ extends GutTest
 
 
 const GameUiTypes = preload("res://addons/modular_ui_architecture/modules/game_ui/types.gd")
+const UiLayersFixture = preload("res://tests/fixtures/ui_layers/layers.gd")
 const GameUiService = preload("res://addons/modular_ui_architecture/modules/game_ui/services/game_ui.svc.gd")
 const ViewsRegistry = preload("res://addons/modular_ui_architecture/modules/game_ui/registries/views.reg.gd")
 const UiAttachmentsRegistry = preload("res://addons/modular_ui_architecture/modules/game_ui/registries/ui_attachments.reg.gd")
@@ -20,7 +21,7 @@ var _game_ui: GameUiService
 
 
 func before_each() -> void:
-	_ui_layers = UiLayersService.new()
+	_ui_layers = UiLayersFixture.make_service()
 	_ui_layers.enable()
 	await wait_process_frames(2)
 	_views = ViewsRegistry.new()
@@ -66,9 +67,9 @@ func test_mount_view_emits_view_mounted_with_token() -> void:
 func test_mount_view_places_view_on_requested_layer() -> void:
 	_register_view()
 
-	var view := _game_ui.mount_view(TOKEN, UiLayersTypes.UiLayer.WINDOW)
+	var view := _game_ui.mount_view(TOKEN, UiLayersFixture.DemoTokens.Layers.WINDOW)
 
-	assert_eq(view.get_parent(), _ui_layers.get_layer_node(UiLayersTypes.UiLayer.WINDOW))
+	assert_eq(view.get_parent(), _ui_layers.get_layer_node(UiLayersFixture.DemoTokens.Layers.WINDOW))
 
 
 func test_mount_view_twice_pushes_error_and_returns_null() -> void:
@@ -125,10 +126,10 @@ func test_mount_world_ui_reparents_control_into_world_container() -> void:
 	add_child_autofree(anchor)
 	var ui := Control.new()
 
-	var mounted := _game_ui.mount_world_ui(ui, anchor, UiLayersTypes.UiLayer.DEFAULT)
+	var mounted := _game_ui.mount_world_ui(ui, anchor, UiLayersTypes.DEFAULT_LAYER)
 
 	assert_same(mounted, ui)
-	assert_eq(ui.get_parent(), _ui_layers.get_world_ui_container(UiLayersTypes.UiLayer.DEFAULT))
+	assert_eq(ui.get_parent(), _ui_layers.get_world_ui_container(UiLayersTypes.DEFAULT_LAYER))
 	_game_ui.unmount_world_ui(ui)
 
 
@@ -146,7 +147,7 @@ func test_unmount_world_ui_frees_tracked_node() -> void:
 	var anchor := Node2D.new()
 	add_child_autofree(anchor)
 	var ui := Control.new()
-	_game_ui.mount_world_ui(ui, anchor, UiLayersTypes.UiLayer.DEFAULT)
+	_game_ui.mount_world_ui(ui, anchor, UiLayersTypes.DEFAULT_LAYER)
 
 	var is_success := _game_ui.unmount_world_ui(ui)
 	await wait_process_frames(1)

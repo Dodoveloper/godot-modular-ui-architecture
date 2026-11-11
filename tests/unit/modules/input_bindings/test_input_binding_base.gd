@@ -4,23 +4,24 @@ extends GutTest
 
 
 const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
+const UiLayersFixture = preload("res://tests/fixtures/ui_layers/layers.gd")
 const InputBindingsTypes = preload("res://addons/modular_ui_architecture/modules/input_bindings/types.gd")
 
 
 func test_defaults_are_default_layer_pressed_and_zero_priority() -> void:
 	var binding := RecordingBinding.new()
 
-	assert_eq(binding.layer, UiLayersTypes.UiLayer.DEFAULT)
+	assert_eq(binding.layer, UiLayersTypes.DEFAULT_LAYER)
 	assert_eq(binding.input_type, InputBindingsTypes.InputActionType.PRESSED)
 	assert_eq(binding.priority, 0)
 
 
 func test_constructor_arguments_are_stored() -> void:
 	var binding := RecordingBinding.new(
-		UiLayersTypes.UiLayer.HUD, InputBindingsTypes.InputActionType.RELEASED
+		UiLayersFixture.DemoTokens.Layers.HUD, InputBindingsTypes.InputActionType.RELEASED
 	)
 
-	assert_eq(binding.layer, UiLayersTypes.UiLayer.HUD)
+	assert_eq(binding.layer, UiLayersFixture.DemoTokens.Layers.HUD)
 	assert_eq(binding.input_type, InputBindingsTypes.InputActionType.RELEASED)
 
 
@@ -47,7 +48,7 @@ class RecordingBinding extends InputBindingsTypes.InputBinding:
 	var executed := 0
 	var checked := 0
 
-	func _init(layer_ := UiLayersTypes.UiLayer.DEFAULT, input_type_ := InputBindingsTypes.InputActionType.PRESSED) -> void:
+	func _init(layer_ := UiLayersTypes.DEFAULT_LAYER, input_type_ := InputBindingsTypes.InputActionType.PRESSED) -> void:
 		super(layer_, input_type_)
 
 	func _execute() -> void:
