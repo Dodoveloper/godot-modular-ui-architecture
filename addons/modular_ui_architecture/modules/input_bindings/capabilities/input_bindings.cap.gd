@@ -20,6 +20,6 @@ const InputBindingsTypes = preload("../../input_bindings/types.gd")
 ## [param input_type] - The type of input (pressed, released).[br]
 ## Returns [code]true[/code] if a binding was executed, [code]false[/code] otherwise.
 @abstract func trigger_bindings(
-	action: StringName, layer := UiLayersTypes.UiLayer.DEFAULT,
+	action: StringName, layer := UiLayersTypes.DEFAULT_LAYER,
 	input_type := InputBindingsTypes.InputActionType.PRESSED
 ) -> bool

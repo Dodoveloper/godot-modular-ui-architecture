@@ -63,7 +63,7 @@ func disable() -> void:
 
 # TODO: eventually, Views may override convention methods (e.g. on_open, on_close)
 # to implement animations, staying in the tree, or reusing instances.
-func mount_view(token: StringName, layer := UiLayersTypes.UiLayer.DEFAULT) -> Node:
+func mount_view(token: StringName, layer := UiLayersTypes.DEFAULT_LAYER) -> Node:
 	var view_registration := _reg_views.get_view_registration(token)
 	if not view_registration:
 		push_error("No registered View found for token '%s'" % [token])
@@ -108,7 +108,7 @@ func get_view(token: StringName) -> Node:
 
 
 func mount_world_ui(
-	ui: Control, anchor: CanvasItem = null, layer := UiLayersTypes.UiLayer.DEFAULT,
+	ui: Control, anchor: CanvasItem = null, layer := UiLayersTypes.DEFAULT_LAYER,
 	offset := Vector2.ZERO, mirror_anchor_visuals := false
 ) -> Control:
 	var world_ui_container := _svc_ui_layers.get_world_ui_container(layer)

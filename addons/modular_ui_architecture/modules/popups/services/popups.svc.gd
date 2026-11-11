@@ -1,7 +1,8 @@
 extends CapPopups
 
 
-const PopupsUiLayer = preload("../../ui_layers/nodes/popups_ui_layer.gd")
+const PopupsTypes = preload("../types.gd")
+const PopupsUiLayer = preload("../nodes/popups_ui_layer.gd")
 
 var _svc_ui_layers: CapUiLayers
 
@@ -30,14 +31,14 @@ func open_popup(
 	popup_data.color = color
 	popup_data.dismiss_on_click_outside = dismiss_on_click_outside
 
-	return _svc_ui_layers.mount_ui(popup_path, UiLayersTypes.UiLayer.POPUP, popup_data)
+	return _svc_ui_layers.mount_ui(popup_path, PopupsTypes.POPUPS_LAYER, popup_data)
 
 
 func open_popup_queued(
 	popup_path: String, color := Color(0.0, 0.0, 0.0, 0.5), setup := Callable(),
 	dismiss_on_click_outside := false
 ) -> void:
-	var popups_layer: PopupsUiLayer = _svc_ui_layers.get_layer_node(UiLayersTypes.UiLayer.POPUP)
+	var popups_layer: PopupsUiLayer = _svc_ui_layers.get_layer_node(PopupsTypes.POPUPS_LAYER)
 	popups_layer.enqueue_popup(popup_path, color, setup, dismiss_on_click_outside)
 
 
@@ -46,10 +47,10 @@ func close_popup(popup: Control) -> bool:
 
 
 func has_popups() -> bool:
-	var popups_layer: PopupsUiLayer = _svc_ui_layers.get_layer_node(UiLayersTypes.UiLayer.POPUP)
+	var popups_layer: PopupsUiLayer = _svc_ui_layers.get_layer_node(PopupsTypes.POPUPS_LAYER)
 	return popups_layer.has_popups()
 
 
 func close_topmost_popup(reason := PopupTypes.CloseReason.SERVICE) -> void:
-	var popups_layer: PopupsUiLayer = _svc_ui_layers.get_layer_node(UiLayersTypes.UiLayer.POPUP)
+	var popups_layer: PopupsUiLayer = _svc_ui_layers.get_layer_node(PopupsTypes.POPUPS_LAYER)
 	popups_layer.close_topmost_popup(reason)

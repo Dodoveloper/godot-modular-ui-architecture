@@ -6,9 +6,9 @@ enum InputActionType {
 }
 
 
-## Base input binding, represents an action scoped to a specific [enum UiLayer].
+## Base input binding, represents an action scoped to a specific layer token.
 @abstract class InputBinding extends RefCounted:
-	var layer: UiLayersTypes.UiLayer
+	var layer: StringName
 	var input_type: InputActionType
 	## Execution priority relative to other bindings on the same action and layer.
 	## Higher values execute first. Bindings with equal priority run in registration order (stable).
@@ -16,7 +16,7 @@ enum InputActionType {
 	
 	
 	func _init(
-		layer_ := UiLayersTypes.UiLayer.DEFAULT, input_type_ := InputActionType.PRESSED
+		layer_ := UiLayersTypes.DEFAULT_LAYER, input_type_ := InputActionType.PRESSED
 	) -> void:
 		layer = layer_
 		input_type = input_type_

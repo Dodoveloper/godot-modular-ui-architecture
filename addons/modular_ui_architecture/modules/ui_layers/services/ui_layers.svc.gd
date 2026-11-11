@@ -1,27 +1,16 @@
 extends CapUiLayers
 
 
-const Utils = preload("../../../shared/classes/utils.gd")
-const DefaultUiLayerNode = preload("../nodes/default_ui_layer.gd")
-const HudUiLayerNode = preload("../nodes/hud_ui_layer.gd")
-const HudOverlayUiLayerNode = preload("../nodes/hud_overlay_ui_layer.gd")
-const WindowUiLayerNode = preload("../nodes/window_ui_layer.gd")
-const OverlayUiLayerNode = preload("../nodes/overlay_ui_layer.gd")
-const PopupsUiLayerNode = preload("../nodes/popups_ui_layer.gd")
-const TooltipUiLayerNode = preload("../nodes/tooltip_ui_layer.gd")
+var _reg_ui_layers: CapUiLayersRegistry
 
-static var _layers_config: Dictionary[UiLayersTypes.UiLayer, UiLayersTypes.UiLayerConfig] = {
-	UiLayersTypes.UiLayer.DEFAULT: UiLayersTypes.UiLayerConfig.new(DefaultUiLayerNode, 1, false),
-	UiLayersTypes.UiLayer.HUD: UiLayersTypes.UiLayerConfig.new(HudUiLayerNode, 2, false),
-	UiLayersTypes.UiLayer.HUD_OVERLAY: UiLayersTypes.UiLayerConfig.new(HudOverlayUiLayerNode, 3, false),
-	UiLayersTypes.UiLayer.WINDOW: UiLayersTypes.UiLayerConfig.new(WindowUiLayerNode, 4, true),
-	UiLayersTypes.UiLayer.OVERLAY: UiLayersTypes.UiLayerConfig.new(OverlayUiLayerNode, 5, true),
-	UiLayersTypes.UiLayer.POPUP: UiLayersTypes.UiLayerConfig.new(PopupsUiLayerNode, 6, true),
-	UiLayersTypes.UiLayer.TOOLTIP: UiLayersTypes.UiLayerConfig.new(TooltipUiLayerNode, 7, false),
-}
+## Registration of each enabled layer, by token.
+var _layer_registrations: Dictionary[StringName, UiLayersTypes.UiLayerRegistration] = {}
+var _layers_to_nodes: Dictionary[StringName, UiLayerNode] = {}
+var _world_ui_containers: Dictionary[StringName, Control] = {}
 
-var _layers_to_nodes: Dictionary[UiLayersTypes.UiLayer, UiLayerNode] = {}
-var _world_ui_containers: Dictionary[UiLayersTypes.UiLayer, Control] = {}
+
+func _init(reg_ui_layers: CapUiLayersRegistry) -> void:
+	_reg_ui_layers = reg_ui_layers
 
 
 func enable() -> void:
@@ -32,22 +21,28 @@ func disable() -> void:
 	_free_layer_nodes()
 
 
-func get_layer_node(layer: UiLayersTypes.UiLayer) -> UiLayerNode:
+func get_layer_node(layer: StringName) -> UiLayerNode:
 	return _layers_to_nodes.get(layer, null)
 
 
-func get_layers() -> Array[UiLayersTypes.UiLayer]:
-	return _layers_to_nodes.keys()
+func get_layers() -> Array[StringName]:
+	var layers: Array[StringName] = []
+	layers.assign(_layers_to_nodes.keys())
+	return layers
 
 
-func get_world_ui_container(layer: UiLayersTypes.UiLayer) -> Control:
+func get_world_ui_container(layer: StringName) -> Control:
 	return _world_ui_containers.get(layer, null)
 
 
 func mount_ui(
-	scene_path: String, layer: UiLayersTypes.UiLayer, data: Dictionary[StringName, Variant] = {}
+	scene_path: String, layer: StringName, data: Dictionary[StringName, Variant] = {}
 ) -> Node:
 	var layer_node := get_layer_node(layer)
+	if not layer_node:
+		push_error("No UI layer registered for token '%s'" % layer)
+		return null
+	
 	return layer_node.mount_node(scene_path, data)
 
 
@@ -66,16 +61,16 @@ func unmount_ui(ui: Node) -> bool:
 	return layer_node.unmount_node(ui)
 
 
-func is_layer_input_blocked(layer: UiLayersTypes.UiLayer) -> bool:
-	var layer_config: UiLayersTypes.UiLayerConfig = _layers_config.get(layer, null)
-	if not layer_config:
+func is_layer_input_blocked(layer: StringName) -> bool:
+	var registration: UiLayersTypes.UiLayerRegistration = _layer_registrations.get(layer, null)
+	if not registration:
 		return false
-
+	
 	for other_layer in _layers_to_nodes.keys():
-		var other_config := _layers_config[other_layer]
-		if other_config.canvas_layer_index <= layer_config.canvas_layer_index:
+		var other := _layer_registrations[other_layer]
+		if other.order <= registration.order:
 			continue
-		if not other_config.should_block_inputs:
+		if not other.should_block_inputs:
 			continue
 		if _layers_to_nodes[other_layer].get_mounted_nodes().size() > 0:
 			return true
@@ -84,27 +79,33 @@ func is_layer_input_blocked(layer: UiLayersTypes.UiLayer) -> bool:
 
 
 func notify_input_triggered(
-	action: StringName, layer := UiLayersTypes.UiLayer.DEFAULT,
+	action: StringName, layer := UiLayersTypes.DEFAULT_LAYER,
 	input_type := InputBindingsTypes.InputActionType.PRESSED
 ) -> void:
 	ui_layer_input_triggered.emit(action, layer, input_type)
 
 
 func _instantiate_layer_nodes() -> void:
+	_reg_ui_layers.seal()
 	var tree := Engine.get_main_loop() as SceneTree
 	var layer_container := Node.new()
 	layer_container.name = LAYER_CONTAINER_NODE_NAME
 	tree.root.add_child.call_deferred(layer_container)
 	
-	for layer in _layers_config.keys():
-		var layer_config := _layers_config[layer]
-		var layer_node: UiLayerNode = layer_config.node_script.new(self)
+	# Canvas indices are assigned densely in draw order, so the engine's CanvasLayer range never
+	# limits how many layers a project can register.
+	var canvas_index := 1
+	for registration in _reg_ui_layers.get_layer_registrations():
+		var layer := registration.token
+		var layer_node: UiLayerNode = registration.node_script.new(self)
 		layer_node.ui_layer = layer
-		layer_node.layer = layer_config.canvas_layer_index
-		layer_node.should_block_inputs = layer_config.should_block_inputs
-		layer_node.name = Utils.enum_to_str(UiLayersTypes.UiLayer, layer).to_pascal_case()
+		layer_node.layer = canvas_index
+		layer_node.should_block_inputs = registration.should_block_inputs
+		layer_node.name = layer.to_pascal_case()
+		canvas_index += 1
 		
 		layer_container.add_child(layer_node)
+		_layer_registrations[layer] = registration
 		_layers_to_nodes[layer] = layer_node
 		
 		var world_ui_container := Control.new()
@@ -126,4 +127,5 @@ func _free_layer_nodes() -> void:
 	
 	layer_container.queue_free()
 	_layers_to_nodes.clear()
+	_layer_registrations.clear()
 	_world_ui_containers.clear()

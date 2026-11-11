@@ -11,7 +11,7 @@ func _ready() -> void:
 	if not player:
 		push_error("Nameplate could not find a node in the 'player' group")
 		return
-
+	
 	_label.text = player.character_name
 	player.name_changed.connect(_on_player_name_changed)
 

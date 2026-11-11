@@ -1,4 +1,5 @@
 const GameUiModule = preload("res://addons/modular_ui_architecture/modules/game_ui/game_ui.md.gd")
+const LayersModule = preload("res://demo/modules/layers/layers.md.gd")
 const InputBindingsModule = preload("res://addons/modular_ui_architecture/modules/input_bindings/input_bindings.md.gd")
 const TooltipsModule = preload("res://addons/modular_ui_architecture/modules/tooltips/tooltips.md.gd")
 const PolicyStoreModule = preload("res://addons/modular_ui_architecture/modules/policy_store/policy_store.md.gd")
@@ -14,6 +15,7 @@ const INVENTORY_PATH := "res://demo/modules/inventory/content/ui/inventory.tscn"
 const TOGGLE_INVENTORY_ACTION := &"toggle_inventory"
 
 static var IMPORTS := [
+	LayersModule,
 	GameUiModule,
 	InputBindingsModule,
 	TooltipsModule,
@@ -39,7 +41,7 @@ class InventoryModule extends GdlrModule:
 	
 	func _register_bindings() -> void:
 		var toggle_inventory_binding := ToggleInventoryBinding.new(
-			svc_game_ui, UiLayersTypes.UiLayer.WINDOW
+			svc_game_ui, Tokens.Layers.WINDOW
 		)
 		reg_input_bindings.register_binding(TOGGLE_INVENTORY_ACTION, toggle_inventory_binding)
 	

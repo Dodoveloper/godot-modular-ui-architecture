@@ -50,7 +50,7 @@ tile_set = ExtResource("2_8vxkw")
 [node name="HudRequester" parent="." unique_id=1435008715 instance=ExtResource("3_qfc3f")]
 unique_name_in_owner = true
 token = &"hud"
-layer = 1
+layer = &"hud"
 unmount_mode = 1
 
 [node name="Chest" parent="." unique_id=1933379847 instance=ExtResource("4_chest")]

@@ -18,7 +18,7 @@ signal view_mounted(token: StringName)
 ## [param layer] - Layer the View will be added as a child of.[br]
 ## [br]
 ## Returns the View instance.
-@abstract func mount_view(token: StringName, layer := UiLayersTypes.UiLayer.DEFAULT) -> Node
+@abstract func mount_view(token: StringName, layer := UiLayersTypes.DEFAULT_LAYER) -> Node
 ## Unounts a currently-mounted View by token.
 @abstract func unmount_view(token: StringName) -> bool
 ## Gets a mounted View by token.
@@ -38,7 +38,7 @@ signal view_mounted(token: StringName)
 ## [br]
 ## Returns the UI node if successful, [code]null[/code] otherwise.
 @abstract func mount_world_ui(
-	ui: Control, anchor: CanvasItem = null, layer := UiLayersTypes.UiLayer.DEFAULT,
+	ui: Control, anchor: CanvasItem = null, layer := UiLayersTypes.DEFAULT_LAYER,
 	offset := Vector2.ZERO, mirror_anchor_visuals := false
 ) -> Control
 ## Unmounts a world-anchored UI node and stops position tracking.[br]

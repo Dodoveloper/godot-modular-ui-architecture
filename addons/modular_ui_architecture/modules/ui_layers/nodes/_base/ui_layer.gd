@@ -2,7 +2,6 @@ class_name UiLayerNode
 extends CanvasLayer
 
 
-const UiLayersTypes = preload("../../types.gd")
 const InputBindingsTypes = preload("../../../input_bindings/types.gd")
 const SceneCache = preload("../../../../shared/classes/scene_cache.gd")
 
@@ -20,7 +19,7 @@ const _FOCUS_NAV_ACTIONS: Array[StringName] = [
 	&"ui_up", &"ui_down", &"ui_left", &"ui_right",
 ]
 
-var ui_layer: UiLayersTypes.UiLayer
+var ui_layer: StringName
 var should_block_inputs: bool
 
 ## List of input actions, cached for performance reasons.

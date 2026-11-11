@@ -11,6 +11,13 @@ class Scenes:
 	}
 
 
+class Layers:
+	## Layers registered by the demo's [code]layers[/code] module. The addon's default layer is
+	## [code]UiLayersTypes.DEFAULT_LAYER[/code].
+	const HUD: StringName = &"hud"
+	const WINDOW: StringName = &"window"
+
+
 class Policies:
 	const Categories: Dictionary[StringName, StringName] = {
 		## Whether opening popups triggered by gameplay events is allowed.

@@ -32,7 +32,7 @@ enum UnmountMode {
 		token = value
 		update_configuration_warnings()
 ## Layer the View should be spawned on.
-@export var layer := UiLayersTypes.UiLayer.DEFAULT:
+@export var layer := UiLayersTypes.DEFAULT_LAYER:
 	set(value):
 		layer = value
 		update_configuration_warnings()
@@ -53,7 +53,7 @@ func _enter_tree() -> void:
 	if not token:
 		assert(false, "Token not specified")
 		return
-	if layer == null:
+	if not layer:
 		assert(false, "Layer not specified")
 		return
 	
@@ -76,7 +76,7 @@ func _get_configuration_warnings() -> PackedStringArray:
 	var warnings: PackedStringArray = []
 	if not token:
 		warnings.append("Token must be specified")
-	if layer == null:
+	if not layer:
 		warnings.append("Layer must be specified")
 	
 	return warnings
@@ -96,7 +96,7 @@ func mount_view() -> Node:
 	else:
 		push_warning(
 			"View %s could not mount on layer %s"
-			% [token, Utils.enum_to_str(UiLayersTypes.UiLayer, layer)]
+			% [token, layer]
 		)
 	
 	return view_instance
