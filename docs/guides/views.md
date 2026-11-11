@@ -29,6 +29,7 @@ const GameUiTypes = preload("res://addons/modular_ui_architecture/modules/game_u
 const INVENTORY_TOKEN := &"inventory"
 const INVENTORY_PATH := "res://my_feature/inventory.tscn"
 
+
 class MyFeatureModule extends GdlrModule:
 	var reg_views: CapViewsRegistry
 	var svc_game_ui: CapGameUi

@@ -5,7 +5,6 @@ const TooltipsModule = preload("res://addons/modular_ui_architecture/modules/too
 const PolicyStoreModule = preload("res://addons/modular_ui_architecture/modules/policy_store/policy_store.md.gd")
 const PoliciesModule = preload("res://demo/modules/policies/policies.md.gd")
 
-const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
 const GameUiTypes = preload("res://addons/modular_ui_architecture/modules/game_ui/types.gd")
 const ToggleInventoryBinding = preload("./bindings/toggle_inventory.bind.gd")
 const InventoryButtonAttachment = preload("./attachments/inventory_button.attach.gd")

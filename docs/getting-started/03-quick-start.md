@@ -38,9 +38,8 @@ so everything registered there is ready when the module starts.
 # my_feature/my_feature.md.gd
 const GameUiModule = preload("res://addons/modular_ui_architecture/modules/game_ui/game_ui.md.gd")
 const InputBindingsModule = preload("res://addons/modular_ui_architecture/modules/input_bindings/input_bindings.md.gd")
-const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
-const Tokens = preload("res://demo/shared/classes/tokens.gd")
 const GameUiTypes = preload("res://addons/modular_ui_architecture/modules/game_ui/types.gd")
+const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
 const ToggleHelloBinding = preload("./bindings/toggle_hello.bind.gd")
 const HelloButtonAttachment = preload("./attachments/hello_button.attach.gd")
 
@@ -64,7 +63,7 @@ class MyFeatureModule extends GdlrModule:
 
 	func register() -> void:
 		reg_views.register_view(GameUiTypes.ViewRegistration.new(HELLO_TOKEN, HELLO_VIEW_PATH))
-		var binding := ToggleHelloBinding.new(svc_game_ui, HELLO_TOKEN, Tokens.Layers.WINDOW)
+		var binding := ToggleHelloBinding.new(svc_game_ui, HELLO_TOKEN, UiLayersTypes.DEFAULT_LAYER)
 		reg_input_bindings.register_binding(TOGGLE_HELLO_ACTION, binding)
 		reg_attachments.register_attachment(HelloButtonAttachment.new(svc_input_bindings))
 ```
@@ -116,8 +115,6 @@ unmounts it otherwise. It always goes through `CapGameUi`, never through the Vie
 extends InputBindingsTypes.InputBinding
 
 
-const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
-const Tokens = preload("res://demo/shared/classes/tokens.gd")
 const InputBindingsTypes = preload("res://addons/modular_ui_architecture/modules/input_bindings/types.gd")
 
 var _svc_game_ui: CapGameUi
@@ -156,9 +153,8 @@ extends GameUiTypes.UiAttachment
 
 const GameUiTypes = preload("res://addons/modular_ui_architecture/modules/game_ui/types.gd")
 const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
-const Tokens = preload("res://demo/shared/classes/tokens.gd")
 
-const HELLO_BUTTON_PATH := "res://my_feature/hello_button.tscn"
+const HELLO_BUTTON_PATH := "res://my_feature/widget/hello_button.tscn"
 const TOGGLE_HELLO_ACTION := &"toggle_hello"
 
 var _svc_input_bindings: CapInputBindings
@@ -178,7 +174,7 @@ func _build(host_ui: Node, context: RefCounted) -> Control:
 
 
 func _on_button_pressed() -> void:
-	_svc_input_bindings.trigger_bindings(TOGGLE_HELLO_ACTION, Tokens.Layers.WINDOW)
+	_svc_input_bindings.trigger_bindings(TOGGLE_HELLO_ACTION, UiLayersTypes.DEFAULT_LAYER)
 ```
 
 Create `res://my_feature/hello_button.tscn`: a `Button` root with the text "Say hi".

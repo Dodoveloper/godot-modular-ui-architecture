@@ -93,8 +93,8 @@ class MyModule extends GdlrModule:
 
 	func register() -> void:
 		reg_ui_layers.register_layer(UiLayersTypes.UiLayerRegistration.new(
-MY_LAYER, MyLayerNode, UiLayersTypes.Order.WINDOW + 50, true
-))
+      MY_LAYER, MyLayerNode, UiLayersTypes.Order.WINDOW + 50, true
+    ))
 ```
 
 Each registration has four parts:

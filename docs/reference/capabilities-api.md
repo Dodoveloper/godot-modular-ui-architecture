@@ -19,7 +19,7 @@ Module: `game_ui`. Source: `game_ui/capabilities/game_ui.cap.gd`.
 | method | `unmount_view(token: StringName) -> bool` | Unmounts the View. Returns `false` if none is mounted under `token`. |
 | method | `get_view(token: StringName) -> Node` | The mounted View, or `null`. |
 | method | `is_view_mounted(token: StringName) -> bool` | Whether a View is mounted under `token`. |
-| method | `mount_world_ui(ui: Control, anchor: CanvasItem = null, layer := DEFAULT, offset := Vector2.ZERO, mirror_anchor_visuals := false) -> Control` | Mounts a control into a layer and tracks `anchor` every frame. Returns `ui`, or `null`. |
+| method | `mount_world_ui(ui: Control, anchor: CanvasItem = null, layer := UiLayersTypes.DEFAULT_LAYER, offset := Vector2.ZERO, mirror_anchor_visuals := false) -> Control` | Mounts a control into a layer and tracks `anchor` every frame. Returns `ui`, or `null`. |
 | method | `unmount_world_ui(ui: Control) -> bool` | Stops tracking and frees a World UI node. |
 | method | `mount_attachments(view: Node, add_to_slot: Callable) -> void` | Mounts the Attachments for `view`. `AttachmentSlotsController` calls this. You don't usually call it. |
 | method | `unmount_attachment(attachment: GameUiTypes.UiAttachment) -> void` | Removes the UI built for an attachment. |
@@ -55,14 +55,26 @@ Module: `ui_layers`. Source: `ui_layers/capabilities/ui_layers.cap.gd`.
 |--------|-----------|---------|
 | signal | `ui_layer_input_triggered(action: StringName, layer: StringName, input_type: InputActionType)` | Emitted when a registered action is pressed or released on a layer. Input Bindings listen to this. |
 | method | `get_layer_node(layer: StringName) -> UiLayerNode` | The node backing `layer`. |
-| method | `get_layers() -> Array[StringName]` | All mounted layers. |
+| method | `get_layers() -> Array[StringName]` | The tokens of the registered layers, in ascending draw order. |
 | method | `get_world_ui_container(layer: StringName) -> Control` | The container World UI on `layer` mounts into. |
 | method | `is_layer_input_blocked(layer: StringName) -> bool` | `true` if a higher layer that blocks input has UI mounted. |
 | method | `mount_ui(scene_path: String, layer: StringName, data := {}) -> Node` | Mounts a scene into `layer`. Returns the node, or `null`. |
 | method | `unmount_ui(ui: Node) -> bool` | Unmounts and frees a node mounted in any layer. |
-| method | `notify_input_triggered(action, layer := DEFAULT, input_type := PRESSED) -> void` | Broadcasts an input action. Layer nodes call this. You don't usually call it. |
+| method | `notify_input_triggered(action, layer := UiLayersTypes.DEFAULT_LAYER, input_type := PRESSED) -> void` | Broadcasts an input action. Layer nodes call this. You don't usually call it. |
 
 Layers are created when the module is enabled. Don't call these before the graph has started.
+
+## CapUiLayersRegistry
+
+Module: `ui_layers`. Source: `ui_layers/capabilities/ui_layers_registry.cap.gd`. Stores the layers that
+[CapUiLayers](#capuilayers) creates. Call it from `register()`. See
+[Registering a layer](../guides/ui-layers.md#registering-a-layer).
+
+| Method | Signature | Summary |
+|--------|-----------|---------|
+| `register_layer` | `register_layer(registration: UiLayersTypes.UiLayerRegistration) -> void` | Registers a layer. An empty or duplicate token, a script that doesn't extend `UiLayerNode`, or an order already used by another layer pushes an error and is ignored. Registering after `enable()` pushes an error. |
+| `get_layer_registrations` | `get_layer_registrations() -> Array[UiLayersTypes.UiLayerRegistration]` | The registered layers, sorted by ascending order. |
+| `seal` | `seal() -> void` | Stops accepting registrations. `CapUiLayers` calls it when it creates the layer nodes. You don't usually call it. |
 
 ## CapInputBindings
 
@@ -70,7 +82,7 @@ Module: `input_bindings`. Source: `input_bindings/capabilities/input_bindings.ca
 
 | Method | Signature | Summary |
 |--------|-----------|---------|
-| `trigger_bindings` | `trigger_bindings(action: StringName, layer := DEFAULT, input_type := PRESSED) -> bool` | Runs the first binding for `action` on `layer` whose `should_execute()` is `true`. Returns `true` if one ran. |
+| `trigger_bindings` | `trigger_bindings(action: StringName, layer := UiLayersTypes.DEFAULT_LAYER, input_type := PRESSED) -> bool` | Runs the first binding for `action` on `layer` whose `should_execute()` is `true`. Returns `true` if one ran. |
 
 ## CapInputBindingsRegistry
 

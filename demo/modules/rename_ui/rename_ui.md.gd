@@ -2,7 +2,6 @@ const InputBindingsModule = preload("res://addons/modular_ui_architecture/module
 const LayersModule = preload("res://demo/modules/layers/layers.md.gd")
 const GameUiModule = preload("res://addons/modular_ui_architecture/modules/game_ui/game_ui.md.gd")
 
-const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
 const GameUiTypes = preload("res://addons/modular_ui_architecture/modules/game_ui/types.gd")
 const ToggleRenameBinding = preload("./bindings/toggle_rename.bind.gd")
 const RenameButtonAttachment = preload("./attachments/rename_button.attach.gd")

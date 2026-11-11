@@ -24,9 +24,9 @@ func register_layer(registration: UiLayersTypes.UiLayerRegistration) -> void:
 	for other: UiLayersTypes.UiLayerRegistration in _registrations.values():
 		if other.order == registration.order:
 			push_error(
-"UI layer '%s' can't use order %s, it is already used by '%s'"
-% [registration.token, registration.order, other.token]
-)
+				"UI layer '%s' can't use order %s, it is already used by '%s'"
+				% [registration.token, registration.order, other.token]
+			)
 			return
 	
 	_registrations[registration.token] = registration

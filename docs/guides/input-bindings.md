@@ -18,8 +18,6 @@ through the same binding, so they always behave the same way.
 extends InputBindingsTypes.InputBinding
 
 
-const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
-const Tokens = preload("res://demo/shared/classes/tokens.gd")
 const InputBindingsTypes = preload("res://addons/modular_ui_architecture/modules/input_bindings/types.gd")
 
 var _svc_game_ui: CapGameUi

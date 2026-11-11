@@ -3,7 +3,6 @@ extends GutTest
 ## because it needs a laid-out tooltip; see the tooltip tests in tests/unit/modules/tooltips.
 
 
-const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
 const TooltipsTypes = preload("res://addons/modular_ui_architecture/modules/tooltips/types.gd")
 const UiLayersFixture = preload("res://tests/fixtures/ui_layers/layers.gd")
 const UiLayersService = preload("res://addons/modular_ui_architecture/modules/ui_layers/services/ui_layers.svc.gd")

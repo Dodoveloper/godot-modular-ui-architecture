@@ -14,8 +14,8 @@ class Scenes:
 class Layers:
 	## Layers registered by the demo's [code]layers[/code] module. The addon's default layer is
 	## [code]UiLayersTypes.DEFAULT_LAYER[/code].
-	const HUD: StringName = &"hud"
-	const WINDOW: StringName = &"window"
+	const HUD := &"hud"
+	const WINDOW := &"window"
 
 
 class Policies:
