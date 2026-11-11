@@ -78,22 +78,15 @@ can run exactly what a key runs. The layer decides *which* bindings are eligible
 
 ## The UI layers
 
-Each layer is a fixed plane. Layers drawn later are on top and receive input first.
+A layer is a plane that UI mounts into. Layers with a higher order are drawn on top and receive
+input first. Modules register the layers they need, so a project can add its own. The addon provides
+`DEFAULT`, and the Popups and Tooltips modules provide `POPUP` and `TOOLTIP`. Your project declares
+the rest, such as a HUD or a Window layer, in its own modules.
 
-| Layer | Typical use |
-|-------|-------------|
-| `DEFAULT` | Fallback. |
-| `HUD` | The HUD. |
-| `HUD_OVERLAY` | Overlays drawn on top of the HUD. |
-| `WINDOW` | Exclusive Views, such as a Pause Menu or an Inventory. Only one child at a time. |
-| `OVERLAY` | Overlays above windows. |
-| `POPUP` | Popups. |
-| `TOOLTIP` | Tooltips, above everything else. |
-
-The order is defined by the addon and can't be changed by your code. Each layer has its own node
-script, so you can customize one layer's behaviour without touching the others. See
-[UI Layers](../guides/ui-layers.md#customizing-a-layer) and
-[Types and enums](../reference/types-and-enums.md#uilayer).
+Each layer has its own node script, which decides what the layer accepts and how it mounts. Layers
+are ordered by their integer order, so a module can put a layer between two others, or above every
+other layer. See [UI Layers](../guides/ui-layers.md#registering-a-layer) and
+[Types and enums](../reference/types-and-enums.md#uilayer-tokens).
 
 ## Where the addon ends and your code begins
 

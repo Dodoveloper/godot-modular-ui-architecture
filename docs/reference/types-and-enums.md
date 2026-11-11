@@ -1,31 +1,50 @@
 # Types and enums
 
 The enums and value classes the addon's signatures use. Refer to them by their script's `preload`
-constant, as in the guides, for example `UiLayersTypes.UiLayer.WINDOW`.
+constant, as in the guides, for example `UiLayersTypes.Order.WINDOW`.
 
-## UiLayer
+## UiLayer tokens
 
 Source: `addons/modular_ui_architecture/modules/ui_layers/types.gd`.
 
-| Value | Canvas order | Blocks input below | Notes |
-|-------|--------------|--------------------|-------|
-| `DEFAULT` | 1 | No | Fallback. |
-| `HUD` | 2 | No | HUD Views. Only one child is allowed. |
-| `HUD_OVERLAY` | 3 | No | Overlays over the HUD. |
-| `WINDOW` | 4 | Yes | Exclusive Views. Only one child is allowed. |
-| `OVERLAY` | 5 | Yes | Overlays over windows. |
-| `POPUP` | 6 | Yes | Popups. |
-| `TOOLTIP` | 7 | No | Tooltips. Only one at a time. |
+A layer is identified by a `StringName` token, not an enum. The addon defines one token:
+`UiLayersTypes.DEFAULT_LAYER` (`&"default"`). The Popups and Tooltips modules define their own:
+`PopupsTypes.POPUPS_LAYER` (`&"popup"`) and `TooltipsTypes.TOOLTIPS_LAYER` (`&"tooltip"`). Your project
+declares any other token in one of its own modules.
 
-Canvas order sets draw order and input priority. The addon fixes these values, and your code can't
-reorder them.
+## UiLayer.Order
 
-## UiLayerConfig
+Source: `addons/modular_ui_architecture/modules/ui_layers/types.gd`.
 
-A value class that describes a layer's node script, canvas index, and whether it blocks input. The
-addon builds these internally, and you won't need to create one. Each layer's node script is in
-`addons/modular_ui_architecture/modules/ui_layers/nodes/`. See
-[Customizing a layer](../guides/ui-layers.md#customizing-a-layer).
+The predefined draw-order anchors. A layer's order decides draw order and input priority, and a higher
+order is drawn on top. These values are anchors, and any integer is valid.
+
+| Value | Order |
+|-------|-------|
+| `DEFAULT` | 0 |
+| `HUD` | 100 |
+| `HUD_OVERLAY` | 200 |
+| `WINDOW` | 300 |
+| `OVERLAY` | 400 |
+| `POPUP` | 500 |
+| `TOOLTIP` | 600 |
+
+See [Choosing an order](../guides/ui-layers.md#choosing-an-order).
+
+## UiLayerRegistration
+
+Source: `addons/modular_ui_architecture/modules/ui_layers/types.gd`. Describes a layer a module registers
+through `CapUiLayersRegistry.register_layer()`.
+
+| Member | Type | Summary |
+|--------|------|---------|
+| `token` | `StringName` | Unique token for the layer. |
+| `node_script` | `GDScript` | Script of the layer's node. Must extend `UiLayerNode`. |
+| `order` | `int` | Draw and input order. Must be unique among layers. |
+| `should_block_inputs` | `bool` | Whether the layer blocks lower layers while it has UI mounted. Default `false`. |
+
+Construct it as `UiLayersTypes.UiLayerRegistration.new(token, node_script, order, should_block_inputs)`.
+See [Registering a layer](../guides/ui-layers.md#registering-a-layer).
 
 ## InputActionType
 
@@ -42,7 +61,7 @@ Source: `addons/modular_ui_architecture/modules/input_bindings/types.gd`. An abs
 
 | Member | Type | Summary |
 |--------|------|---------|
-| `layer` | `UiLayer` | The layer the binding is scoped to. Set through `_init()`. |
+| `layer` | `StringName` | The layer token the binding is scoped to. Set through `_init()`. |
 | `input_type` | `InputActionType` | `PRESSED` or `RELEASED`. Set through `_init()`. |
 | `priority` | `int` | Higher runs first. Equal priorities use registration order. Default `0`. |
 | `_execute()` | virtual | Performs the behaviour. |

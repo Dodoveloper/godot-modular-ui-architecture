@@ -41,7 +41,7 @@ addons/modular_ui_architecture/
 │       ├── registries/                  # (only for modules that need a registry capability)
 │       │   └── <name>.reg.gd
 │       └── ...module-specific dirs, e.g.:
-│           ├── nodes/                    # ui_layers: UiLayerNode subclasses per UiLayer
+│           ├── nodes/                    # UiLayerNode subclasses, one per layer the module registers
 │           ├── ui/                       # tooltips: the Tooltip base scene/script
 │           └── bindings/           # popups: built-in InputBinding subclasses (e.g. close_popup)
 └── shared/

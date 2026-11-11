@@ -22,6 +22,7 @@ extends GameUiTypes.UiAttachment
 
 const GameUiTypes = preload("res://addons/modular_ui_architecture/modules/game_ui/types.gd")
 const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
+const Tokens = preload("res://demo/shared/classes/tokens.gd")
 
 const HELLO_BUTTON_PATH := "res://my_feature/hello_button.tscn"
 const TOGGLE_HELLO_ACTION := &"toggle_hello"
@@ -43,7 +44,7 @@ func _build(host_ui: Node, context: RefCounted) -> Control:
 
 
 func _on_button_pressed() -> void:
-	_svc_input_bindings.trigger_bindings(TOGGLE_HELLO_ACTION, UiLayersTypes.UiLayer.WINDOW)
+	_svc_input_bindings.trigger_bindings(TOGGLE_HELLO_ACTION, Tokens.Layers.WINDOW)
 ```
 
 Register it in the owning module:

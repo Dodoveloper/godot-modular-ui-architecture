@@ -183,7 +183,7 @@ behavior, or when a View/Popup needs a *second* binding beyond its toggle (e.g. 
 action inside an already-open View).
 
 1. `extends InputBindingsTypes.InputBinding`, `_init(...)` takes whatever capabilities
-   `_execute()` needs plus `layer_ := UiLayersTypes.UiLayer.DEFAULT` and calls `super(layer_)`.
+   `_execute()` needs plus `layer_ := UiLayersTypes.DEFAULT_LAYER` and calls `super(layer_)`.
 2. Implement `_execute()` (perform the action) and `_should_execute()` (decide whether to —
    check `CapPolicyStore.is_allowed(category)` here if the action should be gate-able, not
    inside `_execute()`).

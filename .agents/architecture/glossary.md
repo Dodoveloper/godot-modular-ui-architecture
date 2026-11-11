@@ -100,20 +100,20 @@ apply the definitions below when naming/organizing new UI, even without dedicate
   `show_tooltip(tooltip_path, anchor, contents, available_rect)`. Concrete tooltips extend the
   `Tooltip` base scene/script (`addons/modular_ui_architecture/modules/tooltips/ui/tooltip.gd`)
   and implement `_initialize(tooltip_data)`.
-- **UI Layer (`UiLayersTypes.UiLayer`)** — one of a fixed, statically-defined, strictly-ordered
-  set of planes UI mounts under (`DEFAULT`, `HUD`, `HUD_OVERLAY`, `WINDOW`, `OVERLAY`, `POPUP`,
-  `TOOLTIP`), each backed by a `CanvasLayer`-based `UiLayerNode` subclass with its own script in
-  `ui_layers/nodes/`. Order between layers is fixed and controls both draw order and input
-  priority; a layer's node can also enforce its own mounting rules (e.g. `WindowUiLayerNode` and
-  `HudUiLayerNode` only allow one mounted child at a time). Every View/Popup/Tooltip mount targets
-  a specific layer.
+- **UI Layer (token: `StringName`)** — a plane UI mounts under, identified by a `StringName` token
+  and registered by a module through `CapUiLayersRegistry.register_layer()`. Each layer is backed by a
+  `CanvasLayer`-based `UiLayerNode` subclass, whose script the module provides. Order is an integer
+  and controls both draw order and input priority; the predefined anchors are in
+  `UiLayersTypes.Order`. A layer's node can enforce its own mounting rules (e.g. the demo's
+  `WindowUiLayerNode` only allows one mounted child). Every View/Popup/Tooltip mount targets a
+  specific layer token.
 - **`UiLayerNode`** — the node backing a UI Layer, owned/created by `CapUiLayers`. Mounts/unmounts
   nodes, optionally blocks gameplay input while it has mounted children, and listens for
   registered input actions to notify `CapInputBindings` (via `CapUiLayers.notify_input_triggered`)
   when one is pressed/released — decoupling raw input from binding logic. See ADR-001 for its
   `_input` vs. `_unhandled_input` split.
 - **Input Binding (`InputBindingsTypes.InputBinding`)** — a small, focused object tied to one
-  Input Action (defined in Project Settings) and one target `UiLayer`, implementing
+  Input Action (defined in Project Settings) and one target UI layer token, implementing
   `_should_execute()` (decide whether to react) and `_execute()` (perform its action, typically
   by calling a service like `CapGameUi` with a View token and layer). Registered via
   `CapInputBindingsRegistry.register_binding(action, binding)`; evaluated by the owning

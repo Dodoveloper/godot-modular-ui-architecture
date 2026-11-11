@@ -15,7 +15,7 @@ Module: `game_ui`. Source: `game_ui/capabilities/game_ui.cap.gd`.
 | Member | Signature | Summary |
 |--------|-----------|---------|
 | signal | `view_mounted(token: StringName)` | Emitted after a View is mounted, **before** its Attachments mount. |
-| method | `mount_view(token: StringName, layer := UiLayer.DEFAULT) -> Node` | Mounts the registered View. Returns it, or `null`. |
+| method | `mount_view(token: StringName, layer := UiLayersTypes.DEFAULT_LAYER) -> Node` | Mounts the registered View. Returns it, or `null`. |
 | method | `unmount_view(token: StringName) -> bool` | Unmounts the View. Returns `false` if none is mounted under `token`. |
 | method | `get_view(token: StringName) -> Node` | The mounted View, or `null`. |
 | method | `is_view_mounted(token: StringName) -> bool` | Whether a View is mounted under `token`. |
@@ -53,12 +53,12 @@ Module: `ui_layers`. Source: `ui_layers/capabilities/ui_layers.cap.gd`.
 
 | Member | Signature | Summary |
 |--------|-----------|---------|
-| signal | `ui_layer_input_triggered(action: StringName, layer: UiLayer, input_type: InputActionType)` | Emitted when a registered action is pressed or released on a layer. Input Bindings listen to this. |
-| method | `get_layer_node(layer: UiLayer) -> UiLayerNode` | The node backing `layer`. |
-| method | `get_layers() -> Array[UiLayer]` | All mounted layers. |
-| method | `get_world_ui_container(layer: UiLayer) -> Control` | The container World UI on `layer` mounts into. |
-| method | `is_layer_input_blocked(layer: UiLayer) -> bool` | `true` if a higher layer that blocks input has UI mounted. |
-| method | `mount_ui(scene_path: String, layer: UiLayer, data := {}) -> Node` | Mounts a scene into `layer`. Returns the node, or `null`. |
+| signal | `ui_layer_input_triggered(action: StringName, layer: StringName, input_type: InputActionType)` | Emitted when a registered action is pressed or released on a layer. Input Bindings listen to this. |
+| method | `get_layer_node(layer: StringName) -> UiLayerNode` | The node backing `layer`. |
+| method | `get_layers() -> Array[StringName]` | All mounted layers. |
+| method | `get_world_ui_container(layer: StringName) -> Control` | The container World UI on `layer` mounts into. |
+| method | `is_layer_input_blocked(layer: StringName) -> bool` | `true` if a higher layer that blocks input has UI mounted. |
+| method | `mount_ui(scene_path: String, layer: StringName, data := {}) -> Node` | Mounts a scene into `layer`. Returns the node, or `null`. |
 | method | `unmount_ui(ui: Node) -> bool` | Unmounts and frees a node mounted in any layer. |
 | method | `notify_input_triggered(action, layer := DEFAULT, input_type := PRESSED) -> void` | Broadcasts an input action. Layer nodes call this. You don't usually call it. |
 

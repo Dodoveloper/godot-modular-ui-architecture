@@ -85,7 +85,7 @@ declaration (see `game_ui.svc.gd`):
 ```gdscript
 # TODO: eventually, Views may override convention methods (e.g. on_open, on_close)
 # to implement animations, staying in the tree, or reusing instances.
-func mount_view(token: StringName, layer := UiLayersTypes.UiLayer.DEFAULT) -> Node:
+func mount_view(token: StringName, layer := UiLayersTypes.DEFAULT_LAYER) -> Node:
 ```
 
 ## Static Typing
