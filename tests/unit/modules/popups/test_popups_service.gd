@@ -3,9 +3,10 @@ extends GutTest
 
 
 const PopupsService = preload("res://addons/modular_ui_architecture/modules/popups/services/popups.svc.gd")
-const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
+const PopupsTypes = preload("res://addons/modular_ui_architecture/modules/popups/types.gd")
+const UiLayersFixture = preload("res://tests/fixtures/ui_layers/layers.gd")
 const UiLayersService = preload("res://addons/modular_ui_architecture/modules/ui_layers/services/ui_layers.svc.gd")
-const PopupsUiLayer = preload("res://addons/modular_ui_architecture/modules/ui_layers/nodes/popups_ui_layer.gd")
+const PopupsUiLayer = preload("res://addons/modular_ui_architecture/modules/popups/nodes/popups_ui_layer.gd")
 
 const SCENE_PATH := "res://tests/fixtures/scenes/empty_control.tscn"
 
@@ -15,10 +16,10 @@ var _service: PopupsService
 
 
 func before_each() -> void:
-	_ui_layers = UiLayersService.new()
+	_ui_layers = UiLayersFixture.make_service()
 	_ui_layers.enable()
 	await wait_process_frames(2)
-	_popups_layer = _ui_layers.get_layer_node(UiLayersTypes.UiLayer.POPUP)
+	_popups_layer = _ui_layers.get_layer_node(PopupsTypes.POPUPS_LAYER)
 	_service = PopupsService.new(_ui_layers)
 
 

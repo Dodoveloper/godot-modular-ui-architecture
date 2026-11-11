@@ -18,14 +18,13 @@ through the same binding, so they always behave the same way.
 extends InputBindingsTypes.InputBinding
 
 
-const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
 const InputBindingsTypes = preload("res://addons/modular_ui_architecture/modules/input_bindings/types.gd")
 
 var _svc_game_ui: CapGameUi
 var _view_token: StringName
 
 
-func _init(svc_game_ui: CapGameUi, view_token: StringName, layer_: UiLayersTypes.UiLayer) -> void:
+func _init(svc_game_ui: CapGameUi, view_token: StringName, layer_: StringName) -> void:
 	_svc_game_ui = svc_game_ui
 	_view_token = view_token
 	super(layer_)
@@ -45,7 +44,7 @@ func _should_execute() -> bool:
 Register it in the owning module's `register()`, against the action name:
 
 ```gdscript
-reg_input_bindings.register_binding(&"toggle_hello", ToggleHelloBinding.new(svc_game_ui, &"hello", UiLayersTypes.UiLayer.WINDOW))
+reg_input_bindings.register_binding(&"toggle_hello", ToggleHelloBinding.new(svc_game_ui, &"hello", Tokens.Layers.WINDOW))
 ```
 
 Then add `toggle_hello` to the Input Map. A binding for an action that doesn't exist in the Input Map
@@ -77,7 +76,7 @@ returns `true` will hide the check, and the lower binding won't get the chance t
 Higher priority values run first. Equal priorities run in registration order.
 
 ```gdscript
-var binding := ToggleHelloBinding.new(svc_game_ui, &"hello", UiLayersTypes.UiLayer.WINDOW)
+var binding := ToggleHelloBinding.new(svc_game_ui, &"hello", Tokens.Layers.WINDOW)
 binding.priority = 10
 reg_input_bindings.register_binding(&"toggle_hello", binding)
 ```
@@ -91,7 +90,7 @@ A button calls the same code path as a key, so it stays consistent:
 
 ```gdscript
 func _on_button_pressed() -> void:
-	_svc_input_bindings.trigger_bindings(&"toggle_hello", UiLayersTypes.UiLayer.WINDOW)
+	_svc_input_bindings.trigger_bindings(&"toggle_hello", Tokens.Layers.WINDOW)
 ```
 
 Use `trigger_bindings()` to call a binding by action name and layer. The button doesn't call

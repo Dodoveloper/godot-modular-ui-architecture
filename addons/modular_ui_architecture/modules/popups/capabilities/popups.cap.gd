@@ -17,7 +17,6 @@ extends GdlrCapability
 ## Popups' lifecycles should be exclusively managed through this class.
 
 
-const UiLayersTypes = preload("../../ui_layers/types.gd")
 const PopupTypes = preload("../types.gd")
 
 @abstract func enable() -> void

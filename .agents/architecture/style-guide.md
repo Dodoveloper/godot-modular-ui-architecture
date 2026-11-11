@@ -51,7 +51,7 @@ signals — this codebase already does this consistently (see any `*.cap.gd`). U
 ```gdscript
 ## Blocks a policy [param category] for a given [param source].[br]
 ## Multiple sources may block the same category simultaneously.
-@abstract func block(category: PolicyStoreTypes.Category, source: Object) -> void
+@abstract func block(category: StringName, source: Object) -> void
 ```
 
 ## Dictionary Shape Comments
@@ -85,7 +85,7 @@ declaration (see `game_ui.svc.gd`):
 ```gdscript
 # TODO: eventually, Views may override convention methods (e.g. on_open, on_close)
 # to implement animations, staying in the tree, or reusing instances.
-func mount_view(token: StringName, layer := UiLayersTypes.UiLayer.DEFAULT) -> Node:
+func mount_view(token: StringName, layer := UiLayersTypes.DEFAULT_LAYER) -> Node:
 ```
 
 ## Static Typing
@@ -167,7 +167,7 @@ needs it.
 ## Data Values
 
 Use `StringName` for identifiers compared repeatedly (action names, View/tooltip tokens,
-Policy Store categories via enum, dictionary keys meant for fast lookup) — see `Tokens.gd` and
+Policy Store categories, dictionary keys meant for fast lookup) — see `Tokens.gd` and
 every `&"..."` action name in this codebase. Use `String` for display text and anything that
 gets string-manipulated (e.g. `Player.character_name`).
 

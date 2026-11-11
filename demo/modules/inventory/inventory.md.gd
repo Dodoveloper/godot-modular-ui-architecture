@@ -1,11 +1,11 @@
 const GameUiModule = preload("res://addons/modular_ui_architecture/modules/game_ui/game_ui.md.gd")
+const LayersModule = preload("res://demo/modules/layers/layers.md.gd")
 const InputBindingsModule = preload("res://addons/modular_ui_architecture/modules/input_bindings/input_bindings.md.gd")
 const TooltipsModule = preload("res://addons/modular_ui_architecture/modules/tooltips/tooltips.md.gd")
 const PolicyStoreModule = preload("res://addons/modular_ui_architecture/modules/policy_store/policy_store.md.gd")
+const PoliciesModule = preload("res://demo/modules/policies/policies.md.gd")
 
-const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
 const GameUiTypes = preload("res://addons/modular_ui_architecture/modules/game_ui/types.gd")
-const PolicyStoreTypes = preload("res://addons/modular_ui_architecture/modules/policy_store/types.gd")
 const ToggleInventoryBinding = preload("./bindings/toggle_inventory.bind.gd")
 const InventoryButtonAttachment = preload("./attachments/inventory_button.attach.gd")
 const Inventory = preload("./content/ui/inventory.gd")
@@ -14,10 +14,12 @@ const INVENTORY_PATH := "res://demo/modules/inventory/content/ui/inventory.tscn"
 const TOGGLE_INVENTORY_ACTION := &"toggle_inventory"
 
 static var IMPORTS := [
+	LayersModule,
 	GameUiModule,
 	InputBindingsModule,
 	TooltipsModule,
 	PolicyStoreModule,
+	PoliciesModule,
 ]
 
 
@@ -38,7 +40,7 @@ class InventoryModule extends GdlrModule:
 	
 	func _register_bindings() -> void:
 		var toggle_inventory_binding := ToggleInventoryBinding.new(
-			svc_game_ui, UiLayersTypes.UiLayer.WINDOW
+			svc_game_ui, Tokens.Layers.WINDOW
 		)
 		reg_input_bindings.register_binding(TOGGLE_INVENTORY_ACTION, toggle_inventory_binding)
 	
@@ -63,7 +65,7 @@ class InventoryModule extends GdlrModule:
 			return
 		
 		var inventory: Inventory = svc_game_ui.get_view(token)
-		svc_policy_store.block(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI, inventory)
+		svc_policy_store.block(Tokens.Policies.Categories.OPEN_GAMEPLAY_POPUP_UI, inventory)
 		inventory.close_requested.connect(_on_inventory_close_requested.bind(token))
 		inventory.tree_exiting.connect(_on_inventory_tree_exiting.bind(inventory))
 	
@@ -73,4 +75,4 @@ class InventoryModule extends GdlrModule:
 	
 	
 	func _on_inventory_tree_exiting(inventory: Inventory) -> void:
-		svc_policy_store.unblock(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI, inventory)
+		svc_policy_store.unblock(Tokens.Policies.Categories.OPEN_GAMEPLAY_POPUP_UI, inventory)

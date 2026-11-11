@@ -115,17 +115,6 @@ Full user documentation lives in [`docs/`](docs/README.md). Start with the
 
 Contributors can read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request.
 
-## Potential improvements
-
-The addon is usable today, but a few things are still closed to projects that use it:
-
-- **Custom Policy categories.** Today, a new `PolicyStoreTypes.Category` value means editing
-  `policy_store/types.gd` in the addon. A project should be able to declare its own categories from
-  its own modules. See [Policy Store](docs/guides/policy-store.md#the-categories).
-- **Custom UI Layers.** Today, a new `UiLayer` value, and its `UiLayerNode` script, means editing
-  files in `ui_layers/`. Layers should be registrable from a project's modules. See
-  [Customizing a layer](docs/guides/ui-layers.md#customizing-a-layer).
-
 ## AI disclosure
 
 This project was developed with the assistance of AI tools. The majority of the code was

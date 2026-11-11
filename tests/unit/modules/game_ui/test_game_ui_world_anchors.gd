@@ -5,6 +5,7 @@ extends GutTest
 
 
 const GameUiService = preload("res://addons/modular_ui_architecture/modules/game_ui/services/game_ui.svc.gd")
+const UiLayersFixture = preload("res://tests/fixtures/ui_layers/layers.gd")
 const UiAttachmentsRegistry = preload("res://addons/modular_ui_architecture/modules/game_ui/registries/ui_attachments.reg.gd")
 const ViewsRegistry = preload("res://addons/modular_ui_architecture/modules/game_ui/registries/views.reg.gd")
 const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
@@ -15,7 +16,7 @@ var _game_ui: GameUiService
 
 
 func before_each() -> void:
-	_ui_layers = UiLayersService.new()
+	_ui_layers = UiLayersFixture.make_service()
 	_ui_layers.enable()
 	await wait_process_frames(2)
 	_game_ui = GameUiService.new(UiAttachmentsRegistry.new(), ViewsRegistry.new(), _ui_layers)
@@ -112,7 +113,7 @@ func test_frame_draw_places_ui_at_anchor_position_plus_offset() -> void:
 	anchor.global_position = Vector2(100, 50)
 	var ui := Control.new()
 	autofree(ui)
-	_game_ui.mount_world_ui(ui, anchor, UiLayersTypes.UiLayer.DEFAULT, Vector2(8, -4))
+	_game_ui.mount_world_ui(ui, anchor, UiLayersTypes.DEFAULT_LAYER, Vector2(8, -4))
 
 	_game_ui._on_frame_pre_draw()
 
@@ -167,7 +168,7 @@ func test_mirroring_copies_anchor_visibility_modulate_and_scaled_scale() -> void
 	var ui := Control.new()
 	autofree(ui)
 	ui.scale = Vector2(3, 3)
-	_game_ui.mount_world_ui(ui, anchor, UiLayersTypes.UiLayer.DEFAULT, Vector2.ZERO, true)
+	_game_ui.mount_world_ui(ui, anchor, UiLayersTypes.DEFAULT_LAYER, Vector2.ZERO, true)
 
 	_game_ui._on_frame_pre_draw()
 
@@ -184,7 +185,7 @@ func test_without_mirroring_ui_keeps_its_own_visibility_and_modulate() -> void:
 	var ui := Control.new()
 	autofree(ui)
 	ui.modulate = Color.WHITE
-	_game_ui.mount_world_ui(ui, anchor, UiLayersTypes.UiLayer.DEFAULT, Vector2.ZERO, false)
+	_game_ui.mount_world_ui(ui, anchor, UiLayersTypes.DEFAULT_LAYER, Vector2.ZERO, false)
 
 	_game_ui._on_frame_pre_draw()
 

@@ -8,7 +8,8 @@ extends GutTest
 ## _reposition() with fixed rects.
 
 
-const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
+const TooltipsTypes = preload("res://addons/modular_ui_architecture/modules/tooltips/types.gd")
+const UiLayersFixture = preload("res://tests/fixtures/ui_layers/layers.gd")
 const UiLayersService = preload("res://addons/modular_ui_architecture/modules/ui_layers/services/ui_layers.svc.gd")
 const TooltipsService = preload("res://addons/modular_ui_architecture/modules/tooltips/services/tooltips.svc.gd")
 const TooltipScript = preload("res://addons/modular_ui_architecture/modules/tooltips/ui/tooltip.gd")
@@ -16,7 +17,7 @@ const FixtureTooltip = preload("res://tests/fixtures/tooltips/fixture_tooltip.gd
 
 const TOOLTIP_SCENE_PATH := "res://tests/fixtures/tooltips/fixture_tooltip.tscn"
 const NON_TOOLTIP_SCENE_PATH := "res://tests/fixtures/scenes/empty_control.tscn"
-const TOOLTIP_LAYER := UiLayersTypes.UiLayer.TOOLTIP
+const TOOLTIP_LAYER := TooltipsTypes.TOOLTIPS_LAYER
 
 var _ui_layers: UiLayersService
 var _tooltips: TooltipsService
@@ -24,7 +25,7 @@ var _layer: Node
 
 
 func before_each() -> void:
-	_ui_layers = UiLayersService.new()
+	_ui_layers = UiLayersFixture.make_service()
 	_ui_layers.enable()
 	await wait_process_frames(2)
 	_tooltips = TooltipsService.new(_ui_layers)

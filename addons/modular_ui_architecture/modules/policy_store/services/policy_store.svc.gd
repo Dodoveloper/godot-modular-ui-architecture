@@ -1,15 +1,22 @@
 extends CapPolicyStore
 
 
+var _reg_policy_categories: CapPolicyCategoriesRegistry
+
 ## Mapping of blocked categories.
 ## [codeblock]
 ## @shape: {
-##   [category: PolicyStoreTypes.Category]: {
+##   [category: StringName]: {
 ##     [source_id: int]: [source: WeakRef]
 ##   }
 ## }
 ## [/codeblock]
-var _blocked_categories: Dictionary[PolicyStoreTypes.Category, Dictionary] = {}
+var _blocked_categories: Dictionary[StringName, Dictionary] = {}
+
+
+func _init(reg_policy_categories: CapPolicyCategoriesRegistry) -> void:
+	_reg_policy_categories = reg_policy_categories
+	_reg_policy_categories.category_unregistered.connect(_on_category_unregistered)
 
 
 func enable() -> void:
@@ -21,7 +28,9 @@ func disable() -> void:
 	print("CapPolicyStore disabled")
 
 
-func block(category: PolicyStoreTypes.Category, source: Object) -> void:
+func block(category: StringName, source: Object) -> void:
+	if not _is_registered(category):
+		return
 	if source == null:
 		push_error("PolicyStore.block source cannot be null")
 		return
@@ -30,7 +39,9 @@ func block(category: PolicyStoreTypes.Category, source: Object) -> void:
 	_blocked_categories.get_or_add(category, {})[source_id] = weakref(source)
 
 
-func unblock(category: PolicyStoreTypes.Category, source: Object) -> void:
+func unblock(category: StringName, source: Object) -> void:
+	if not _is_registered(category):
+		return
 	if source == null:
 		return
 	
@@ -38,22 +49,28 @@ func unblock(category: PolicyStoreTypes.Category, source: Object) -> void:
 	var blockers: Dictionary = _blocked_categories.get(category, {})
 	if blockers.is_empty():
 		return
-
+	
 	blockers.erase(source_id)
 	if blockers.is_empty():
 		_blocked_categories.erase(category)
 
 
-func is_allowed(category: PolicyStoreTypes.Category) -> bool:
+func is_allowed(category: StringName) -> bool:
+	if not _is_registered(category):
+		return true
+	
 	_prune_dead_blockers(category)
-
+	
 	return (_blocked_categories.get(category, {}) as Dictionary).is_empty()
 
 
-func get_blockers(category: PolicyStoreTypes.Category) -> Array[Object]:
-	_prune_dead_blockers(category)
-
+func get_blockers(category: StringName) -> Array[Object]:
 	var blockers: Array[Object] = []
+	if not _is_registered(category):
+		return blockers
+	
+	_prune_dead_blockers(category)
+	
 	var blockers_dict := _blocked_categories.get(category, {}) as Dictionary
 	for weak_ref in blockers_dict.values():
 		var blocker = (weak_ref as WeakRef).get_ref()
@@ -63,7 +80,16 @@ func get_blockers(category: PolicyStoreTypes.Category) -> Array[Object]:
 	return blockers
 
 
-func _prune_dead_blockers(category: PolicyStoreTypes.Category) -> void:
+## Returns whether [param category] is registered. Pushes an error when it isn't.
+func _is_registered(category: StringName) -> bool:
+	if _reg_policy_categories.is_category_registered(category):
+		return true
+	
+	push_error("Policy category '%s' is not registered" % category)
+	return false
+
+
+func _prune_dead_blockers(category: StringName) -> void:
 	var blockers: Dictionary = _blocked_categories.get(category, {})
 	if blockers.is_empty():
 		return
@@ -78,3 +104,8 @@ func _prune_dead_blockers(category: PolicyStoreTypes.Category) -> void:
 		blockers.erase(dead_id)
 	if blockers.is_empty():
 		_blocked_categories.erase(category)
+
+
+## Drops every block on [param category] once the registry unregisters it.
+func _on_category_unregistered(category: StringName) -> void:
+	_blocked_categories.erase(category)

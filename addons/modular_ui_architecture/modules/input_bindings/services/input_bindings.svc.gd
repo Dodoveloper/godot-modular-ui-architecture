@@ -21,7 +21,7 @@ func disable() -> void:
 
 
 func trigger_bindings(
-	action: StringName, layer := UiLayersTypes.UiLayer.DEFAULT,
+	action: StringName, layer := UiLayersTypes.DEFAULT_LAYER,
 	input_type := InputBindingsTypes.InputActionType.PRESSED
 ) -> bool:
 	var bindings := _reg_input_bindings.get_bindings(action)
@@ -47,6 +47,6 @@ func trigger_bindings(
 
 
 func _on_svc_ui_layers_input_triggered(
-	action: StringName, layer: UiLayersTypes.UiLayer, input_type: InputBindingsTypes.InputActionType
+	action: StringName, layer: StringName, input_type: InputBindingsTypes.InputActionType
 ) -> void:
 	trigger_bindings(action, layer, input_type)

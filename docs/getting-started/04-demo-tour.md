@@ -13,13 +13,19 @@ their API may change independently.
 
 | Demo module | Shows | Key files |
 |-------------|-------|-----------|
+| `layers` | The project's UI layers. It registers the `hud` and `window` layers, which the addon doesn't provide. | `layers.md.gd`, `content/layers/hud_ui_layer.gd`, `content/layers/window_ui_layer.gd` |
 | `player` | A moving character and a World UI nameplate. | `content/entities/player.gd`, `content/ui/nameplate.tscn` |
 | `hud` | The HUD View with three bottom slots (`bottom_left`, `bottom_center`, `bottom_right`). | `hud.md.gd`, `content/ui/hud.tscn` |
+| `policies` | The project's Policy Store categories. It declares `OPEN_GAMEPLAY_POPUP_UI` for the other modules to use. | `policies.md.gd` |
 | `pause_menu` | A View toggled by a key and a HUD button, a confirmation Popup, and a Policy Store block. | `pause_menu.md.gd`, `bindings/toggle_pause_menu.bind.gd`, `attachments/pause_menu_button.attach.gd` |
 | `rename_ui` | A View toggled by a key, with a text field so you can see keystrokes reach the field. | `rename_ui.md.gd`, `bindings/toggle_rename.bind.gd` |
 | `inventory` | A View with item slots, item Tooltips, a Context, and a footer slot for other modules. | `inventory.md.gd`, `content/ui/inventory.gd` |
 | `equipment` | Two Attachments contributed into *other* modules' Views, without importing them. | `equipment.md.gd`, `attachments/equip_button.attach.gd`, `attachments/equipped_item_label.attach.gd` |
 | `chest` | An entity that queues several reward Popups, gated by Policy Store. | `content/entities/chest.gd` |
+
+The `layers` module is the demo's example of [registering a layer](../guides/ui-layers.md#registering-a-layer).
+The addon provides only the `default` layer. Every other layer the demo uses, `hud` and `window`, is
+declared by this module, so you can see both the registration and the node scripts in one place.
 
 The root `demo/demo.md.gd` only composes the demo modules by importing them. It declares no providers
 of its own.
@@ -27,12 +33,19 @@ of its own.
 Two shared folders hold generic demo code:
 
 - `demo/shared/classes/`: `ToggleableDisplay` (a base class for dismissable Views and Popups),
-  `InputManager` (a global input-block counter), and `Tokens` (View token constants).
+  `InputManager` (a global input-block counter), and `Tokens` (the View tokens, UI layer tokens, and
+  Policy Store categories the demo uses). `Tokens` is a `class_name`, so you don't need to preload it.
 - `demo/shared/ui/`: a `confirmation_dialog` and an `attention_dialog`, reused by several modules.
 
 ## Experiments
 
 These show *why* the architecture helps, not just what it does. Each one is safe to undo.
+
+**Remove a layer and see what breaks.** The `hud` and `window` layers are registered in
+`demo/modules/layers/layers.md.gd`. Delete the `register_layer` call for `Tokens.Layers.HUD` and run the
+demo. The HUD doesn't mount, and the output shows `No UI layer registered for token 'hud'`, followed by
+`View hud could not mount on layer hud`. Removing the `LayersModule` import alone changes nothing, because
+`pause_menu`, `rename_ui` and `inventory` import it too.
 
 **Remove a feature as a unit.** Comment out `InventoryModule` in `demo/demo.md.gd` and run again. The
 Inventory's HUD button, its keybinding, and the View all disappear, with no errors. Nothing else in the

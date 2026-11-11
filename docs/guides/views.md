@@ -29,6 +29,7 @@ const GameUiTypes = preload("res://addons/modular_ui_architecture/modules/game_u
 const INVENTORY_TOKEN := &"inventory"
 const INVENTORY_PATH := "res://my_feature/inventory.tscn"
 
+
 class MyFeatureModule extends GdlrModule:
 	var reg_views: CapViewsRegistry
 	var svc_game_ui: CapGameUi
@@ -58,7 +59,7 @@ mounted. Connect to it to set up the View's own behaviour, as the demo does for 
 
 ## Mount on a layer
 
-`mount_view` takes an optional `layer`. Views default to `UiLayer.DEFAULT`. Most Views belong in
+`mount_view` takes an optional `layer`. Views default to `UiLayersTypes.DEFAULT_LAYER`. Most Views belong in
 `WINDOW` (only one child, so an opened window replaces another) or `HUD`. See [UI Layers](ui-layers.md).
 
 ## Declarative mounting with ViewRequester

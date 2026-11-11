@@ -8,14 +8,15 @@ extends GutTest
 
 
 const PopupTypes = preload("res://addons/modular_ui_architecture/modules/popups/types.gd")
-const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
+const PopupsTypes = preload("res://addons/modular_ui_architecture/modules/popups/types.gd")
+const UiLayersFixture = preload("res://tests/fixtures/ui_layers/layers.gd")
 const UiLayersService = preload("res://addons/modular_ui_architecture/modules/ui_layers/services/ui_layers.svc.gd")
 const PopupsService = preload("res://addons/modular_ui_architecture/modules/popups/services/popups.svc.gd")
 
 const SCENE_PATH := "res://tests/fixtures/scenes/empty_control.tscn"
 const TRANSITION_SCENE_PATH := "res://tests/fixtures/scenes/transition_popup.tscn"
 const MISSING_SCENE_PATH := "res://tests/fixtures/scenes/does_not_exist.tscn"
-const POPUP_LAYER := UiLayersTypes.UiLayer.POPUP
+const POPUP_LAYER := PopupsTypes.POPUPS_LAYER
 
 var _ui_layers: UiLayersService
 var _popups: PopupsService
@@ -23,7 +24,7 @@ var _layer: Node
 
 
 func before_each() -> void:
-	_ui_layers = UiLayersService.new()
+	_ui_layers = UiLayersFixture.make_service()
 	_ui_layers.enable()
 	await wait_process_frames(2)
 	_popups = PopupsService.new(_ui_layers)

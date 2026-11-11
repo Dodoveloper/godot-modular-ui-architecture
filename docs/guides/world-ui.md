@@ -44,7 +44,7 @@ In `WORLD_FOLLOW` mode, if `world_anchor` is empty, the portal uses its owner if
 | Property | Purpose |
 |----------|---------|
 | `target_ui` | The `Control` to mount. It's reparented out of the portal's parent scene. |
-| `target_layer` | The UI layer it's mounted on. Use `DEFAULT` unless you need something else. |
+| `target_layer` | The UI layer it's mounted on. Use the default one unless you need something else. |
 | `anchor_mode` | `NONE` or `WORLD_FOLLOW`. See above. |
 | `world_anchor` | The `Node2D` to follow in `WORLD_FOLLOW` mode. Leave empty for auto-resolution. |
 | `mirror_anchor_visuals` | If `true`, copies the anchor's `visible`, `modulate`, and `scale` to the UI every frame. |

@@ -80,13 +80,14 @@ lifecycles. See ADR-002 for why this split was kept instead of unifying them.
 
 ## 3. UI Layers: mounting + input, end to end
 
-Each `UiLayer` (`DEFAULT`, `HUD`, `HUD_OVERLAY`, `WINDOW`, `OVERLAY`, `POPUP`, `TOOLTIP`) is a
-`CanvasLayer` backed by its own `UiLayerNode` subclass in `ui_layers/nodes/` (one script per layer,
-so each can be customized independently). Layer-specific rules are overridden there, e.g.
-`_can_mount_scene`/`_mount_node`: `WindowUiLayerNode` and `HudUiLayerNode` allow only one mounted
-child, and `HudUiLayerNode` is currently identical to `WindowUiLayerNode` on purpose. `CapUiLayers`
-creates one node per layer at `enable()`, in a fixed, ordered list that also determines draw order
-and input priority (declared in `ui_layers.svc.gd::_layers_config`).
+Each UI layer is a `CanvasLayer` backed by a `UiLayerNode` subclass that its module registers
+through `CapUiLayersRegistry` in `register()`. The `ui_layers` module registers only `DEFAULT`; the
+Popups and Tooltips modules register `POPUP` and `TOOLTIP`; the demo's `layers` module registers its
+own HUD and Window layers, as an example. Layer-specific rules are overridden in the node script,
+e.g. `_can_mount_scene`/`_mount_node`. The demo's `WindowUiLayerNode` and `HudUiLayerNode` allow only one
+mounted child. `CapUiLayers` creates one node per registration at `enable()`, sorted by order, which
+determines draw order and input priority. Canvas indices are assigned densely from that sorted list.
+The registry is sealed at `enable()`, so layers can't be registered later.
 
 Input flow, per event:
 
@@ -128,16 +129,18 @@ unconditionally, which is safe there because those actions are never meant to be
 
 ## 4. Policy Store: cross-module interaction gating
 
-`CapPolicyStore` blocks semantic categories (`PolicyStoreTypes.Category`, e.g.
-`OPEN_WINDOW_UI`), not specific bindings or UI instances. Any object calls
-`block(category, source)`/`unblock(category, source)`; the category is allowed again only once
-every blocker is removed or its `source` becomes invalid (pruned automatically via `WeakRef`).
+`CapPolicyStore` blocks semantic categories (`StringName` tokens, registered by modules through
+`CapPolicyCategoriesRegistry`; the addon ships none), not specific bindings or UI instances.
+Any object calls `block(category, source)`/`unblock(category, source)`; the category
+is allowed again only once every blocker is removed or its `source` becomes invalid (pruned
+automatically via `WeakRef`).
 This is intentionally decoupled from `CapInputBindings` — a binding's `_should_execute()` is
 just one *consumer* of Policy Store, not the only one; any system needing to know "is this class
 of interaction currently allowed" can ask, without knowing which other module(s) might be
 blocking it or why. The demo's `chest` entity is a non-binding example: it checks
-`is_allowed(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI)` directly before opening its
-reward popups, with `pause_menu`/`inventory` blocking that category for their own lifetime.
+`is_allowed(Tokens.Policies.Categories.OPEN_GAMEPLAY_POPUP_UI)` directly before opening its
+reward popups, with `pause_menu`/`inventory` blocking that category for their own lifetime. The
+category itself is declared by the demo's `policies` module.
 (See §0 — this is the "pragmatism" example: it was extracted because multiple bindings across
 multiple demo modules needed the same check, not preemptively.)
 

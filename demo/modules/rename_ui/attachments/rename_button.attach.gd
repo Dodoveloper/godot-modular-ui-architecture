@@ -2,7 +2,6 @@ extends GameUiTypes.UiAttachment
 
 
 const GameUiTypes = preload("res://addons/modular_ui_architecture/modules/game_ui/types.gd")
-const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
 const Hud = preload("res://demo/modules/hud/content/ui/hud.gd")
 
 const RENAME_BUTTON_PATH := "res://demo/modules/rename_ui/content/ui/rename_button.tscn"
@@ -26,9 +25,9 @@ func _build(host_ui: Node, context: RefCounted) -> Control:
 	var button: Button = super(host_ui, context)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_END
 	button.pressed.connect(_on_button_pressed)
-
+	
 	return button
 
 
 func _on_button_pressed() -> void:
-	_svc_input_bindings.trigger_bindings(INPUT_ACTION, UiLayersTypes.UiLayer.WINDOW)
+	_svc_input_bindings.trigger_bindings(INPUT_ACTION, Tokens.Layers.WINDOW)

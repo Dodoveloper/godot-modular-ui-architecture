@@ -8,3 +8,6 @@ enum CloseReason {
 	## Close requested by the Popup itself.
 	POPUP,
 }
+
+## Token of the layer Popups mount into.
+const POPUPS_LAYER := &"popup"

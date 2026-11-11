@@ -5,18 +5,20 @@ extends GutTest
 
 
 const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
+const PopupsTypes = preload("res://addons/modular_ui_architecture/modules/popups/types.gd")
+const UiLayersFixture = preload("res://tests/fixtures/ui_layers/layers.gd")
 const InputBindingsTypes = preload("res://addons/modular_ui_architecture/modules/input_bindings/types.gd")
 const UiLayersService = preload("res://addons/modular_ui_architecture/modules/ui_layers/services/ui_layers.svc.gd")
 
 const SCENE_PATH := "res://tests/fixtures/scenes/empty_control.tscn"
-const DEFAULT_LAYER := UiLayersTypes.UiLayer.DEFAULT
+const DEFAULT_LAYER := UiLayersTypes.DEFAULT_LAYER
 const SIGNAL_NAME := "ui_layer_input_triggered"
 
 var _service: UiLayersService
 
 
 func before_each() -> void:
-	_service = UiLayersService.new()
+	_service = UiLayersFixture.make_service()
 	_service.enable()
 	await wait_process_frames(2)
 	watch_signals(_service)
@@ -60,7 +62,7 @@ func test_non_focus_nav_action_is_broadcast_from_unhandled_input_phase() -> void
 
 func test_focus_nav_broadcast_from_input_is_skipped_when_layer_is_obstructed() -> void:
 	# A mounted popup blocks input of every lower layer, so the DEFAULT layer must not pre-empt it.
-	_service.mount_ui(SCENE_PATH, UiLayersTypes.UiLayer.POPUP)
+	_service.mount_ui(SCENE_PATH, PopupsTypes.POPUPS_LAYER)
 	var layer := _service.get_layer_node(DEFAULT_LAYER)
 
 	layer._input(_make_pressed_event(&"ui_up"))

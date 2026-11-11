@@ -1,11 +1,11 @@
 const GameUiModule = preload("res://addons/modular_ui_architecture/modules/game_ui/game_ui.md.gd")
+const LayersModule = preload("res://demo/modules/layers/layers.md.gd")
 const InputBindingsModule = preload("res://addons/modular_ui_architecture/modules/input_bindings/input_bindings.md.gd")
 const PolicyStoreModule = preload("res://addons/modular_ui_architecture/modules/policy_store/policy_store.md.gd")
+const PoliciesModule = preload("res://demo/modules/policies/policies.md.gd")
 const PopupsModule = preload("res://addons/modular_ui_architecture/modules/popups/popups.md.gd")
 
-const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
 const GameUiTypes = preload("res://addons/modular_ui_architecture/modules/game_ui/types.gd")
-const PolicyStoreTypes = preload("res://addons/modular_ui_architecture/modules/policy_store/types.gd")
 const TogglePauseMenuBinding = preload("./bindings/toggle_pause_menu.bind.gd")
 const PauseMenuButtonAttachment = preload("./attachments/pause_menu_button.attach.gd")
 const Hud = preload("res://demo/modules/hud/content/ui/hud.gd")
@@ -17,9 +17,11 @@ const CONFIRM_QUIT_DIALOG_PATH := "res://demo/shared/ui/confirmation_dialog/conf
 const TOGGLE_PAUSE_ACTION := &"toggle_pause"
 
 static var IMPORTS := [
+	LayersModule,
 	GameUiModule,
 	InputBindingsModule,
 	PolicyStoreModule,
+	PoliciesModule,
 	PopupsModule,
 ]
 
@@ -42,7 +44,7 @@ class PauseMenuModule extends GdlrModule:
 	
 	func _register_bindings() -> void:
 		var toggle_pm_binding := TogglePauseMenuBinding.new(
-			svc_game_ui, UiLayersTypes.UiLayer.WINDOW
+			svc_game_ui, Tokens.Layers.WINDOW
 		)
 		reg_input_bindings.register_binding(TOGGLE_PAUSE_ACTION, toggle_pm_binding)
 	
@@ -67,7 +69,7 @@ class PauseMenuModule extends GdlrModule:
 			return
 		
 		var pause_menu: PauseMenu = svc_game_ui.get_view(token)
-		svc_policy_store.block(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI, pause_menu)
+		svc_policy_store.block(Tokens.Policies.Categories.OPEN_GAMEPLAY_POPUP_UI, pause_menu)
 		pause_menu.close_requested.connect(_on_pause_menu_close_requested.bind(token))
 		pause_menu.quit_requested.connect(_on_pause_menu_quit_requested)
 		pause_menu.tree_exiting.connect(_on_pause_menu_tree_exiting.bind(pause_menu))
@@ -93,4 +95,4 @@ class PauseMenuModule extends GdlrModule:
 	
 	
 	func _on_pause_menu_tree_exiting(pause_menu: PauseMenu) -> void:
-		svc_policy_store.unblock(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI, pause_menu)
+		svc_policy_store.unblock(Tokens.Policies.Categories.OPEN_GAMEPLAY_POPUP_UI, pause_menu)

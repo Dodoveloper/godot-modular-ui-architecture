@@ -8,29 +8,30 @@ handled for you.
 
 ## The layers
 
-| Layer | Draw order | Blocks input below it? | Notes |
-|-------|-----------|------------------------|-------|
-| `DEFAULT` | 1 (lowest) | No | Fallback. |
-| `HUD` | 2 | No | HUD Views. Only one child may be mounted at a time. |
-| `HUD_OVERLAY` | 3 | No | Overlays on top of the HUD. |
-| `WINDOW` | 4 | Yes | Exclusive Views. Only one child may be mounted at a time. |
-| `OVERLAY` | 5 | Yes | Overlays above windows. |
-| `POPUP` | 6 | Yes | Popups. |
-| `TOOLTIP` | 7 (highest) | No | Tooltips. Only one at a time. |
+The addon registers one layer, `DEFAULT`. Every other layer is registered by a module, either the
+addon's own modules or yours. The addon's own layers are:
 
-The order and the input-blocking flags are set by the addon and can't be changed by your code.
+| Token | Registered by | Order | Blocks input below it? | Notes |
+|-------|---------------|-------|------------------------|-------|
+| `UiLayersTypes.DEFAULT_LAYER` (`&"default"`) | `ui_layers` | 0 | No | Fallback, used when nothing names a layer. |
+| `&"popup"` (`PopupsTypes.POPUPS_LAYER`) | `popups` | 500 | Yes | Popups. |
+| `&"tooltip"` (`TooltipsTypes.TOOLTIPS_LAYER`) | `tooltips` | 600 | No | Tooltips. Only one at a time. |
+
+The demo registers `&"hud"` and `&"window"` in its own `layers` module. Those are shown in the
+[demo](../getting-started/04-demo-tour.md) and in [Registering a layer](#registering-a-layer).
+
+The predefined orders are listed under [Choosing an order](#choosing-an-order).
 
 ## What a layer does
 
-Each layer is a `UiLayerNode`, a `CanvasLayer` the addon creates when the UI systems start. You don't
-create or manage these nodes yourself. The addon owns them, and you mount through `CapUiLayers` or
-through the services built on it (`CapGameUi` for Views, `CapPopups` for Popups).
+Each layer is a `UiLayerNode`, a `CanvasLayer` that the addon creates when the UI systems start. You
+don't create or manage these nodes yourself. The addon owns them, and you mount through `CapUiLayers`
+or through the services built on it (`CapGameUi` for Views, `CapPopups` for Popups).
 
-Every layer has its own script in `addons/modular_ui_architecture/modules/ui_layers/nodes/`, and
-each script extends `UiLayerNode`. The scripts are where layer-specific rules live. For example,
-`WindowUiLayerNode` and `HudUiLayerNode` override `_can_mount_scene` to accept only one child. The
-`HUD` script is currently identical to the `WINDOW` script, but it is separate so you can change
-the HUD's behaviour without affecting `WINDOW`. See [Customizing a layer](#customizing-a-layer).
+A layer's behaviour is defined by its node script, which extends `UiLayerNode`. The base class
+handles mounting, unmounting and input. You can override `_can_mount_scene` to decide what a layer
+accepts. For example, the demo's `WINDOW` layer accepts a single child. See
+[Registering a layer](#registering-a-layer).
 
 A layer:
 
@@ -62,39 +63,81 @@ focus-navigation path.
 
 ## Mounting on a layer
 
-`CapGameUi.mount_view(token, layer)` and `CapPopups.open_popup(...)` take a layer. For a View, pass the
-layer that matches its role:
+`CapGameUi.mount_view(token, layer)` and `CapPopups.open_popup(...)` take a layer. Pass the token of
+the layer that matches the View's role:
 
 ```gdscript
-svc_game_ui.mount_view(&"inventory", UiLayersTypes.UiLayer.WINDOW)
-svc_game_ui.mount_view(&"hud", UiLayersTypes.UiLayer.HUD)
+svc_game_ui.mount_view(&"inventory", Tokens.Layers.WINDOW)
+svc_game_ui.mount_view(&"hud", Tokens.Layers.HUD)
 ```
 
-The `WINDOW` and `HUD` layers accept only one child. Mounting a second View there is refused, and the
-mount returns `null`.
+`Tokens.Layers` is the demo's own holder. Your project chooses its own constants, as described in
+[Registering a layer](#registering-a-layer).
 
-## Customizing a layer
+A layer that only accepts one child (as `WINDOW` and `HUD` do in the demo) refuses a second mount,
+and the mount returns `null`.
 
-Each layer's script is listed in `_layers_config` in `ui_layers.svc.gd`. To change how a layer
-behaves:
+## Registering a layer
 
-1. Edit that layer's script in `modules/ui_layers/nodes/`. Each one extends `UiLayerNode`. The
-   `DEFAULT`, `HUD_OVERLAY` and `OVERLAY` scripts are empty, so they use the base behaviour. The
-   `HUD` and `WINDOW` scripts accept one child. Override the methods you need, such as
-   `_can_mount_scene` (decide what the layer accepts) or `_mount_node` and `_unmount_node` (decide
-   how a node is added and removed).
-2. If you want a layer to use a different script, change its entry in `_layers_config`.
+A module declares a layer by registering it in `register()`, the same way it registers Views:
 
-The layer scripts are `default_ui_layer.gd`, `hud_ui_layer.gd`, `hud_overlay_ui_layer.gd`,
-`window_ui_layer.gd`, `overlay_ui_layer.gd`, `popups_ui_layer.gd` and `tooltip_ui_layer.gd`.
+```gdscript
+const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
+const MyLayerNode = preload("./content/layers/my_layer.gd")
 
-> The addon is part of your project, so these edits apply to that project only. An addon upgrade
-> may overwrite them, so record your changes and reapply them after upgrading.
->
-> **Current limitation:** you can't add a new layer from your own module. A new `UiLayer` value needs
-> a matching entry in `ui_layers/types.gd`, a node script, and an entry in `_layers_config`, all in the
-> addon. Registering layers from your own modules is a planned improvement, noted in the
-> [README](../../README.md#potential-improvements).
+const MY_LAYER := &"my_layer"
+
+class MyModule extends GdlrModule:
+	var reg_ui_layers: CapUiLayersRegistry
+
+
+	func register() -> void:
+		reg_ui_layers.register_layer(UiLayersTypes.UiLayerRegistration.new(
+      MY_LAYER, MyLayerNode, UiLayersTypes.Order.WINDOW + 50, true
+    ))
+```
+
+Each registration has four parts:
+
+- **`token`**: a unique `StringName`. An empty or already-registered token is an error.
+- **`node_script`**: a script that extends `UiLayerNode`. Anything else is an error. Don't override
+  `_init()` in it, because the addon creates the node with the layers service as its only argument.
+- **`order`**: an integer. Layers with a higher order are drawn on top and receive input first. Two
+  layers can't share an order.
+- **`should_block_inputs`**: whether the layer blocks the input of the layers below it while it has
+  UI mounted. Defaults to `false`.
+
+### Choosing an order
+
+The addon's predefined orders are in `UiLayersTypes.Order`:
+
+| Anchor | Value |
+|--------|-------|
+| `DEFAULT` | 0 |
+| `HUD` | 100 |
+| `HUD_OVERLAY` | 200 |
+| `WINDOW` | 300 |
+| `OVERLAY` | 400 |
+| `POPUP` | 500 |
+| `TOOLTIP` | 600 |
+
+These are anchors, not a closed list. Pick any integer. To draw a layer between two anchors, use a
+value in between, such as `UiLayersTypes.Order.WINDOW + 50`. To draw a layer above everything, use a
+value higher than `TOOLTIP`.
+
+A module doesn't need to know the other layers. Registering a layer above `POPUP` puts it on top of
+popups without any reference to the popups module.
+
+### When you can register
+
+Layers are registered during `register()`. The addon creates the layer nodes in `enable()`, after
+every module has registered. Registering later pushes an error, and the layer is not created.
+
+### Using a layer you don't own
+
+Mount onto a layer by its token, without registering it. A module that needs the Popups layer
+uses `PopupsTypes.POPUPS_LAYER` and never registers it. Registering a token twice is an error, so
+only the module that owns a layer registers it.
 
 ## Reading layer state
 
@@ -110,6 +153,28 @@ For the full list of methods, see [Capabilities API](../reference/capabilities-a
 - **Layers are created on enable.** Don't mount anything before the module graph has started.
 - **Don't parent UI to a layer node yourself.** Use the mount API. It handles SceneCache and the
   ordering rules.
+- **A layer can't be registered after `enable()`.** Register it in `register()`.
+
+## Migrating from 1.x
+
+Version 2.0.0 replaces the `UiLayer` enum with `StringName` tokens, and it moves the layer scripts
+into the modules that own them:
+
+- `UiLayersTypes.UiLayer.DEFAULT` becomes `UiLayersTypes.DEFAULT_LAYER`. The other values have no
+  addon token: `POPUP` becomes `PopupsTypes.POPUPS_LAYER`, and `TOOLTIP` becomes
+  `TooltipsTypes.TOOLTIPS_LAYER`. `HUD`, `WINDOW`, `HUD_OVERLAY` and `OVERLAY` become tokens your
+  project declares, as in [Registering a layer](#registering-a-layer).
+- Every layer parameter and property is a `StringName` now, including `ViewRequester.layer` and
+  `WorldUiPortal.target_layer`. Scenes store the layer as the token, so an exported `layer` that held
+  an enum integer, for example `layer = 1`, must be set to a token such as `&"hud"`.
+- The layer scripts moved out of `ui_layers/nodes/`. `popups_ui_layer.gd` moved to `popups/nodes/` and
+  `tooltip_ui_layer.gd` moved to `tooltips/nodes/`. The HUD and Window scripts now live in the demo, under
+  `demo/modules/layers/content/layers/`. The HUD Overlay and Overlay scripts are removed. If you edited
+  any of these, move the changes into your own layer script and register it.
+- `UiLayerConfig` and `_layers_config` are removed. Register layers with `CapUiLayersRegistry` instead.
+- The addon no longer provides `HUD`, `HUD_OVERLAY`, `WINDOW` and `OVERLAY`. Register the ones your
+  project uses, as in [Registering a layer](#registering-a-layer). The demo's `layers` module is a
+  working example.
 
 ## Next
 

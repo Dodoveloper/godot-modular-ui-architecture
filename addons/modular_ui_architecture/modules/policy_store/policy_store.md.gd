@@ -1,13 +1,19 @@
+const RegPolicyCategories = preload("./registries/policy_categories.reg.gd")
 const PolicyStoreSvc = preload("./services/policy_store.svc.gd")
 
 
 static var PROVIDERS := {
+	CapPolicyCategoriesRegistry: {
+		"use": RegPolicyCategories,
+	},
 	CapPolicyStore: {
+		"inject": [CapPolicyCategoriesRegistry],
 		"use": PolicyStoreSvc,
 	}
 }
 
 static var EXPORTS := [
+	CapPolicyCategoriesRegistry,
 	CapPolicyStore,
 ]
 

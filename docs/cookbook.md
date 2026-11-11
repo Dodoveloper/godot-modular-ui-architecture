@@ -19,7 +19,9 @@ See the [Quick start](getting-started/03-quick-start.md) for the files, and [Vie
 ## Gate gameplay popups while a window is open
 
 A window blocks a category of interaction while it's open. Gameplay code checks the category before it
-shows a popup. Neither side needs to know about the other.
+shows a popup. Neither side needs to know about the other. The category is declared once, by the project,
+as in [Declaring your own](guides/policy-store.md#declaring-your-own). `OPEN_GAMEPLAY_POPUP_UI` below
+stands for that token, for example `&"open_gameplay_popup_ui"`.
 
 Blocking, from the window's module, when the window opens and closes:
 
@@ -28,18 +30,18 @@ var svc_policy_store: CapPolicyStore
 
 
 func _on_window_mounted(window: Node) -> void:
-	svc_policy_store.block(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI, window)
+	svc_policy_store.block(OPEN_GAMEPLAY_POPUP_UI, window)
 	window.tree_exiting.connect(_on_window_unmounting.bind(window))
 
 
 func _on_window_unmounting(window: Node) -> void:
-	svc_policy_store.unblock(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI, window)
+	svc_policy_store.unblock(OPEN_GAMEPLAY_POPUP_UI, window)
 ```
 
 Checking, from the gameplay code that would show the popup:
 
 ```gdscript
-if not _svc_policy_store.is_allowed(PolicyStoreTypes.Category.OPEN_GAMEPLAY_POPUP_UI):
+if not _svc_policy_store.is_allowed(OPEN_GAMEPLAY_POPUP_UI):
 	return
 
 _svc_popups.open_popup_queued(REWARD_PATH, Color(0, 0, 0, 0), _configure_reward.bind(reward))

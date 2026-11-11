@@ -1,7 +1,7 @@
 const InputBindingsModule = preload("res://addons/modular_ui_architecture/modules/input_bindings/input_bindings.md.gd")
+const LayersModule = preload("res://demo/modules/layers/layers.md.gd")
 const GameUiModule = preload("res://addons/modular_ui_architecture/modules/game_ui/game_ui.md.gd")
 
-const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
 const GameUiTypes = preload("res://addons/modular_ui_architecture/modules/game_ui/types.gd")
 const ToggleRenameBinding = preload("./bindings/toggle_rename.bind.gd")
 const RenameButtonAttachment = preload("./attachments/rename_button.attach.gd")
@@ -11,6 +11,7 @@ const TOGGLE_RENAME_ACTION := &"toggle_rename"
 const RENAME_UI_PATH := "res://demo/modules/rename_ui/content/ui/rename_display.tscn"
 
 static var IMPORTS := [
+	LayersModule,
 	InputBindingsModule,
 	GameUiModule,
 ]
@@ -32,7 +33,7 @@ class RenameUiModule extends GdlrModule:
 	
 	func _register_bindings() -> void:
 		var toggle_rename_binding := ToggleRenameBinding.new(
-			svc_game_ui, UiLayersTypes.UiLayer.WINDOW
+			svc_game_ui, Tokens.Layers.WINDOW
 		)
 		reg_input_bindings.register_binding(TOGGLE_RENAME_ACTION, toggle_rename_binding)
 	

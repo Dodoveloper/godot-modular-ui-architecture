@@ -4,6 +4,7 @@ extends GutTest
 
 
 const UiLayersTypes = preload("res://addons/modular_ui_architecture/modules/ui_layers/types.gd")
+const UiLayersFixture = preload("res://tests/fixtures/ui_layers/layers.gd")
 const InputBindingsTypes = preload("res://addons/modular_ui_architecture/modules/input_bindings/types.gd")
 const InputBindingsRegistry = preload("res://addons/modular_ui_architecture/modules/input_bindings/registries/input_bindings.reg.gd")
 const InputBindingsService = preload("res://addons/modular_ui_architecture/modules/input_bindings/services/input_bindings.svc.gd")
@@ -19,7 +20,7 @@ var _service: InputBindingsService
 
 func before_each() -> void:
 	_registry = InputBindingsRegistry.new()
-	_ui_layers = UiLayersService.new()
+	_ui_layers = UiLayersFixture.make_service()
 	_service = InputBindingsService.new(_registry, _ui_layers)
 
 
@@ -28,7 +29,7 @@ func after_each() -> void:
 
 
 func _make_binding(
-	should_execute := true, layer := UiLayersTypes.UiLayer.DEFAULT,
+	should_execute := true, layer := UiLayersTypes.DEFAULT_LAYER,
 	input_type := InputBindingsTypes.InputActionType.PRESSED, priority := 0
 ) -> FakeBinding:
 	var binding := FakeBinding.new(layer, input_type)
@@ -61,9 +62,9 @@ func test_skips_binding_when_should_execute_is_false() -> void:
 
 
 func test_skips_binding_on_different_layer() -> void:
-	var binding := _make_binding(true, UiLayersTypes.UiLayer.HUD)
+	var binding := _make_binding(true, UiLayersFixture.DemoTokens.Layers.HUD)
 
-	var executed := _service.trigger_bindings(ACTION, UiLayersTypes.UiLayer.DEFAULT)
+	var executed := _service.trigger_bindings(ACTION, UiLayersTypes.DEFAULT_LAYER)
 
 	assert_false(executed)
 	assert_eq(binding.execute_count, 0)
@@ -71,10 +72,10 @@ func test_skips_binding_on_different_layer() -> void:
 
 func test_skips_binding_on_different_input_type() -> void:
 	var binding := _make_binding(
-		true, UiLayersTypes.UiLayer.DEFAULT, InputBindingsTypes.InputActionType.RELEASED
+		true, UiLayersTypes.DEFAULT_LAYER, InputBindingsTypes.InputActionType.RELEASED
 	)
 
-	var executed := _service.trigger_bindings(ACTION, UiLayersTypes.UiLayer.DEFAULT,
+	var executed := _service.trigger_bindings(ACTION, UiLayersTypes.DEFAULT_LAYER,
 		InputBindingsTypes.InputActionType.PRESSED)
 
 	assert_false(executed)
@@ -83,10 +84,10 @@ func test_skips_binding_on_different_input_type() -> void:
 
 func test_executes_binding_matching_released_input_type() -> void:
 	var binding := _make_binding(
-		true, UiLayersTypes.UiLayer.DEFAULT, InputBindingsTypes.InputActionType.RELEASED
+		true, UiLayersTypes.DEFAULT_LAYER, InputBindingsTypes.InputActionType.RELEASED
 	)
 
-	var executed := _service.trigger_bindings(ACTION, UiLayersTypes.UiLayer.DEFAULT,
+	var executed := _service.trigger_bindings(ACTION, UiLayersTypes.DEFAULT_LAYER,
 		InputBindingsTypes.InputActionType.RELEASED)
 
 	assert_true(executed)
@@ -94,9 +95,9 @@ func test_executes_binding_matching_released_input_type() -> void:
 
 
 func test_only_first_eligible_binding_executes() -> void:
-	var high := _make_binding(true, UiLayersTypes.UiLayer.DEFAULT,
+	var high := _make_binding(true, UiLayersTypes.DEFAULT_LAYER,
 		InputBindingsTypes.InputActionType.PRESSED, 10)
-	var low := _make_binding(true, UiLayersTypes.UiLayer.DEFAULT,
+	var low := _make_binding(true, UiLayersTypes.DEFAULT_LAYER,
 		InputBindingsTypes.InputActionType.PRESSED, 0)
 
 	_service.trigger_bindings(ACTION)
@@ -106,9 +107,9 @@ func test_only_first_eligible_binding_executes() -> void:
 
 
 func test_falls_through_to_next_binding_when_higher_priority_declines() -> void:
-	var high := _make_binding(false, UiLayersTypes.UiLayer.DEFAULT,
+	var high := _make_binding(false, UiLayersTypes.DEFAULT_LAYER,
 		InputBindingsTypes.InputActionType.PRESSED, 10)
-	var low := _make_binding(true, UiLayersTypes.UiLayer.DEFAULT,
+	var low := _make_binding(true, UiLayersTypes.DEFAULT_LAYER,
 		InputBindingsTypes.InputActionType.PRESSED, 0)
 
 	var executed := _service.trigger_bindings(ACTION)
@@ -122,7 +123,7 @@ func test_triggers_bindings_when_layer_signal_is_emitted() -> void:
 	var binding := _make_binding()
 
 	_ui_layers.ui_layer_input_triggered.emit(
-		ACTION, UiLayersTypes.UiLayer.DEFAULT, InputBindingsTypes.InputActionType.PRESSED
+		ACTION, UiLayersTypes.DEFAULT_LAYER, InputBindingsTypes.InputActionType.PRESSED
 	)
 
 	assert_eq(binding.execute_count, 1)

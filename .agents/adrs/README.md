@@ -12,6 +12,8 @@ Context section, because that narrative *is* the evidence for the decision.
 | [001](001-ui-layer-input-broadcast-ordering.md) | `UiLayerNode` input broadcast ordering | Why input broadcasting is split between `_input` (focus-nav-colliding actions only) and `_unhandled_input` (everything else), instead of using one phase for everything. |
 | [002](002-separate-popups-views-tooltips-subsystems.md) | Separate Views/Popups/Tooltips subsystems | Why these three UI-mounting systems were kept independent instead of unified into one "modal" capability. |
 | [003](003-world-ui-positioned-pre-draw-lazy-sampled.md) | World UI is positioned in `frame_pre_draw` with lazily-sampled anchors | Why world-anchored UI is positioned right before drawing (not in `physics_frame`/`process_frame`), why anchors are sampled per tick at render time, and why engine interpolation is disabled on that UI. |
+| [004](004-policy-categories-as-registered-string-names.md) | Policy categories are registered `StringName` tokens, not an enum | Why Policy Store categories moved from `PolicyStoreTypes.Category` to modules registering tokens through a registry, and why unregistered categories are errors rather than silently accepted. |
+| [005](005-ui-layers-are-registered-string-name-tokens.md) | UI layers are registered `StringName` tokens, not an enum | Why UI layers moved from the `UiLayer` enum to modules registering layers with an integer order through a registry, and why orders are predefined anchors rather than a closed list. |
 
 
 ## When To Add A New ADR

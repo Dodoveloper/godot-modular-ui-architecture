@@ -20,7 +20,7 @@ on the owner's `ready` by default.
 | Export | Type | Default | Purpose |
 |--------|------|---------|---------|
 | `token` | `StringName` | `&""` | The token of the View to request. Required. |
-| `layer` | `UiLayer` | `DEFAULT` | The layer the View mounts on. |
+| `layer` | `StringName` | `&"default"` | The layer token the View mounts on. |
 | `mount_mode` | `MountMode` | `ON_READY` | `ON_READY` mounts on the owner's `ready`. `MANUAL` waits for `mount_view()`. |
 | `unmount_mode` | `UnmountMode` | `MANUAL` | `MANUAL` unmounts only on `unmount_view()`. `ON_EXIT_TREE` unmounts when the owner leaves the tree. |
 
@@ -90,7 +90,7 @@ Mounts a UI into a layer, and optionally follows a world node. See [World UI](..
 | Export | Type | Default | Purpose |
 |--------|------|---------|---------|
 | `target_ui` | `Control` | `null` | The control to mount. Required. |
-| `target_layer` | `UiLayer` | `DEFAULT` | The layer to mount on. |
+| `target_layer` | `StringName` | `&"default"` | The layer token to mount on. |
 | `anchor_mode` | `AnchorMode` | `NONE` | `NONE` keeps the UI's layout. `WORLD_FOLLOW` follows `world_anchor`. |
 | `world_anchor` | `Node2D` | `null` | The node to follow in `WORLD_FOLLOW` mode. Empty means the owner, or the owner's parent. |
 | `mirror_anchor_visuals` | `bool` | `false` | Copies the anchor's `visible`, `modulate`, and `scale` onto the UI. `WORLD_FOLLOW` only. |

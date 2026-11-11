@@ -25,8 +25,8 @@ enum AnchorMode {
 	set(value):
 		target_ui = value
 		update_configuration_warnings()
-## Target UI layer. For most cases, it's recommended to use [enum UiLayersTypes.UiLayer.DEFAULT].
-@export var target_layer := UiLayersTypes.UiLayer.DEFAULT
+## Target UI layer. For most cases, it's recommended to use [enum UiLayersTypes.DEFAULT_LAYER].
+@export var target_layer := UiLayersTypes.DEFAULT_LAYER
 ## Determines how the position of [member target_ui] will be updated.
 @export var anchor_mode := AnchorMode.NONE:
 	set(value):

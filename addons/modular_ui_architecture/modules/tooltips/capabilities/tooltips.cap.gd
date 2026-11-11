@@ -3,7 +3,6 @@ class_name CapTooltips
 extends GdlrCapability
 
 
-const UiLayersTypes = preload("../../ui_layers/types.gd")
 
 @abstract func enable() -> void
 @abstract func disable() -> void
