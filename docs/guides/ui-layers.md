@@ -88,11 +88,11 @@ const MyLayerNode = preload("./content/layers/my_layer.gd")
 const MY_LAYER := &"my_layer"
 
 class MyModule extends GdlrModule:
-	var reg_ui_layers: CapUiLayersRegistry
+  var reg_ui_layers: CapUiLayersRegistry
 
 
-	func register() -> void:
-		reg_ui_layers.register_layer(UiLayersTypes.UiLayerRegistration.new(
+  func register() -> void:
+    reg_ui_layers.register_layer(UiLayersTypes.UiLayerRegistration.new(
       MY_LAYER, MyLayerNode, UiLayersTypes.Order.WINDOW + 50, true
     ))
 ```
